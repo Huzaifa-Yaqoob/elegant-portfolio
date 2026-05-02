@@ -5,6 +5,7 @@
 @import "@fontsource-variable/oxanium";
 
 :root {
+    /* Obsidian Edge - Dark Mode First */
     --background: #141313;
     --foreground: #e5e2e1;
     --card: #201f1f;
@@ -14,13 +15,13 @@
     --primary: #c9c6c5;
     --primary-foreground: #313030;
     --secondary: #c6c6c7;
-    --secondary-foreground: #2f3131;
+    --secondary-foreground: #141313;
     --muted: #1c1b1b;
     --muted-foreground: #c4c7c7;
     --accent: #201f1f;
     --accent-foreground: #e5e2e1;
     --destructive: #ffb4ab;
-    --border: #444748;
+    --border: #333333;
     --input: #444748;
     --ring: #c9c6c5;
     --chart-1: #e5e2e1;
@@ -95,4 +96,9 @@
   html {
     @apply font-sans;
     }
+
+  /* Hide default cursor globally since we use a custom one */
+  body, a, button, input, textarea {
+    cursor: none !important;
+  }
 }

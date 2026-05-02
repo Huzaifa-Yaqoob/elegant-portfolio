@@ -1,21 +1,40 @@
-import { createContext, useContext } from "react"
+import { useSyncExternalStore } from "react"
 
-export type CursorVariant = "default" | "project" | "button" | "text" | "hidden"
+export type CursorVariant = "default" | "form" | "button" | "text" | "hidden"
 
-export interface CursorContextType {
-  variant: CursorVariant
-  setVariant: (variant: CursorVariant) => void
-  cursorText: string
-  setCursorText: (text: string) => void
+/**
+ * Singleton state to share cursor data across Astro islands
+ */
+let state = {
+  variant: "default" as CursorVariant,
+  cursorText: "",
 }
 
-export const CursorContext = createContext<CursorContextType | undefined>(
-  undefined
-)
+const listeners = new Set<() => void>()
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener)
+  return () => listeners.delete(listener)
+}
+
+const getSnapshot = () => state
 
 export const useCursor = () => {
-  const context = useContext(CursorContext)
-  if (!context)
-    throw new Error("useCursor must be used within a CursorProvider")
-  return context
+  const { variant, cursorText } = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getSnapshot
+  )
+
+  const setVariant = (v: CursorVariant) => {
+    state = { ...state, variant: v }
+    listeners.forEach((l) => l())
+  }
+
+  const setCursorText = (t: string) => {
+    state = { ...state, cursorText: t }
+    listeners.forEach((l) => l())
+  }
+
+  return { variant, cursorText, setVariant, setCursorText }
 }

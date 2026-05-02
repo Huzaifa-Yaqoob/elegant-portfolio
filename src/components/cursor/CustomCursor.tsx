@@ -1,15 +1,26 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "@/lib/gsap"
 import { useCursor } from "@/components/cursor/useCursor.ts"
 
 function CustomCursor() {
-  const { variant } = useCursor()
+  const { variant, cursorText } = useCursor()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const lines = useRef<any[]>([])
   const cursorRef = useRef<HTMLAnchorElement>(null)
+  const particlesRef = useRef<HTMLDivElement>(null)
+  
+  // Persistent physics state to prevent "jumps" on re-renders
+  const mouse = useRef({ x: 0, y: 0 })
+  const pos = useRef({ x: 0, y: 0 })
+  const variantRef = useRef(variant)
+
+  // Keep the variant ref up to date without re-running the main GSAP effect
+  useEffect(() => {
+    variantRef.current = variant
+  }, [variant])
 
   useGSAP(() => {
     // 1. Create highly optimized setters
@@ -90,9 +101,7 @@ function CustomCursor() {
 
     // 2. Add smoothing (The "Physics" part)
     // We use a proxy object to 'lerp' (interpolate) the values
-    const pos = { x: 0, y: 0 }
     const prevMouse = { x: 0, y: 0 } // To calculate actual mouse velocity
-    const mouse = { x: 0, y: 0 }
 
     // 3. Fix Canvas Resolution
     const resizeCanvas = () => {
@@ -109,45 +118,49 @@ function CustomCursor() {
     )
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX
-      mouse.y = e.clientY
+      mouse.current.x = e.clientX
+      mouse.current.y = e.clientY
     }
 
     const updateTicker = () => {
       if (!ctx || !canvas) return
 
       const dt = 0.1
-      const dx = mouse.x - pos.x
-      const dy = mouse.y - pos.y
+      const dx = mouse.current.x - pos.current.x
+      const dy = mouse.current.y - pos.current.y
       const speed = Math.sqrt(dx * dx + dy * dy)
 
       // Calculate actual mouse velocity for more realistic smoke
-      const mouseVelX = mouse.x - prevMouse.x
-      const mouseVelY = mouse.y - prevMouse.y
-      prevMouse.x = mouse.x
-      prevMouse.y = mouse.y
+      const mouseVelX = mouse.current.x - prevMouse.x
+      const mouseVelY = mouse.current.y - prevMouse.y
+      prevMouse.x = mouse.current.x
+      prevMouse.y = mouse.current.y
 
-      pos.x += dx * dt
-      pos.y += dy * dt
+      pos.current.x += dx * dt
+      pos.current.y += dy * dt
 
-      xSetter(pos.x)
-      ySetter(pos.y)
+      if (variantRef.current !== 'hidden') {
+        xSetter(pos.current.x)
+        ySetter(pos.current.y)
+      }
 
       // 0. Update Plane Rotation to face movement direction
       if (speed > 0.5) {
         const angle = Math.atan2(dy, dx) * (180 / Math.PI)
-        rSetter(angle) // No offset: point leads when moving right, open side leads when moving left
+        // Only rotate the '>' icon, not the I-beam '|' or text
+        if (variantRef.current === 'default' || variantRef.current === 'button') rSetter(angle)
+        else rSetter(0)
       }
 
       // Calculate tail position for the trail start
       const tailOffsetX = speed > 0 ? (dx / speed) * 12 : 0
       const tailOffsetY = speed > 0 ? (dy / speed) * 12 : 0
-      const targetX = pos.x - tailOffsetX
-      const targetY = pos.y - tailOffsetY
+      const targetX = pos.current.x - tailOffsetX
+      const targetY = pos.current.y - tailOffsetY
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.globalCompositeOperation = "source-over"
-      ctx.strokeStyle = "rgba(210, 215, 220, 0.12)" // Soft smokey blue-grey
+      ctx.strokeStyle = variantRef.current === 'hidden' ? "transparent" : "rgba(210, 215, 220, 0.12)"
       ctx.lineWidth = 1.2
 
       lines.current.forEach((line) => {
@@ -166,7 +179,37 @@ function CustomCursor() {
       window.removeEventListener("resize", resizeCanvas)
       gsap.ticker.remove(updateTicker)
     }
-  })
+  }, []) // Never re-run the physics loop setup
+
+  // Handle the "Form" variant character release
+  useEffect(() => {
+    if (variant !== "form") return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key.length !== 1) return // Only handle printable characters
+
+      const particle = document.createElement("span")
+      particle.innerText = e.key
+      particle.className = "fixed pointer-events-none font-mono text-primary z-[9999] opacity-80"
+      particle.style.left = `${cursorRef.current?.getBoundingClientRect().left}px`
+      particle.style.top = `${cursorRef.current?.getBoundingClientRect().top}px`
+      
+      particlesRef.current?.appendChild(particle)
+
+      gsap.to(particle, {
+        y: -100 - Math.random() * 50,
+        x: (Math.random() - 0.5) * 50,
+        rotation: (Math.random() - 0.5) * 45,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        onComplete: () => particle.remove()
+      })
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [variant])
 
   useGSAP(() => {
     const tl = gsap.timeline({ overwrite: "auto", ease: "power2.out" })
@@ -180,19 +223,38 @@ function CustomCursor() {
         scale: 1,
       })
     }
+
+    if (variant === "hidden") {
+      gsap.to([cursorRef.current, canvasRef.current], { opacity: 0, duration: 0.2 })
+    } else {
+      gsap.to([cursorRef.current, canvasRef.current], { opacity: 1, duration: 0.2 })
+    }
   }, [variant])
+
   return (
     <>
       <canvas
         ref={canvasRef}
         className="pointer-events-none fixed inset-0 z-[9998] bg-transparent mix-blend-difference"
       />
+      <div ref={particlesRef} className="pointer-events-none fixed inset-0 z-[10000]" />
       <a
         href="#"
         ref={cursorRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center font-mono text-lg font-bold text-white mix-blend-difference"
+        className="pointer-events-none fixed top-0 left-0 z-[9999] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center font-heading text-lg font-bold text-white mix-blend-difference whitespace-nowrap"
       >
-        &gt;
+        {variant === "form" ? (
+          <span className="text-2xl font-light">|</span>
+        ) : variant === "text" ? (
+          <div className="flex flex-col items-center">
+             <span className="mb-8 text-xs uppercase tracking-widest bg-white text-black px-2 py-1">
+              {cursorText}
+            </span>
+            <span>&gt;</span>
+          </div>
+        ) : (
+          <span>&gt;</span>
+        )}
       </a>
     </>
   )

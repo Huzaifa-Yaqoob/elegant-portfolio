@@ -1,7 +1,5 @@
 ---
 import "@/styles/global.css"
-import { CursorProvider } from "@/components/cursor/CursorContext.tsx"
-import CustomCursor from "@/components/cursor/CustomCursor.tsx"
 ---
 
 <html lang="en">
@@ -12,8 +10,6 @@ import CustomCursor from "@/components/cursor/CustomCursor.tsx"
     <title>Huzaifa.Dev Portfolio</title>
   </head>
   <body>
-    <CursorProvider client:load>
-      <slot />
-    </CursorProvider>
+    <slot />
   </body>
 </html>
