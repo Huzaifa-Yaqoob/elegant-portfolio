@@ -1,0 +1,94 @@
+---
+import { getEntry } from "astro:content"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/lib/button-variants"
+
+const navEntry = await getEntry("nav", "nav")
+if (!navEntry) throw new Error("Navigation configuration not found")
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) throw new Error("Site configuration not found")
+
+const { footer } = navEntry.data
+const { personal, social } = siteEntry.data
+
+const currentYear = new Date().getFullYear()
+const copyrightText = footer.copyright.replace("{year}", currentYear.toString())
+---
+
+<footer class="bg-surface-container-low relative overflow-hidden pt-24 pb-12">
+  <!-- Diagonal Divider - This creates the visual skew -->
+  <div
+    class="absolute top-0 left-0 -mt-12 h-24 w-full origin-top-left -skew-y-3 transform bg-background"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-16">
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
+      <!-- Copyright & Tagline -->
+      <div class="flex flex-col gap-4">
+        <p class="font-body-sm text-on-surface-variant">
+          {copyrightText}
+        </p>
+        {
+          footer.tagline && (
+            <p class="font-body-sm text-on-surface-variant">{footer.tagline}</p>
+          )
+        }
+      </div>
+
+      <!-- Contact Information -->
+      <div class="flex flex-col gap-4">
+        <h3
+          class="font-heading text-lg font-semibold tracking-wider text-primary uppercase"
+        >
+          Contact
+        </h3>
+        <a
+          href={`mailto:${personal.email}`}
+          class="font-body-lg text-on-surface transition-colors hover:text-primary"
+        >
+          {personal.email}
+        </a>
+        <a
+          href={`tel:${personal.phone}`}
+          class="font-body-lg text-on-surface transition-colors hover:text-primary"
+        >
+          {personal.phone}
+        </a>
+        <a
+          href={personal.address_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-body-lg text-on-surface transition-colors hover:text-primary"
+        >
+          {personal.address}
+        </a>
+      </div>
+
+      <!-- Social Links -->
+      <div class="flex flex-col gap-4">
+        <h3
+          class="font-heading text-lg font-semibold tracking-wider text-primary uppercase"
+        >
+          Connect
+        </h3>
+        <div class="flex flex-wrap gap-4">
+          {
+            Object.entries(social).map(([platform, url]) => (
+              <a
+                href={url as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+              >
+                {platform}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
