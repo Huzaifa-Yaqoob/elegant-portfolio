@@ -138,29 +138,30 @@ const { header } = navEntry.data
   const line2 = mobileToggle?.querySelector(".line-2")
   const line3 = mobileToggle?.querySelector(".line-3")
 
-  let isMenuOpen = false
   let lastScrollY = window.scrollY
   const scrollThreshold = 50
+  let isNavHidden = false
+
+  // GSAP Timeline for Mobile Menu (Skill: gsap-timeline)
+  const menuTl = gsap.timeline({ paused: true, reversed: true })
+
+  if (mobileMenu && line1 && line2 && line3 && nav) {
+    menuTl
+      .to(mobileMenu, { y: 0, duration: 0.6, ease: "power4.out" })
+      .to(line1, { y: 8, rotation: 45, duration: 0.3 }, 0)
+      .to(line2, { scaleX: 0, opacity: 0, duration: 0.3 }, 0)
+      .to(line3, { y: -8, rotation: -45, duration: 0.3 }, 0)
+      // Ensure header stays visible when menu is open
+      .to(nav, { yPercent: 0, duration: 0.4, ease: "power2.out" }, 0)
+  }
 
   // Mobile Menu Toggle Logic
   mobileToggle?.addEventListener("click", () => {
-    isMenuOpen = !isMenuOpen
-    
-    if (isMenuOpen) {
-      // Open menu
-      if (mobileMenu) gsap.to(mobileMenu, { y: 0, duration: 0.6, ease: "power4.out" })
-      if (line1) gsap.to(line1, { y: 8, rotation: 45, duration: 0.3 })
-      if (line2) gsap.to(line2, { scaleX: 0, opacity: 0, duration: 0.3 })
-      if (line3) gsap.to(line3, { y: -8, rotation: -45, duration: 0.3 })
+    if (menuTl.reversed()) {
+      menuTl.play()
       document.body.style.overflow = "hidden"
-      // Ensure header stays visible
-      if (nav) gsap.to(nav, { yPercent: 0, duration: 0.4, ease: "power2.out", overwrite: true })
     } else {
-      // Close menu
-      if (mobileMenu) gsap.to(mobileMenu, { y: "100%", duration: 0.6, ease: "power4.in" })
-      if (line1) gsap.to(line1, { y: 0, rotation: 0, duration: 0.3 })
-      if (line2) gsap.to(line2, { scaleX: 1, opacity: 1, duration: 0.3 })
-      if (line3) gsap.to(line3, { y: 0, rotation: 0, duration: 0.3 })
+      menuTl.reverse()
       document.body.style.overflow = ""
     }
   })
@@ -168,7 +169,8 @@ const { header } = navEntry.data
   window.addEventListener(
     "scroll",
     () => {
-      if (isMenuOpen) return
+      // Don't hide/show while menu is open
+      if (!menuTl.reversed()) return
 
       const currentScrollY = window.scrollY
 
@@ -191,32 +193,31 @@ const { header } = navEntry.data
         navContainer?.classList.add("py-8")
       }
 
-      // 2. Visibility State (Headroom Logic: Hide on scroll down, show on scroll up)
+      // 2. Visibility State (Headroom Logic: Skill: gsap-performance)
       if (currentScrollY > 200) {
-        if (currentScrollY > lastScrollY) {
+        if (currentScrollY > lastScrollY && !isNavHidden) {
           // Scrolling Down - Hide using GSAP for smooth transition
+          isNavHidden = true
           if (nav) gsap.to(nav, {
             yPercent: -100,
             duration: 0.4,
             ease: "power2.inOut",
-            overwrite: true,
           })
-        } else {
+        } else if (currentScrollY < lastScrollY && isNavHidden) {
           // Scrolling Up - Show
+          isNavHidden = false
           if (nav) gsap.to(nav, {
             yPercent: 0,
             duration: 0.4,
             ease: "power2.out",
-            overwrite: true,
           })
         }
-      } else {
-        // Always show at the top of the page
+      } else if (isNavHidden) {
+        isNavHidden = false
         if (nav) gsap.to(nav, {
           yPercent: 0,
           duration: 0.4,
           ease: "power2.out",
-          overwrite: true,
         })
       }
 
