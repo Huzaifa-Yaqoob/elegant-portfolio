@@ -96,9 +96,4 @@
   html {
     @apply font-sans;
     }
-
-  /* Hide default cursor globally since we use a custom one */
-  body, a, button, input, textarea {
-    cursor: none !important;
-  }
 }

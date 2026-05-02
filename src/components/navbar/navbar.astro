@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/lib/button-variants"
+import { cn } from "@/lib/utils"
 
 const navEntry = await getEntry("nav", "nav")
 if (!navEntry) throw new Error("Navigation configuration not found")
@@ -41,10 +42,12 @@ const { header } = navEntry.data
         header.links.map((link: { label: string; href: string }) => (
           <a
             href={link.href}
-            class="group relative font-heading text-[13px] font-semibold tracking-[0.12em] uppercase transition-colors hover:text-primary"
+            class={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "font-heading tracking-[0.12em] text-[13px]"
+            )}
           >
             {link.label}
-            <span class="absolute -bottom-1 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
           </a>
         ))
       }
@@ -52,10 +55,11 @@ const { header } = navEntry.data
 
     <!-- CTA Button -->
     <div class="hidden lg:block">
-      <a href={header.cta.href}>
-        <Button client:load>
-          {header.cta.label}
-        </Button>
+      <a 
+        href={header.cta.href} 
+        class={buttonVariants({ variant: "default" })}
+      >
+        {header.cta.label}
       </a>
     </div>
   </div>
