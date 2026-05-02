@@ -1,0 +1,129 @@
+---
+import { getEntry } from "astro:content"
+import { Button } from "@/components/ui/button"
+
+const navEntry = await getEntry("nav", "nav")
+if (!navEntry) throw new Error("Navigation configuration not found")
+
+const { header } = navEntry.data
+---
+
+<header
+  id="main-nav"
+  class="fixed top-0 left-0 z-50 w-full border-b border-transparent transition-all duration-300 ease-in-out"
+>
+  <div
+    id="nav-container"
+    class="mx-auto flex items-center justify-between px-6 py-8 transition-all duration-300 lg:px-16"
+  >
+    <!-- Logo -->
+    <a
+      href={header.logo.href}
+      class="group font-heading text-2xl leading-none font-extrabold tracking-tighter uppercase"
+    >
+      <span class="transition-colors group-hover:text-primary">
+        {
+          header.logo.label
+            .split(".")
+            .map((part: string, i: number, arr: string[]) => (
+              <>
+                {part}
+                {i < arr.length - 1 && <span class="text-primary">.</span>}
+              </>
+            ))
+        }
+      </span>
+    </a>
+
+    <!-- Main Links - Desktop Only for now -->
+    <nav class="hidden items-center gap-10 lg:flex">
+      {
+        header.links.map((link: { label: string; href: string }) => (
+          <a
+            href={link.href}
+            class="group relative font-heading text-[13px] font-semibold tracking-[0.12em] uppercase transition-colors hover:text-primary"
+          >
+            {link.label}
+            <span class="absolute -bottom-1 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- CTA Button -->
+    <div class="hidden lg:block">
+      <a href={header.cta.href}>
+        <Button client:load>
+          {header.cta.label}
+        </Button>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const nav = document.getElementById("main-nav")
+  const navContainer = document.getElementById("nav-container")
+  let lastScrollY = window.scrollY
+  const scrollThreshold = 50
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const currentScrollY = window.scrollY
+
+      // 1. Background State (Glassy Effect) & Dynamic Padding
+      if (currentScrollY > scrollThreshold) {
+        nav?.classList.add(
+          "bg-background/70",
+          "backdrop-blur-xl",
+          "border-white/5"
+        )
+        navContainer?.classList.remove("py-8")
+        navContainer?.classList.add("py-4")
+      } else {
+        nav?.classList.remove(
+          "bg-background/70",
+          "backdrop-blur-xl",
+          "border-white/5"
+        )
+        navContainer?.classList.remove("py-4")
+        navContainer?.classList.add("py-8")
+      }
+
+      // 2. Visibility State (Headroom Logic: Hide on scroll down, show on scroll up)
+      if (currentScrollY > 200) {
+        if (currentScrollY > lastScrollY) {
+          // Scrolling Down - Hide using GSAP for smooth transition
+          gsap.to(nav, {
+            yPercent: -100,
+            duration: 0.4,
+            ease: "power2.inOut",
+            overwrite: true,
+          })
+        } else {
+          // Scrolling Up - Show
+          gsap.to(nav, {
+            yPercent: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: true,
+          })
+        }
+      } else {
+        // Always show at the top of the page
+        gsap.to(nav, {
+          yPercent: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: true,
+        })
+      }
+
+      lastScrollY = currentScrollY
+    },
+    { passive: true }
+  )
+</script>

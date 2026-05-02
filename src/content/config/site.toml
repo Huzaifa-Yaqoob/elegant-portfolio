@@ -1,0 +1,23 @@
+# src/config/site.toml
+site_name = "Huzaifa.Dev Portfolio"
+description = "A custom documentation registry for modern web apps."
+
+[personal]
+name = "Huzaifa"
+email = "huzaifa@example.com"
+phone = "+1 (234) 567-890"
+address = "123 Obsidian St, Tech City"
+address_link = "https://maps.google.com"
+
+[stats]
+years_experience = 5
+projects_completed = 42
+total_clients = 28
+
+[social]
+github = "https://github.com/huzaifa"
+twitter = "https://twitter.com/huzaifa"
+instagram = "https://instagram.com/huzaifa"
+facebook = "https://facebook.com/huzaifa"
+discord = "https://discord.gg/huzaifa"
+whatsapp = "https://wa.me/1234567890"

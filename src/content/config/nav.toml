@@ -1,0 +1,18 @@
+[header]
+logo = { label = "HUZAIFA.DEV", href = "/" }
+
+links = [
+  { label = "Home", href = "/" },
+  { label = "About", href = "/about" },
+  { label = "Work", href = "/work" },
+  { label = "Contact", href = "/contact" }
+]
+
+cta = { label = "Get in Touch", href = "/contact" }
+
+[footer]
+# Use a placeholder like {year} to be replaced in your component logic
+copyright = "© {year} Huzaifa. All rights reserved."
+
+# Extra text if needed
+tagline = "Built with Obsidian Edge Design System."
