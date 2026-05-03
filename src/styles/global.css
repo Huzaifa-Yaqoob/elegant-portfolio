@@ -15,13 +15,13 @@
     --primary: #c9c6c5;
     --primary-foreground: #313030;
     --secondary: #c6c6c7;
-    --secondary-foreground: #141313;
+    --secondary-foreground: #2f3131; /* Updated */
     --muted: #1c1b1b;
     --muted-foreground: #c4c7c7;
     --accent: #201f1f;
     --accent-foreground: #e5e2e1;
     --destructive: #ffb4ab;
-    --border: #333333;
+    --border: #444748; /* Updated */
     --input: #444748;
     --ring: #c9c6c5;
     --chart-1: #e5e2e1;
