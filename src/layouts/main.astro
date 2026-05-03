@@ -11,9 +11,11 @@ import Footer from "@/components/footer/footer.astro"
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Huzaifa.Dev Portfolio</title>
   </head>
-  <body>
+  <body class="flex min-h-svh flex-col">
     <Navbar />
-    <slot />
+    <main class="grow">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>
