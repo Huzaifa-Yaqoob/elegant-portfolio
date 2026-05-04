@@ -40,6 +40,15 @@
     --sidebar-ring: #c9c6c5;
 }
 
+/* Light theme for navbar when data-theme="light" is active */
+#main-nav[data-theme="light"] {
+  --background: var(--inverse-surface); /* From DESIGN.md: '#e5e2e1' */
+  --foreground: var(--inverse-on-surface); /* From DESIGN.md: '#313030' */
+  --muted-foreground: #5f5e5e; /* A darker muted color for light backgrounds */
+  --border: #c4c7c7; /* A lighter border for light backgrounds */
+}
+
+
 @theme inline {
     --font-sans: 'Outfit Variable', sans-serif;
     --font-heading: 'Oxanium Variable', sans-serif;

@@ -16,6 +16,7 @@ const { header } = navEntry.data
 <header
   id="main-nav"
   class="fixed top-0 left-0 z-50 w-full border-b border-transparent transition-all duration-300 ease-in-out"
+  data-theme="dark"
 >
   <div
     id="nav-container"
@@ -26,7 +27,7 @@ const { header } = navEntry.data
       href={header.logo.href}
       class="group font-heading text-2xl leading-none font-extrabold tracking-tighter uppercase"
     >
-      <span class="transition-colors group-hover:text-primary">
+      <span class="transition-colors group-hover:text-primary text-foreground">
         {
           header.logo.label
             .split(".")
@@ -48,7 +49,7 @@ const { header } = navEntry.data
             href={link.href}
             class={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "font-heading tracking-[0.12em] text-[13px]"
+              "font-heading tracking-[0.12em] text-[13px] text-foreground"
             )}
           >
             {link.label}
@@ -70,8 +71,8 @@ const { header } = navEntry.data
 
     <!-- CTA Button -->
     <div class="hidden lg:block">
-      <a 
-        href={header.cta.href} 
+      <a
+        href={header.cta.href}
         class={buttonVariants({ variant: "default" })}
       >
         {header.cta.label}
@@ -90,7 +91,7 @@ const { header } = navEntry.data
       header.links.map((link: { label: string; href: string }) => (
         <a
           href={link.href}
-          class="font-heading text-5xl font-extrabold tracking-tighter uppercase transition-colors hover:text-primary"
+          class="font-heading text-5xl font-extrabold tracking-tighter uppercase transition-colors hover:text-primary text-foreground"
         >
           {link.label}
         </a>
@@ -99,8 +100,8 @@ const { header } = navEntry.data
   </nav>
 
   <div class="mt-auto flex flex-col gap-10 px-8 pb-12">
-    <a 
-      href={header.cta.href} 
+    <a
+      href={header.cta.href}
       class={cn(buttonVariants({ variant: "default", size: "lg" }), "w-full py-10 text-xl font-bold tracking-widest")}
     >
       {header.cta.label}
@@ -111,7 +112,7 @@ const { header } = navEntry.data
         <p class="font-heading text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase mb-3">
           Email
         </p>
-        <a href={`mailto:${personal.email}`} class="text-2xl font-medium hover:text-primary transition-colors">
+        <a href={`mailto:${personal.email}`} class="text-2xl font-medium hover:text-primary transition-colors text-foreground">
           {personal.email}
         </a>
       </div>
@@ -119,7 +120,7 @@ const { header } = navEntry.data
         <p class="font-heading text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase mb-3">
           Connect
         </p>
-        <a href={`tel:${personal.phone}`} class="text-2xl font-medium hover:text-primary transition-colors">
+        <a href={`tel:${personal.phone}`} class="text-2xl font-medium hover:text-primary transition-colors text-foreground">
           {personal.phone}
         </a>
       </div>
@@ -165,6 +166,20 @@ const { header } = navEntry.data
       document.body.style.overflow = ""
     }
   })
+
+  // Function to update navbar theme based on background (placeholder logic)
+  function updateNavbarTheme() {
+    if (!nav) return;
+
+    // Placeholder logic: If scrolled far down, assume a "light" background for demonstration
+    // In a real scenario, you might check the dominant color of the content behind the navbar
+    // or have an explicit theme switch.
+    if (window.scrollY > 500) { // Arbitrary scroll position for demonstration
+      nav.dataset.theme = "light";
+    } else {
+      nav.dataset.theme = "dark";
+    }
+  }
 
   window.addEventListener(
     "scroll",
@@ -221,8 +236,14 @@ const { header } = navEntry.data
         })
       }
 
+      // Update navbar theme based on scroll position
+      updateNavbarTheme();
+
       lastScrollY = currentScrollY
     },
     { passive: true }
   )
+
+  // Initial theme update on load
+  updateNavbarTheme();
 </script>

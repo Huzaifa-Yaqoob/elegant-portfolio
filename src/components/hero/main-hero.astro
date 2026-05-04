@@ -40,12 +40,16 @@
   <div
     class="hero-right absolute top-0 right-0 z-10 h-[50%] w-full lg:z-0 lg:h-full lg:w-[60%]"
   >
-    <img
-      alt="hero-image"
+    <div
       id="hero-diagonal-image"
-      src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070"
-      class="h-full w-full object-cover opacity-0"
-    />
+      class="relative h-full w-full overflow-hidden opacity-0"
+    >
+      <img
+        alt="hero-image"
+        src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    </div>
   </div>
 </section>
 
