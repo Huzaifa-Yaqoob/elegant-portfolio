@@ -1,0 +1,88 @@
+---
+
+---
+
+<section class="hero-section relative h-screen overflow-hidden bg-background">
+  <!-- Left Side (Content): Bottom on mobile, Center-Left on desktop -->
+  <div
+    class="hero-left absolute bottom-0 left-0 z-0 flex h-[60%] w-full items-center justify-center lg:z-10 lg:h-full lg:w-1/2"
+  >
+    <div class="flex flex-col items-center gap-4 px-6 text-center lg:gap-6">
+      <h1
+        class="text-on-surface font-heading text-5xl font-bold tracking-tighter uppercase lg:text-8xl"
+      >
+        Huzaifa.Dev
+      </h1>
+      <p
+        class="text-on-surface-variant max-w-md font-sans text-base lg:text-lg"
+      >
+        Crafting elegant and efficient web experiences with technical precision.
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row lg:gap-4">
+        <a
+          href="/contact"
+          class="rounded-none border-2 border-primary bg-primary px-8 py-3 font-heading text-sm font-bold tracking-widest text-primary-foreground uppercase transition-all hover:bg-transparent hover:text-primary"
+        >
+          Contact Me
+        </a>
+        <a
+          href="/work"
+          class="rounded-none border-2 border-primary px-8 py-3 font-heading text-sm font-bold tracking-widest text-primary uppercase transition-all hover:bg-primary hover:text-primary-foreground"
+        >
+          View My Work
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side (Image): Top on mobile, Absolute Right on desktop -->
+  <div
+    class="hero-right absolute top-0 right-0 z-10 h-[50%] w-full lg:z-0 lg:h-full lg:w-[60%]"
+  >
+    <img
+      alt="hero-image"
+      id="hero-diagonal-image"
+      src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070"
+      class="h-full w-full object-cover opacity-0"
+    />
+  </div>
+</section>
+
+<script>
+  import { gsap } from "../../lib/gsap"
+
+  window.addEventListener("load", () => {
+    const mm = gsap.matchMedia()
+
+    mm.add("(min-width: 1024px)", () => {
+      // Desktop Animation: Vertical diagonal cut
+      gsap.fromTo(
+        "#hero-diagonal-image",
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%)" }, // From right edge (full height)
+        {
+          clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)", // To visible diagonal
+          duration: 1.8,
+          ease: "expo.out",
+          force3D: true,
+          opacity: 1,
+        }
+      )
+    })
+
+    mm.add("(max-width: 1023px)", () => {
+      // Mobile Animation: Horizontal diagonal cut (slanted bottom edge)
+      gsap.fromTo(
+        "#hero-diagonal-image",
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 40%, 0% 100%)" }, // From hidden (collapsed top)
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)", // To visible diagonal
+          duration: 1.8,
+          ease: "expo.out",
+          force3D: true,
+          opacity: 1,
+        }
+      )
+    })
+  })
+</script>
