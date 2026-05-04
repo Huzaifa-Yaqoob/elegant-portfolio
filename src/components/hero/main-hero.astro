@@ -1,5 +1,23 @@
 ---
+import { getEntry } from "astro:content"
 
+// Fetch content entries
+const mainHeroEntry = await getEntry("section", "main_hero")
+if (!mainHeroEntry) throw new Error("Main Hero section content not found")
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) throw new Error("Site configuration not found")
+
+const navEntry = await getEntry("nav", "nav")
+if (!navEntry) throw new Error("Navigation configuration not found")
+
+// Extract data
+const { title, description, main_image } = mainHeroEntry.data
+const { personal, stats } = siteEntry.data
+const { header } = navEntry.data
+
+// Find the "Work" link for the button
+const viewWorkLink = header.links.find((link) => link.label === "Work")
 ---
 
 <section class="hero-section relative h-screen overflow-hidden bg-background">
@@ -8,30 +26,75 @@
     class="hero-left absolute bottom-0 left-0 z-0 flex h-[60%] w-full items-center justify-center lg:z-10 lg:h-full lg:w-1/2"
   >
     <div class="flex flex-col items-center gap-4 px-6 text-center lg:gap-6">
+      <!-- Name -->
+      <h2
+        class="text-on-surface font-heading text-3xl font-bold tracking-tighter uppercase lg:text-5xl"
+      >
+        {personal.name}.Dev
+      </h2>
+      <!-- Divider -->
+      <div class="my-2 h-0.5 w-24 bg-primary"></div>
+
+      <!-- Title and Description -->
       <h1
         class="text-on-surface font-heading text-5xl font-bold tracking-tighter uppercase lg:text-8xl"
       >
-        Huzaifa.Dev
+        {title}
       </h1>
       <p
         class="text-on-surface-variant max-w-md font-sans text-base lg:text-lg"
       >
-        Crafting elegant and efficient web experiences with technical precision.
+        {description}
       </p>
 
-      <div class="flex flex-col gap-3 sm:flex-row lg:gap-4">
+      <!-- Divider -->
+      <div class="my-2 h-0.5 w-24 bg-primary"></div>
+
+      <!-- Stats -->
+      <div class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-4">
+        <div class="text-center">
+          <p class="font-heading text-3xl font-bold text-primary">
+            {stats.total_clients}+
+          </p>
+          <p class="text-on-surface-variant text-sm tracking-widest uppercase">
+            Clients
+          </p>
+        </div>
+        <div class="text-center">
+          <p class="font-heading text-3xl font-bold text-primary">
+            {stats.projects_completed}+
+          </p>
+          <p class="text-on-surface-variant text-sm tracking-widest uppercase">
+            Projects
+          </p>
+        </div>
+        <div class="text-center">
+          <p class="font-heading text-3xl font-bold text-primary">
+            {stats.years_experience}+
+          </p>
+          <p class="text-on-surface-variant text-sm tracking-widest uppercase">
+            Years Exp.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row lg:gap-4">
         <a
-          href="/contact"
+          href={header.cta.href}
           class="rounded-none border-2 border-primary bg-primary px-8 py-3 font-heading text-sm font-bold tracking-widest text-primary-foreground uppercase transition-all hover:bg-transparent hover:text-primary"
         >
-          Contact Me
+          {header.cta.label}
         </a>
-        <a
-          href="/work"
-          class="rounded-none border-2 border-primary px-8 py-3 font-heading text-sm font-bold tracking-widest text-primary uppercase transition-all hover:bg-primary hover:text-primary-foreground"
-        >
-          View My Work
-        </a>
+        {
+          viewWorkLink && (
+            <a
+              href={viewWorkLink.href}
+              class="rounded-none border-2 border-primary px-8 py-3 font-heading text-sm font-bold tracking-widest text-primary uppercase transition-all hover:bg-primary hover:text-primary-foreground"
+            >
+              {viewWorkLink.label} My Projects
+            </a>
+          )
+        }
       </div>
     </div>
   </div>
@@ -46,7 +109,7 @@
     >
       <img
         alt="hero-image"
-        src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070"
+        src={main_image}
         class="absolute inset-0 h-full w-full object-cover"
       />
     </div>
