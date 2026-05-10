@@ -29,51 +29,51 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
       class="flex flex-col items-center gap-4 text-center lg:items-start lg:gap-6 lg:text-left"
     >
       <!-- Name -->
-      <h2 class="text-on-surface h2-style uppercase">
+      <h2 class="text-on-secondary h2-style uppercase">
         {personal.name}.Dev
       </h2>
       <!-- Divider -->
-      <div class="my-2 h-0.5 w-24 bg-primary"></div>
+      <div class="my-2 h-0.5 w-24 bg-on-secondary"></div>
 
       <!-- Title and Description -->
-      <h1 class="text-on-surface h1-style uppercase">
+      <h1 class="text-on-secondary h1-style uppercase">
         {title}
       </h1>
-      <p class="text-on-surface-variant body-lg-style max-w-md">
+      <p class="text-on-secondary-container body-lg-style max-w-md">
         {description}
       </p>
 
       <!-- Divider -->
-      <div class="my-2 h-0.5 w-24 bg-primary"></div>
+      <div class="my-2 h-0.5 w-24 bg-on-secondary"></div>
 
       <!-- Stats -->
       <div
         class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-4 lg:justify-start"
       >
         <div class="text-center lg:text-left">
-          <p class="h3-style text-primary">
+          <p class="h3-style text-on-secondary">
             {stats.total_clients}+
           </p>
-          <p class="text-on-surface-variant label-caps-style">Clients</p>
+          <p class="text-on-secondary-container label-caps-style">Clients</p>
         </div>
         <div class="text-center lg:text-left">
-          <p class="h3-style text-primary">
+          <p class="h3-style text-on-secondary">
             {stats.projects_completed}+
           </p>
-          <p class="text-on-surface-variant label-caps-style">Projects</p>
+          <p class="text-on-secondary-container label-caps-style">Projects</p>
         </div>
         <div class="text-center lg:text-left">
-          <p class="h3-style text-primary">
+          <p class="h3-style text-on-secondary">
             {stats.years_experience}+
           </p>
-          <p class="text-on-surface-variant label-caps-style">Years Exp.</p>
+          <p class="text-on-secondary-container label-caps-style">Years Exp.</p>
         </div>
       </div>
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row lg:gap-4">
         <a
           href={header.cta.href}
-          class="label-caps-style rounded-none border-2 border-primary bg-primary px-8 py-3 text-primary-foreground transition-all hover:bg-transparent hover:text-primary"
+          class="label-caps-style rounded-none border-2 border-on-secondary bg-on-secondary px-8 py-3 text-secondary transition-all hover:bg-transparent hover:text-on-secondary"
         >
           {header.cta.label}
         </a>
@@ -81,7 +81,7 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
           viewWorkLink && (
             <a
               href={viewWorkLink.href}
-              class="label-caps-style rounded-none border-2 border-primary px-8 py-3 text-primary transition-all hover:bg-primary hover:text-primary-foreground"
+              class="label-caps-style rounded-none border-2 border-on-secondary px-8 py-3 text-on-secondary transition-all hover:bg-on-secondary hover:text-secondary"
             >
               {viewWorkLink.label} My Projects
             </a>
@@ -102,7 +102,7 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
       <img
         alt="hero-image"
         src={main_image}
-        class="absolute inset-0 h-full w-full object-cover"
+        class="absolute inset-0 h-full w-full object-cover grayscale"
       />
     </div>
   </div>
