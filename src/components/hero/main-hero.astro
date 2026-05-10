@@ -20,13 +20,14 @@ const { header } = navEntry.data
 const viewWorkLink = header.links.find((link) => link.label === "Work")
 ---
 
-<section class="hero-section relative h-screen overflow-hidden bg-secondary">
-  <!-- Left Side (Content): Bottom on mobile, Center-Left on desktop -->
+<section class="hero-section relative min-h-screen overflow-hidden bg-secondary">
+  <div class="grid min-h-screen grid-rows-[48svh_1fr] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:grid-rows-1">
+  <!-- Left Side (Content): Always left-aligned -->
   <div
-    class="hero-left absolute bottom-0 left-0 z-0 flex h-[60%] w-full items-center justify-center px-6 lg:z-10 lg:h-full lg:w-1/2 lg:justify-start lg:px-16"
+    class="hero-left order-2 z-10 flex items-center px-6 py-10 lg:order-1 lg:px-16"
   >
     <div
-      class="flex flex-col items-center gap-4 text-center lg:items-start lg:gap-6 lg:text-left"
+      class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6"
     >
       <!-- Name -->
       <h2 class="h1-style text-primary-container uppercase">
@@ -48,21 +49,21 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
 
       <!-- Stats -->
       <div
-        class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-4 lg:justify-start"
+        class="mt-6 flex flex-wrap justify-start gap-x-8 gap-y-4"
       >
-        <div class="text-center lg:text-left">
+        <div class="text-left">
           <p class="h2-style text-primary-container">
             {stats.total_clients}+
           </p>
           <p class="label-caps-style text-primary-container">Clients</p>
         </div>
-        <div class="text-center lg:text-left">
+        <div class="text-left">
           <p class="h2-style text-primary-container">
             {stats.projects_completed}+
           </p>
           <p class="label-caps-style text-primary-container">Projects</p>
         </div>
-        <div class="text-center lg:text-left">
+        <div class="text-left">
           <p class="h2-style text-primary-container">
             {stats.years_experience}+
           </p>
@@ -85,9 +86,9 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
     </div>
   </div>
 
-  <!-- Right Side (Image): Top on mobile, Absolute Right on desktop -->
+  <!-- Right Side (Image): Top on mobile, Right on desktop -->
   <div
-    class="hero-right absolute top-0 right-0 z-10 h-[50%] w-full lg:z-0 lg:h-full lg:w-[60%]"
+    class="hero-right order-1 z-0 h-full lg:order-2"
   >
     <div
       id="hero-diagonal-image"
@@ -99,6 +100,7 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
         class="absolute inset-0 h-full w-full object-cover grayscale"
       />
     </div>
+  </div>
   </div>
 </section>
 
