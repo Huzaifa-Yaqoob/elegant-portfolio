@@ -14,14 +14,14 @@
     --popover-foreground: #e5e2e1;
     --primary: #c9c6c5;
     --primary-foreground: #313030;
-    --secondary: #c6c6c7;
-    --secondary-foreground: #2f3131; /* Updated */
+    --secondary: #F5F5F5; /* Updated to F5F5F5 */
+    --secondary-foreground: #2f3131;
     --muted: #1c1b1b;
     --muted-foreground: #c4c7c7;
     --accent: #201f1f;
     --accent-foreground: #e5e2e1;
     --destructive: #ffb4ab;
-    --border: #444748; /* Updated */
+    --border: #444748;
     --input: #444748;
     --ring: #c9c6c5;
     --chart-1: #e5e2e1;
@@ -105,4 +105,81 @@
   html {
     @apply font-sans;
     }
+
+  /* Typography styles based on DESIGN.md */
+  .h1-style {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    font-size: 2.5rem; /* Default for mobile (e.g., 40px) */
+  }
+  @screen md {
+    .h1-style {
+      font-size: 5.25rem; /* 84px */
+    }
+  }
+
+  .h2-style {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-size: 2rem; /* Default for mobile (e.g., 32px) */
+  }
+  @screen md {
+    .h2-style {
+      font-size: 3rem; /* 48px */
+    }
+  }
+
+  .h3-style {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0;
+    font-size: 1.5rem; /* Default for mobile (e.g., 24px) */
+  }
+  @screen md {
+    .h3-style {
+      font-size: 2rem; /* 32px */
+    }
+  }
+
+  .body-lg-style {
+    font-family: var(--font-sans);
+    font-size: 1.125rem; /* 18px */
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  .body-sm-style {
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px */
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  .label-caps-style {
+    font-family: var(--font-heading);
+    font-size: 0.8125rem; /* 13px */
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .label-data-style {
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .mix-blend-difference {
+    mix-blend-mode: difference;
+  }
 }

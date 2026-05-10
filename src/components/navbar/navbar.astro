@@ -15,7 +15,7 @@ const { header } = navEntry.data
 
 <header
   id="main-nav"
-  class="fixed top-0 left-0 z-50 w-full border-b border-transparent transition-all duration-300 ease-in-out"
+  class="fixed top-0 left-0 z-50 w-full border-b border-transparent mix-blend-difference transition-all duration-300 ease-in-out"
   data-theme="dark"
 >
   <div
@@ -27,7 +27,7 @@ const { header } = navEntry.data
       href={header.logo.href}
       class="group font-heading text-2xl leading-none font-extrabold tracking-tighter uppercase"
     >
-      <span class="transition-colors group-hover:text-primary text-foreground">
+      <span class="text-foreground transition-colors group-hover:text-primary">
         {
           header.logo.label
             .split(".")
@@ -49,7 +49,7 @@ const { header } = navEntry.data
             href={link.href}
             class={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "font-heading tracking-[0.12em] text-[13px] text-foreground"
+              "label-caps-style text-foreground"
             )}
           >
             {link.label}
@@ -64,16 +64,19 @@ const { header } = navEntry.data
       class="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
       aria-label="Toggle Menu"
     >
-      <span class="line-1 h-0.5 w-6 bg-foreground transition-all duration-300"></span>
-      <span class="line-2 h-0.5 w-6 bg-foreground transition-all duration-300"></span>
-      <span class="line-3 h-0.5 w-6 bg-foreground transition-all duration-300"></span>
+      <span class="line-1 h-0.5 w-6 bg-foreground transition-all duration-300"
+      ></span>
+      <span class="line-2 h-0.5 w-6 bg-foreground transition-all duration-300"
+      ></span>
+      <span class="line-3 h-0.5 w-6 bg-foreground transition-all duration-300"
+      ></span>
     </button>
 
     <!-- CTA Button -->
     <div class="hidden lg:block">
       <a
         href={header.cta.href}
-        class={buttonVariants({ variant: "default" })}
+        class={cn(buttonVariants({ variant: "default" }))}
       >
         {header.cta.label}
       </a>
@@ -91,7 +94,7 @@ const { header } = navEntry.data
       header.links.map((link: { label: string; href: string }) => (
         <a
           href={link.href}
-          class="font-heading text-5xl font-extrabold tracking-tighter uppercase transition-colors hover:text-primary text-foreground"
+          class="h1-style text-foreground uppercase transition-colors hover:text-primary"
         >
           {link.label}
         </a>
@@ -102,25 +105,32 @@ const { header } = navEntry.data
   <div class="mt-auto flex flex-col gap-10 px-8 pb-12">
     <a
       href={header.cta.href}
-      class={cn(buttonVariants({ variant: "default", size: "lg" }), "w-full py-10 text-xl font-bold tracking-widest")}
+      class={cn(
+        buttonVariants({ variant: "default", size: "lg" }),
+        "w-full py-10 text-xl font-bold tracking-widest"
+      )}
     >
       {header.cta.label}
     </a>
 
-    <div class="grid grid-cols-1 gap-8 border-t border-white/10 pt-10 sm:grid-cols-2">
+    <div
+      class="grid grid-cols-1 gap-8 border-t border-white/10 pt-10 sm:grid-cols-2"
+    >
       <div>
-        <p class="font-heading text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase mb-3">
-          Email
-        </p>
-        <a href={`mailto:${personal.email}`} class="text-2xl font-medium hover:text-primary transition-colors text-foreground">
+        <p class="label-caps-style mb-3 text-muted-foreground">Email</p>
+        <a
+          href={`mailto:${personal.email}`}
+          class="h3-style font-medium text-foreground transition-colors hover:text-primary"
+        >
           {personal.email}
         </a>
       </div>
       <div>
-        <p class="font-heading text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase mb-3">
-          Connect
-        </p>
-        <a href={`tel:${personal.phone}`} class="text-2xl font-medium hover:text-primary transition-colors text-foreground">
+        <p class="label-caps-style mb-3 text-muted-foreground">Connect</p>
+        <a
+          href={`tel:${personal.phone}`}
+          class="h3-style font-medium text-foreground transition-colors hover:text-primary"
+        >
           {personal.phone}
         </a>
       </div>
@@ -169,15 +179,16 @@ const { header } = navEntry.data
 
   // Function to update navbar theme based on background (placeholder logic)
   function updateNavbarTheme() {
-    if (!nav) return;
+    if (!nav) return
 
     // Placeholder logic: If scrolled far down, assume a "light" background for demonstration
     // In a real scenario, you might check the dominant color of the content behind the navbar
     // or have an explicit theme switch.
-    if (window.scrollY > 500) { // Arbitrary scroll position for demonstration
-      nav.dataset.theme = "light";
+    if (window.scrollY > 500) {
+      // Arbitrary scroll position for demonstration
+      nav.dataset.theme = "light"
     } else {
-      nav.dataset.theme = "dark";
+      nav.dataset.theme = "dark"
     }
   }
 
@@ -189,55 +200,42 @@ const { header } = navEntry.data
 
       const currentScrollY = window.scrollY
 
-      // 1. Background State (Glassy Effect) & Dynamic Padding
-      if (currentScrollY > scrollThreshold) {
-        nav?.classList.add(
-          "bg-background/70",
-          "backdrop-blur-xl",
-          "border-white/5"
-        )
-        navContainer?.classList.remove("py-8")
-        navContainer?.classList.add("py-4")
-      } else {
-        nav?.classList.remove(
-          "bg-background/70",
-          "backdrop-blur-xl",
-          "border-white/5"
-        )
-        navContainer?.classList.remove("py-4")
-        navContainer?.classList.add("py-8")
-      }
+      // Removed dynamic background and backdrop-filter logic
+      // The header now relies on mix-blend-difference and is transparent by default.
 
       // 2. Visibility State (Headroom Logic: Skill: gsap-performance)
       if (currentScrollY > 200) {
         if (currentScrollY > lastScrollY && !isNavHidden) {
           // Scrolling Down - Hide using GSAP for smooth transition
           isNavHidden = true
-          if (nav) gsap.to(nav, {
-            yPercent: -100,
-            duration: 0.4,
-            ease: "power2.inOut",
-          })
+          if (nav)
+            gsap.to(nav, {
+              yPercent: -100,
+              duration: 0.4,
+              ease: "power2.inOut",
+            })
         } else if (currentScrollY < lastScrollY && isNavHidden) {
           // Scrolling Up - Show
           isNavHidden = false
-          if (nav) gsap.to(nav, {
+          if (nav)
+            gsap.to(nav, {
+              yPercent: 0,
+              duration: 0.4,
+              ease: "power2.out",
+            })
+        }
+      } else if (isNavHidden) {
+        isNavHidden = false
+        if (nav)
+          gsap.to(nav, {
             yPercent: 0,
             duration: 0.4,
             ease: "power2.out",
           })
-        }
-      } else if (isNavHidden) {
-        isNavHidden = false
-        if (nav) gsap.to(nav, {
-          yPercent: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        })
       }
 
       // Update navbar theme based on scroll position
-      updateNavbarTheme();
+      updateNavbarTheme()
 
       lastScrollY = currentScrollY
     },
@@ -245,5 +243,5 @@ const { header } = navEntry.data
   )
 
   // Initial theme update on load
-  updateNavbarTheme();
+  updateNavbarTheme()
 </script>
