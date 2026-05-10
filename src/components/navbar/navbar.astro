@@ -76,7 +76,7 @@ const { header } = navEntry.data
     <div class="hidden lg:block">
       <a
         href={header.cta.href}
-        class={cn(buttonVariants({ variant: "default" }))}
+        class={cn(buttonVariants({ variant: "outline" }))}
       >
         {header.cta.label}
       </a>
@@ -200,8 +200,24 @@ const { header } = navEntry.data
 
       const currentScrollY = window.scrollY
 
-      // Removed dynamic background and backdrop-filter logic
-      // The header now relies on mix-blend-difference and is transparent by default.
+      // Add/remove glass effect based on scroll position
+      if (nav) {
+        if (currentScrollY > scrollThreshold) {
+          nav.classList.add(
+            "bg-background/80",
+            "backdrop-blur-lg",
+            "border-b-border"
+          )
+          nav.classList.remove("mix-blend-difference", "border-transparent")
+        } else {
+          nav.classList.remove(
+            "bg-background/80",
+            "backdrop-blur-lg",
+            "border-b-border"
+          )
+          nav.classList.add("mix-blend-difference", "border-transparent")
+        }
+      }
 
       // 2. Visibility State (Headroom Logic: Skill: gsap-performance)
       if (currentScrollY > 200) {
