@@ -1,0 +1,61 @@
+---
+interface Props {
+  texts?: string[] // Make texts prop optional
+}
+
+const defaultTexts = [
+  "Web Development",
+  "UI/UX Design",
+  "Branding",
+  "SEO Optimization",
+  "Content Creation",
+  "Digital Marketing",
+]
+
+const { texts = defaultTexts } = Astro.props
+---
+
+<div
+  class="marquee-container my-8 -skew-1 overflow-hidden bg-secondary py-8 text-on-secondary"
+>
+  <div class="marquee-content flex gap-4">
+    {
+      Array.from({ length: 4 }).map(() => (
+        <div class="marquee-item flex shrink-0 gap-4">
+          {texts.map((text) => (
+            <>
+              <span class="text-h2-style uppercase">{text}</span>
+              <span class="text-h2-style">•</span>
+            </>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee-content {
+    animation: marquee 30s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+
+  .marquee-item {
+    white-space: nowrap;
+    display: flex;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-25%);
+    }
+  }
+
+  .marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+  }
+</style>
