@@ -1,4 +1,6 @@
 ---
+import { gsap } from "../lib/gsap"
+
 interface Props {
   texts?: string[] // Make texts prop optional
 }
@@ -24,8 +26,8 @@ const { texts = defaultTexts } = Astro.props
         <div class="marquee-item flex shrink-0 gap-4">
           {texts.map((text) => (
             <>
-              <span class="text-h2-style uppercase">{text}</span>
-              <span class="text-h2-style">•</span>
+              <span class="h2-style uppercase">{text}</span>
+              <span class="h2-style">•</span>
             </>
           ))}
         </div>
@@ -36,7 +38,6 @@ const { texts = defaultTexts } = Astro.props
 
 <style>
   .marquee-content {
-    animation: marquee 30s linear infinite;
     display: flex;
     width: max-content;
   }
@@ -45,17 +46,31 @@ const { texts = defaultTexts } = Astro.props
     white-space: nowrap;
     display: flex;
   }
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-25%);
-    }
-  }
-
-  .marquee-container:hover .marquee-content {
-    animation-play-state: paused;
-  }
 </style>
+
+<script>
+  import { gsap } from "../lib/gsap"
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const marqueeContent = document.querySelector(
+      ".marquee-content"
+    ) as HTMLElement
+    const marqueeContainer = document.querySelector(
+      ".marquee-container"
+    ) as HTMLElement
+
+    if (marqueeContent) {
+      const contentWidth = marqueeContent.offsetWidth / 4 // Because we duplicated the content 4 times
+
+      const tl = gsap.to(marqueeContent, {
+        x: -contentWidth,
+        duration: 30,
+        ease: "none",
+        repeat: -1,
+      })
+
+      marqueeContainer.addEventListener("mouseenter", () => tl.pause())
+      marqueeContainer.addEventListener("mouseleave", () => tl.play())
+    }
+  })
+</script>
