@@ -1,12 +1,12 @@
-import * as LucideIcons from "lucide-react";
-import type { LucideIcon, LucideProps } from "lucide-react";
+import * as LucideIcons from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 type LucideIconProps = {
-  name: string;
-  size?: number | string;
-  class?: string;
-  className?: string;
-};
+  name: string
+  size?: number | string
+  class?: string
+  className?: string
+}
 
 export default function LucideIcon({
   name,
@@ -18,13 +18,13 @@ export default function LucideIcon({
     .split("-")
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
+    .join("")
 
-  const iconMap = LucideIcons as unknown as Record<string, LucideIcon>;
-  const Icon = iconMap[iconComponentName];
+  const iconMap = LucideIcons as unknown as Record<string, LucideIcon>
+  const Icon = iconMap[iconComponentName]
 
   if (!Icon) {
-    return null;
+    return null
   }
 
   return (
@@ -32,5 +32,5 @@ export default function LucideIcon({
       size={typeof size === "string" ? Number(size) : size}
       className={className ?? classProp}
     />
-  );
+  )
 }
