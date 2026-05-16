@@ -182,6 +182,10 @@
     * { @apply border-border outline-ring/50; }
     html { @apply no-scrollbar; }
     body { @apply bg-background text-foreground font-sans; }
+    ::selection {
+        background-color: var(--color-secondary); /* #F5F5F5 - Smoky Off-white */
+        color: var(--color-background);           /* #141313 - Deep Obsidian */
+    }
 
     /* Global Typography from DESIGN.md */
     .h1-style {
@@ -192,10 +196,10 @@
         font-size: 2.5rem;
     }
     @media (min-width: 768px) {
-    .h1-style {
+        .h1-style {
         font-size: 5.25rem; /* 84px based on DESIGN.md */
+        }
     }
-}
 
     .h2-style {
         font-family: var(--font-heading);
