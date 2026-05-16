@@ -180,6 +180,7 @@
 
 @layer base {
     * { @apply border-border outline-ring/50; }
+    html { @apply no-scrollbar; }
     body { @apply bg-background text-foreground font-sans; }
 
     /* Global Typography from DESIGN.md */
