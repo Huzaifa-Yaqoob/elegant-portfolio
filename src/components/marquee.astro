@@ -1,6 +1,4 @@
 ---
-import { gsap } from "../lib/gsap"
-
 interface Props {
   texts?: string[] // Make texts prop optional
 }
@@ -55,22 +53,16 @@ const { texts = defaultTexts } = Astro.props
     const marqueeContent = document.querySelector(
       ".marquee-content"
     ) as HTMLElement
-    const marqueeContainer = document.querySelector(
-      ".marquee-container"
-    ) as HTMLElement
 
     if (marqueeContent) {
       const contentWidth = marqueeContent.offsetWidth / 4 // Because we duplicated the content 4 times
 
-      const tl = gsap.to(marqueeContent, {
+      gsap.to(marqueeContent, {
         x: -contentWidth,
         duration: 30,
         ease: "none",
         repeat: -1,
       })
-
-      marqueeContainer.addEventListener("mouseenter", () => tl.pause())
-      marqueeContainer.addEventListener("mouseleave", () => tl.play())
     }
   })
 </script>

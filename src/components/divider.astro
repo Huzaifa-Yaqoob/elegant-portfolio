@@ -1,0 +1,17 @@
+---
+interface Props {
+  text: string
+}
+
+const { text } = Astro.props
+---
+
+<div class="relative mt-8 flex -rotate-3 items-center py-5">
+  <div class="grow border-t border-border-structural"></div>
+  <span class="label-caps-style mx-4 shrink text-on-surface">{text}</span>
+  <div class="grow border-t border-border-structural"></div>
+</div>
+
+<style>
+  /* No additional styles needed here, Tailwind and global.css handle it */
+</style>

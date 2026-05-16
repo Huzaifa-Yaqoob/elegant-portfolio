@@ -10,7 +10,7 @@ export const sectionSchema = z
     badge: z.string().optional(), // Added as optional
     // Add any other common properties that all sections might share
   })
-  .passthrough() // Allows for additional, specific properties in individual section frontmatters
+  .passthrough() // Allows for additional, specific properties in individual section front matters
 
 export type SectionConfig = z.infer<typeof sectionSchema>
 

@@ -1,5 +1,6 @@
 ---
-import { getCollection, getEntry } from "astro:content"
+import { getEntry } from "astro:content"
+import Divider from "@/components/divider.astro"
 
 // Fetch the service section data using getEntry
 const serviceSection = await getEntry("section", "service")
@@ -17,20 +18,23 @@ if (!serviceSection) {
 const { title, description, divider_text, badge } = serviceSection.data
 ---
 
-<section class="mx-auto flex items-end justify-between px-6 py-10 lg:px-16">
-  <h2 class="h1-style mb-6 text-on-surface uppercase">
-    {title.split(" ")[0]}<br />{title.split(" ").slice(1).join(" ")}
-  </h2>
-  <div class="flex flex-col justify-end text-right md:col-span-4">
-    <p
-      class="font-mono-code text-mono-code mb-4 tracking-widest text-outline uppercase"
-    >
-      [ {badge} ]
-    </p>
-    <p
-      class="font-body-lg text-body-lg ml-auto max-w-sm text-on-surface-variant"
-    >
-      {description}
-    </p>
+<section class="px-6 py-10 lg:px-16">
+  <div class="flex items-end justify-between">
+    <h2 class="h1-style mb-6 text-on-surface uppercase">
+      {title.split(" ")[0]}<br />{title.split(" ").slice(1).join(" ")}
+    </h2>
+    <div class="flex flex-col justify-end text-right md:col-span-4">
+      <p
+        class="font-mono-code text-mono-code mb-4 tracking-widest text-outline uppercase"
+      >
+        [ {badge} ]
+      </p>
+      <p
+        class="font-body-lg text-body-lg ml-auto max-w-sm text-on-surface-variant"
+      >
+        {description}
+      </p>
+    </div>
   </div>
+  {divider_text && <Divider text={divider_text} />}
 </section>
