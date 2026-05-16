@@ -20,87 +20,85 @@ const { header } = navEntry.data
 const viewWorkLink = header.links.find((link) => link.label === "Work")
 ---
 
-<section class="hero-section relative min-h-screen overflow-hidden bg-secondary">
-  <div class="grid min-h-screen grid-rows-[48svh_1fr] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:grid-rows-1">
-  <!-- Left Side (Content): Always left-aligned -->
+<section
+  class="hero-section relative min-h-screen overflow-hidden bg-secondary"
+>
   <div
-    class="hero-left order-2 z-10 flex items-center px-6 py-10 lg:order-1 lg:px-16"
+    class="grid min-h-screen grid-rows-[48svh_1fr] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:grid-rows-1"
   >
+    <!-- Left Side (Content): Always left-aligned -->
     <div
-      class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6"
+      class="hero-left z-10 order-2 flex items-center px-6 py-10 lg:order-1 lg:px-16"
     >
-      <!-- Name -->
-      <h2 class="h1-style text-primary-container uppercase">
-        {personal.name}.Dev
-      </h2>
-      <!-- Divider -->
-      <div class="my-2 h-0.5 w-24 bg-primary-container"></div>
+      <div class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6">
+        <!-- Name -->
+        <h2 class="h1-style text-primary-container uppercase">
+          {personal.name}.Dev
+        </h2>
+        <!-- Divider -->
+        <div class="my-2 h-0.5 w-24 bg-primary-container"></div>
 
-      <!-- Title and Description -->
-      <h1 class="h2-style text-primary-container uppercase">
-        {title}
-      </h1>
-      <p class="body-lg-style max-w-md text-primary-container">
-        {description}
-      </p>
+        <!-- Title and Description -->
+        <h1 class="h2-style text-primary-container uppercase">
+          {title}
+        </h1>
+        <p class="body-lg-style max-w-md text-primary-container">
+          {description}
+        </p>
 
-      <!-- Divider -->
-      <div class="my-2 h-0.5 w-24 bg-primary-container"></div>
+        <!-- Divider -->
+        <div class="my-2 h-0.5 w-24 bg-primary-container"></div>
 
-      <!-- Stats -->
+        <!-- Stats -->
+        <div class="mt-6 flex flex-wrap justify-start gap-x-8 gap-y-4">
+          <div class="text-left">
+            <p class="h2-style text-primary-container">
+              {stats.total_clients}+
+            </p>
+            <p class="label-caps-style text-primary-container">Clients</p>
+          </div>
+          <div class="text-left">
+            <p class="h2-style text-primary-container">
+              {stats.projects_completed}+
+            </p>
+            <p class="label-caps-style text-primary-container">Projects</p>
+          </div>
+          <div class="text-left">
+            <p class="h2-style text-primary-container">
+              {stats.years_experience}+
+            </p>
+            <p class="label-caps-style text-primary-container">Years Exp.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row lg:gap-4">
+          {
+            viewWorkLink && (
+              <a
+                href={viewWorkLink.href}
+                class="label-caps-style rounded-none border-2 border-primary-container px-8 py-3 text-primary-container transition-all hover:bg-primary-container hover:text-foreground"
+              >
+                My Projects
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side (Image): Top on mobile, Right on desktop -->
+    <div class="hero-right z-0 order-1 h-full lg:order-2">
       <div
-        class="mt-6 flex flex-wrap justify-start gap-x-8 gap-y-4"
+        id="hero-diagonal-image"
+        class="relative h-full w-full overflow-hidden opacity-0"
       >
-        <div class="text-left">
-          <p class="h2-style text-primary-container">
-            {stats.total_clients}+
-          </p>
-          <p class="label-caps-style text-primary-container">Clients</p>
-        </div>
-        <div class="text-left">
-          <p class="h2-style text-primary-container">
-            {stats.projects_completed}+
-          </p>
-          <p class="label-caps-style text-primary-container">Projects</p>
-        </div>
-        <div class="text-left">
-          <p class="h2-style text-primary-container">
-            {stats.years_experience}+
-          </p>
-          <p class="label-caps-style text-primary-container">Years Exp.</p>
-        </div>
-      </div>
-
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row lg:gap-4">
-        {
-          viewWorkLink && (
-            <a
-              href={viewWorkLink.href}
-              class="label-caps-style rounded-none border-2 border-primary-container px-8 py-3 text-primary-container transition-all hover:bg-primary-container hover:text-foreground"
-            >
-              {viewWorkLink.label} My Projects
-            </a>
-          )
-        }
+        <img
+          alt="hero-image"
+          src={main_image}
+          class="absolute inset-0 h-full w-full object-cover grayscale"
+        />
       </div>
     </div>
-  </div>
-
-  <!-- Right Side (Image): Top on mobile, Right on desktop -->
-  <div
-    class="hero-right order-1 z-0 h-full lg:order-2"
-  >
-    <div
-      id="hero-diagonal-image"
-      class="relative h-full w-full overflow-hidden opacity-0"
-    >
-      <img
-        alt="hero-image"
-        src={main_image}
-        class="absolute inset-0 h-full w-full object-cover grayscale"
-      />
-    </div>
-  </div>
   </div>
 </section>
 
