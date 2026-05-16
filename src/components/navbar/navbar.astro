@@ -19,8 +19,12 @@ const { header } = navEntry.data
   data-theme="dark"
 >
   <div
+    id="nav-glass"
+    class="pointer-events-none absolute inset-0 -z-10 border-b border-transparent transition-all duration-300"
+  ></div>
+  <div
     id="nav-container"
-    class="mx-auto flex items-center justify-between px-6 py-8 transition-all duration-300 lg:px-16"
+    class="relative z-10 mx-auto flex items-center justify-between px-6 py-8 transition-all duration-300 lg:px-16"
   >
     <!-- Logo -->
     <a
@@ -76,7 +80,7 @@ const { header } = navEntry.data
     <div class="hidden lg:block">
       <a
         href={header.cta.href}
-        class={cn(buttonVariants({ variant: "outline" }))}
+        class={cn(buttonVariants({ variant: "outline" }), "isolate mix-blend-normal")}
       >
         {header.cta.label}
       </a>
@@ -142,6 +146,8 @@ const { header } = navEntry.data
   import { gsap } from "@/lib/gsap"
 
   const nav = document.getElementById("main-nav")
+  const navContainer = document.getElementById("nav-container")
+  const navGlass = document.getElementById("nav-glass")
   const mobileToggle = document.getElementById("mobile-toggle")
   const mobileMenu = document.getElementById("mobile-menu")
   const line1 = mobileToggle?.querySelector(".line-1")
@@ -176,21 +182,6 @@ const { header } = navEntry.data
     }
   })
 
-  // Function to update navbar theme based on background (placeholder logic)
-  function updateNavbarTheme() {
-    if (!nav) return
-
-    // Placeholder logic: If scrolled far down, assume a "light" background for demonstration
-    // In a real scenario, you might check the dominant color of the content behind the navbar
-    // or have an explicit theme switch.
-    if (window.scrollY > 500) {
-      // Arbitrary scroll position for demonstration
-      nav.dataset.theme = "light"
-    } else {
-      nav.dataset.theme = "dark"
-    }
-  }
-
   window.addEventListener(
     "scroll",
     () => {
@@ -202,19 +193,23 @@ const { header } = navEntry.data
       // Add/remove glass effect based on scroll position
       if (nav) {
         if (currentScrollY > scrollThreshold) {
-          nav.classList.add(
+          navGlass?.classList.add(
             "bg-background/80",
             "backdrop-blur-lg",
             "border-b-border"
           )
           nav.classList.remove("mix-blend-difference", "border-transparent")
+          navContainer?.classList.remove("py-8")
+          navContainer?.classList.add("py-4")
         } else {
-          nav.classList.remove(
+          navGlass?.classList.remove(
             "bg-background/80",
             "backdrop-blur-lg",
             "border-b-border"
           )
           nav.classList.add("mix-blend-difference", "border-transparent")
+          navContainer?.classList.remove("py-4")
+          navContainer?.classList.add("py-8")
         }
       }
 
@@ -249,14 +244,23 @@ const { header } = navEntry.data
           })
       }
 
-      // Update navbar theme based on scroll position
-      updateNavbarTheme()
-
       lastScrollY = currentScrollY
     },
     { passive: true }
   )
 
-  // Initial theme update on load
-  updateNavbarTheme()
+  // Initial nav state on load (padding + blend mode)
+  if (nav) {
+    if (window.scrollY > scrollThreshold) {
+      navGlass?.classList.add("bg-background/80", "backdrop-blur-lg", "border-b-border")
+      nav.classList.remove("mix-blend-difference", "border-transparent")
+      navContainer?.classList.remove("py-8")
+      navContainer?.classList.add("py-4")
+    } else {
+      navGlass?.classList.remove("bg-background/80", "backdrop-blur-lg", "border-b-border")
+      nav.classList.add("mix-blend-difference", "border-transparent")
+      navContainer?.classList.remove("py-4")
+      navContainer?.classList.add("py-8")
+    }
+  }
 </script>
