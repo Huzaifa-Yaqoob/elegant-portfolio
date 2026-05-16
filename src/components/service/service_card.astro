@@ -1,0 +1,59 @@
+---
+import LucideIcon from "@/components/icons/LucideIcon.astro"
+
+interface Props {
+  number: string
+  icon: string
+  title: string
+  description: string
+  tags: string[]
+}
+
+const { number, icon, title, description, tags } = Astro.props
+---
+
+<div
+  class="group relative flex flex-col overflow-hidden border border-surface-variant bg-transparent p-8 transition-colors duration-300 hover:bg-card-hover"
+>
+  <div
+    class="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-20"
+  >
+    <span
+      class="font-mono-code text-[64px] leading-none font-bold text-on-surface"
+      >{number}</span
+    >
+  </div>
+  <div class="mb-8">
+    <LucideIcon
+      name={icon}
+      size="48"
+      class="text-primary transition-colors group-hover:text-on-surface"
+    />
+  </div>
+  <h3 class="font-h3 text-h3 mb-4 tracking-tight text-on-surface uppercase">
+    {
+      title.split("<br />").map((line) => (
+        <>
+          {line}
+          <br />
+        </>
+      ))
+    }
+  </h3>
+  <p class="font-body-sm text-body-sm mb-8 flex-grow text-on-surface-variant">
+    {description}
+  </p>
+  <div class="mt-auto flex flex-wrap gap-2">
+    {
+      tags.map((tag) => (
+        <span class="font-mono-label text-mono-label border border-surface-variant px-2 py-1 text-on-surface uppercase">
+          {tag}
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  /* No additional styles needed here, Tailwind and global.css handle it */
+</style>

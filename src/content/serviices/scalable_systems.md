@@ -1,8 +1,8 @@
 ---
 number: "05"
-icon: "hub"
+icon: "network"
 title: "Scalable Systems"
 description: "Cloud-ready architectures built for growth and uncompromising stability."
-tags: ["REACT NATIVE", "SWIFT", "KOTLIN"]
+tags: ["AWS", "DOCKER", "KUBERNETES"]
 order: 5
 ---

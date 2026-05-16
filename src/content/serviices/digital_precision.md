@@ -1,8 +1,8 @@
 ---
 number: "06"
-icon: "biotech"
+icon: "shield-check"
 title: "Digital Precision"
 description: "Clean, maintainable codebases engineered with a focus on structural integrity."
-tags: ["PEN TESTING", "OAUTH", "ENCRYPTION"]
+tags: ["CODE QUALITY", "REFACTORING", "TESTING"]
 order: 6
 ---

@@ -1,6 +1,7 @@
 ---
-import { getEntry } from "astro:content"
+import { getEntry, getCollection } from "astro:content"
 import Divider from "@/components/divider.astro"
+import ServiceCard from "@/components/service/service_card.astro"
 
 // Fetch the service section data using getEntry
 const serviceSection = await getEntry("section", "service")
@@ -16,6 +17,12 @@ if (!serviceSection) {
 }
 
 const { title, description, divider_text, badge } = serviceSection.data
+
+// Fetch all service entries from the 'serviices' collection
+const services = await getCollection("services")
+
+// Sort services by the 'order' property
+services.sort((a, b) => a.data.order - b.data.order)
 ---
 
 <section class="px-6 py-10 lg:px-16">
@@ -37,4 +44,18 @@ const { title, description, divider_text, badge } = serviceSection.data
     </div>
   </div>
   {divider_text && <Divider text={divider_text} />}
+
+  <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    {
+      services.map((service) => (
+        <ServiceCard
+          number={service.data.number}
+          icon={service.data.icon}
+          title={service.data.title}
+          description={service.data.description}
+          tags={service.data.tags}
+        />
+      ))
+    }
+  </div>
 </section>
