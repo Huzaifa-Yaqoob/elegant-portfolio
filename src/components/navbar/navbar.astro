@@ -11,6 +11,16 @@ if (!siteEntry) throw new Error("Site configuration not found")
 const { personal } = siteEntry.data
 
 const { header } = navEntry.data
+const currentPath = Astro.url.pathname
+
+const normalizePath = (path: string) => {
+  if (!path) return "/"
+  const withoutTrailing = path.replace(/\/+$/, "")
+  return withoutTrailing === "" ? "/" : withoutTrailing
+}
+
+const isLinkActive = (href: string) =>
+  normalizePath(href) === normalizePath(currentPath)
 ---
 
 <header
@@ -21,7 +31,8 @@ const { header } = navEntry.data
   <div
     id="nav-glass"
     class="pointer-events-none absolute inset-0 -z-10 border-b border-transparent transition-all duration-300"
-  ></div>
+  >
+  </div>
   <div
     id="nav-container"
     class="relative z-10 mx-auto flex items-center justify-between px-6 py-8 transition-all duration-300 lg:px-16"
@@ -51,12 +62,17 @@ const { header } = navEntry.data
         header.links.map((link: { label: string; href: string }) => (
           <a
             href={link.href}
+            data-nav-link
+            data-link-label={link.label}
+            data-active={isLinkActive(link.href) ? "true" : "false"}
             class={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "label-caps-style text-foreground"
+              "label-caps-style text-foreground hover:bg-transparent dark:hover:bg-transparent focus-visible:bg-transparent active:bg-transparent aria-expanded:bg-transparent dark:aria-expanded:bg-transparent"
             )}
           >
-            {link.label}
+            <span data-nav-link-text>
+              {isLinkActive(link.href) ? `[${link.label}]` : link.label}
+            </span>
           </a>
         ))
       }
@@ -80,7 +96,10 @@ const { header } = navEntry.data
     <div class="hidden lg:block">
       <a
         href={header.cta.href}
-        class={cn(buttonVariants({ variant: "outline" }), "isolate mix-blend-normal")}
+        class={cn(
+          buttonVariants({ variant: "outline" }),
+          "isolate mix-blend-normal"
+        )}
       >
         {header.cta.label}
       </a>
@@ -98,9 +117,14 @@ const { header } = navEntry.data
       header.links.map((link: { label: string; href: string }) => (
         <a
           href={link.href}
-          class="h1-style text-foreground uppercase transition-colors hover:text-primary"
+          data-nav-link
+          data-link-label={link.label}
+          data-active={isLinkActive(link.href) ? "true" : "false"}
+          class="h1-style text-foreground uppercase transition-colors hover:bg-transparent hover:text-primary"
         >
-          {link.label}
+          <span data-nav-link-text>
+            {isLinkActive(link.href) ? `[${link.label}]` : link.label}
+          </span>
         </a>
       ))
     }
@@ -153,6 +177,9 @@ const { header } = navEntry.data
   const line1 = mobileToggle?.querySelector(".line-1")
   const line2 = mobileToggle?.querySelector(".line-2")
   const line3 = mobileToggle?.querySelector(".line-3")
+  const navLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
+  )
 
   let lastScrollY = window.scrollY
   const scrollThreshold = 50
@@ -181,6 +208,48 @@ const { header } = navEntry.data
       document.body.style.overflow = ""
     }
   })
+
+  const setupNavLinkHover = (link: HTMLAnchorElement) => {
+    const textWrapper = link.querySelector<HTMLElement>("[data-nav-link-text]")
+    const rawLabel = link.dataset.linkLabel
+    if (!textWrapper || !rawLabel) return
+
+    const isActive = link.dataset.active === "true"
+    const displayText = isActive ? `[${rawLabel}]` : rawLabel
+    textWrapper.textContent = ""
+
+    const chars = Array.from(displayText).map((char) => {
+      const span = document.createElement("span")
+      span.dataset.char = "true"
+      span.style.display = "inline-block"
+      span.style.fontStyle = "normal"
+      span.textContent = char === " " ? "\u00A0" : char
+      textWrapper.appendChild(span)
+      return span
+    })
+
+    link.addEventListener("mouseenter", () => {
+      gsap.killTweensOf(chars)
+      gsap.to(chars, {
+        fontStyle: "italic",
+        duration: 0.22,
+        ease: "power2.out",
+        stagger: 0.025,
+      })
+    })
+
+    link.addEventListener("mouseleave", () => {
+      gsap.killTweensOf(chars)
+      gsap.to(chars, {
+        fontStyle: "normal",
+        duration: 0.2,
+        ease: "power2.out",
+        stagger: 0.02,
+      })
+    })
+  }
+
+  navLinks.forEach(setupNavLinkHover)
 
   window.addEventListener(
     "scroll",
@@ -252,12 +321,20 @@ const { header } = navEntry.data
   // Initial nav state on load (padding + blend mode)
   if (nav) {
     if (window.scrollY > scrollThreshold) {
-      navGlass?.classList.add("bg-background/80", "backdrop-blur-lg", "border-b-border")
+      navGlass?.classList.add(
+        "bg-background/80",
+        "backdrop-blur-lg",
+        "border-b-border"
+      )
       nav.classList.remove("mix-blend-difference", "border-transparent")
       navContainer?.classList.remove("py-8")
       navContainer?.classList.add("py-4")
     } else {
-      navGlass?.classList.remove("bg-background/80", "backdrop-blur-lg", "border-b-border")
+      navGlass?.classList.remove(
+        "bg-background/80",
+        "backdrop-blur-lg",
+        "border-b-border"
+      )
       nav.classList.add("mix-blend-difference", "border-transparent")
       navContainer?.classList.remove("py-4")
       navContainer?.classList.add("py-8")
