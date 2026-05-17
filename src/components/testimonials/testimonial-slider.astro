@@ -1,0 +1,190 @@
+---
+import { getCollection } from "astro:content"
+import TestimonialCard from "./testimonial-card.astro"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+const testimonials = (await getCollection("testimonial")).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+)
+---
+
+<div class="mt-12">
+  <div
+    data-testimonial-slider
+    class="relative border border-surface-variant bg-transparent p-3 md:p-4"
+  >
+    <div class="relative min-h-[430px] overflow-hidden md:min-h-[470px]">
+      {
+        testimonials.map((item, index) => (
+          <div
+            data-slide
+            data-index={index}
+            class={`absolute inset-0 ${
+              index === 0 ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
+            <TestimonialCard
+              quote={item.data.quote}
+              name={item.data.author}
+              role={item.data.role}
+              image={item.data.avatar_url}
+              tag={`LOG_${String(index + 1).padStart(3, "0")}`}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-4 flex items-center justify-between border-t border-surface-variant pt-4">
+      <div class="flex items-center gap-2">
+        {
+          testimonials.map((_, index) => (
+            <button
+              type="button"
+              data-dot={index}
+              aria-label={`Go to testimonial ${index + 1}`}
+              class={`h-1.5 w-8 border border-outline-variant transition-colors ${
+                index === 0 ? "bg-on-surface" : "bg-transparent"
+              }`}
+            />
+          ))
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          data-prev
+          aria-label="Previous testimonial"
+          class="inline-flex h-10 w-10 items-center justify-center border border-outline-variant text-on-surface transition-colors hover:bg-on-surface hover:text-background"
+        >
+          <LucideIcon name="ArrowLeft" size={16} />
+        </button>
+        <button
+          type="button"
+          data-next
+          aria-label="Next testimonial"
+          class="inline-flex h-10 w-10 items-center justify-center border border-outline-variant text-on-surface transition-colors hover:bg-on-surface hover:text-background"
+        >
+          <LucideIcon name="ArrowRight" size={16} />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const slider = document.querySelector<HTMLElement>("[data-testimonial-slider]")
+  if (slider) {
+    const slides = Array.from(
+      slider.querySelectorAll<HTMLElement>("[data-slide]")
+    )
+    const dots = Array.from(slider.querySelectorAll<HTMLElement>("[data-dot]"))
+    const prevBtn = slider.querySelector<HTMLButtonElement>("[data-prev]")
+    const nextBtn = slider.querySelector<HTMLButtonElement>("[data-next]")
+
+    if (slides.length > 0) {
+      let current = 0
+      let isAnimating = false
+      let autoPlayTween: gsap.core.Tween | null = null
+
+      const updateDots = (activeIndex: number) => {
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("bg-on-surface", index === activeIndex)
+          dot.classList.toggle("bg-transparent", index !== activeIndex)
+        })
+      }
+
+      const goTo = (nextIndex: number, direction = 1) => {
+        if (
+          isAnimating ||
+          nextIndex === current ||
+          nextIndex < 0 ||
+          nextIndex >= slides.length
+        )
+          return
+
+        isAnimating = true
+        const currentSlide = slides[current]
+        const nextSlide = slides[nextIndex]
+
+        gsap.set(nextSlide, {
+          xPercent: direction > 0 ? 100 : -100,
+          scale: 0.96,
+          autoAlpha: 0,
+          pointerEvents: "none",
+          force3D: true,
+        })
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.inOut", duration: 0.8 },
+          onComplete: () => {
+            currentSlide.classList.add("pointer-events-none")
+            nextSlide.classList.remove("pointer-events-none")
+            current = nextIndex
+            updateDots(current)
+            isAnimating = false
+          },
+        })
+
+        tl.to(currentSlide, {
+          xPercent: direction > 0 ? -28 : 28,
+          scale: 0.96,
+          autoAlpha: 0,
+          pointerEvents: "none",
+          force3D: true,
+        }).to(
+          nextSlide,
+          {
+            xPercent: 0,
+            scale: 1,
+            autoAlpha: 1,
+            pointerEvents: "auto",
+            force3D: true,
+          },
+          0
+        )
+      }
+
+      const next = () => goTo((current + 1) % slides.length, 1)
+      const prev = () => goTo((current - 1 + slides.length) % slides.length, -1)
+
+      const startAutoPlay = () => {
+        autoPlayTween?.kill()
+        autoPlayTween = gsap.delayedCall(4.5, function tick() {
+          next()
+          autoPlayTween = gsap.delayedCall(4.5, tick)
+        })
+      }
+
+      const stopAutoPlay = () => {
+        autoPlayTween?.kill()
+        autoPlayTween = null
+      }
+
+      nextBtn?.addEventListener("click", () => {
+        next()
+        startAutoPlay()
+      })
+      prevBtn?.addEventListener("click", () => {
+        prev()
+        startAutoPlay()
+      })
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          const direction = index > current ? 1 : -1
+          goTo(index, direction)
+          startAutoPlay()
+        })
+      })
+
+      slider.addEventListener("mouseenter", stopAutoPlay)
+      slider.addEventListener("mouseleave", startAutoPlay)
+
+      startAutoPlay()
+    }
+  }
+</script>

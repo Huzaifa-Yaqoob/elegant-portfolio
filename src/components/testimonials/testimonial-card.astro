@@ -1,0 +1,60 @@
+---
+interface Props {
+  quote: string
+  name: string
+  role: string
+  image: string
+  imageAlt?: string
+  tag?: string
+}
+
+const {
+  quote,
+  name,
+  role,
+  image,
+  imageAlt = `${name} profile picture`,
+  tag = "LOG_002",
+} = Astro.props
+---
+
+<article
+  class="group relative flex w-full flex-col gap-8 overflow-hidden border border-outline-variant bg-primary-fixed p-8 transition-colors duration-500 hover:bg-secondary md:gap-10 md:p-12"
+>
+  <div
+    class="absolute top-0 right-0 border-b border-l border-outline-variant bg-surface px-2 py-1"
+  >
+    <span class="font-mono-code text-mono-code text-on-surface uppercase">
+      {tag}
+    </span>
+  </div>
+
+  <div class="flex grow items-center justify-center py-4 md:py-8">
+    <p
+      class="max-w-3xl text-center font-h3 text-h3 leading-tight text-on-primary-fixed-variant"
+    >
+      "{quote}"
+    </p>
+  </div>
+
+  <div class="mt-auto flex items-center gap-4">
+    <img
+      src={image}
+      alt={imageAlt}
+      class="h-14 w-14 border border-surface object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+      loading="lazy"
+    />
+    <div class="flex flex-col">
+      <span
+        class="font-body-lg text-body-lg font-bold text-on-tertiary-fixed uppercase"
+      >
+        {name}
+      </span>
+      <span
+        class="font-mono-code text-mono-code text-on-tertiary-container uppercase"
+      >
+        {role}
+      </span>
+    </div>
+  </div>
+</article>
