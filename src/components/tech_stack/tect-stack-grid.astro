@@ -1,0 +1,87 @@
+---
+import AstroIcon from "@/components/icons/tech_stack/astro.astro"
+import AwsIcon from "@/components/icons/tech_stack/aws.astro"
+import BunIcon from "@/components/icons/tech_stack/bun.astro"
+import ClaudeCodeIcon from "@/components/icons/tech_stack/claude_code.astro"
+import DockerIcon from "@/components/icons/tech_stack/docker.astro"
+import ExpressIcon from "@/components/icons/tech_stack/express.astro"
+import FigmaIcon from "@/components/icons/tech_stack/figma.astro"
+import GitIcon from "@/components/icons/tech_stack/git.astro"
+import GithubIcon from "@/components/icons/tech_stack/github.astro"
+import GraphqlIcon from "@/components/icons/tech_stack/graphql.astro"
+import LinuxIcon from "@/components/icons/tech_stack/linux.astro"
+import MdxIcon from "@/components/icons/tech_stack/mdx.astro"
+import MongodbIcon from "@/components/icons/tech_stack/mongodb.astro"
+import NestjsIcon from "@/components/icons/tech_stack/nestjs.astro"
+import NextjsIcon from "@/components/icons/tech_stack/nextjs.astro"
+import NodeJsIcon from "@/components/icons/tech_stack/node_js.astro"
+import PostgresqlIcon from "@/components/icons/tech_stack/postgresql.astro"
+import ReactIcon from "@/components/icons/tech_stack/react.astro"
+import RustIcon from "@/components/icons/tech_stack/rust.astro"
+import StripeIcon from "@/components/icons/tech_stack/stripe.astro"
+import TailwindIcon from "@/components/icons/tech_stack/tailwind.astro"
+import TurborepoIcon from "@/components/icons/tech_stack/turborepo.astro"
+import TypescriptIcon from "@/components/icons/tech_stack/typescript.astro"
+import WebassemblyIcon from "@/components/icons/tech_stack/webassembly.astro"
+
+interface TechnologyItem {
+  name: string
+  icon: string
+}
+
+interface Props {
+  technologies: TechnologyItem[]
+}
+
+const { technologies } = Astro.props
+
+const iconMap = {
+  react: ReactIcon,
+  nextjs: NextjsIcon,
+  node_js: NodeJsIcon,
+  typescript: TypescriptIcon,
+  tailwind: TailwindIcon,
+  graphql: GraphqlIcon,
+  docker: DockerIcon,
+  aws: AwsIcon,
+  rust: RustIcon,
+  webassembly: WebassemblyIcon,
+  astro: AstroIcon,
+  bun: BunIcon,
+  claude_code: ClaudeCodeIcon,
+  nestjs: NestjsIcon,
+  stripe: StripeIcon,
+  postgresql: PostgresqlIcon,
+  mongodb: MongodbIcon,
+  git: GitIcon,
+  linux: LinuxIcon,
+  figma: FigmaIcon,
+  turborepo: TurborepoIcon,
+  mdx: MdxIcon,
+  github: GithubIcon,
+  express: ExpressIcon,
+} as const
+---
+
+<div
+  class="grid grid-cols-2 border-t border-l border-border-structural sm:grid-cols-3 md:grid-cols-4"
+>
+  {
+    technologies.map((item) => {
+      const Icon = iconMap[item.icon as keyof typeof iconMap]
+      return (
+        <div class="group relative aspect-square overflow-hidden border-r border-b border-border-structural p-5 transition-colors hover:bg-card-hover md:p-6">
+          <div class="absolute inset-0 bg-gradient-to-br from-surface-container-high/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div class="relative z-10 flex h-full flex-col items-center justify-center text-center">
+            {Icon && (
+              <Icon class="mb-4 h-10 w-10 text-on-surface-variant transition-colors duration-300 group-hover:text-primary" />
+            )}
+            <span class="font-mono-code text-mono-code text-on-surface-variant uppercase transition-colors duration-300 group-hover:text-on-surface">
+              {item.name}
+            </span>
+          </div>
+        </div>
+      )
+    })
+  }
+</div>

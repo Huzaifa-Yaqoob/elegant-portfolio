@@ -1,0 +1,35 @@
+---
+import { getEntry } from "astro:content"
+import TectStackGrid from "./tect-stack-grid.astro"
+
+const techStackSection = await getEntry("section", "tech-stack")
+
+if (!techStackSection) {
+  console.error(
+    "Section entry 'tech-stack.md' not found in content collection 'section'."
+  )
+  return ""
+}
+
+const { title, description, tag, technologies } = techStackSection.data
+---
+
+<section class="relative my-16 border-y border-border-structural bg-surface-container-lowest py-20">
+  <div class="mx-auto px-6 lg:px-16">
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-6">
+      <div class="border-l border-border-structural pl-6 lg:col-span-4 lg:pr-10">
+        <p class="font-mono-label text-mono-label mb-4 text-primary uppercase">
+          {tag}
+        </p>
+        <h2 class="h2-style mb-6 text-on-surface uppercase">
+          {title.split(" ")[0]}<br />{title.split(" ").slice(1).join(" ")}
+        </h2>
+        <p class="body-lg-style text-on-surface-variant">{description}</p>
+      </div>
+
+      <div class="lg:col-span-8">
+        <TectStackGrid technologies={technologies ?? []} />
+      </div>
+    </div>
+  </div>
+</section>
