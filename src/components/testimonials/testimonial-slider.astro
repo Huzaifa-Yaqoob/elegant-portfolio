@@ -13,7 +13,7 @@ const testimonials = (await getCollection("testimonial")).sort(
     data-testimonial-slider
     class="relative border border-surface-variant bg-transparent p-3 md:p-4"
   >
-    <div class="relative min-h-[430px] overflow-hidden md:min-h-[470px]">
+    <div class="relative min-h-107.5 overflow-hidden md:min-h-117.5">
       {
         testimonials.map((item, index) => (
           <div
@@ -35,7 +35,9 @@ const testimonials = (await getCollection("testimonial")).sort(
       }
     </div>
 
-    <div class="mt-4 flex items-center justify-between border-t border-surface-variant pt-4">
+    <div
+      class="mt-4 flex items-center justify-between border-t border-surface-variant pt-4"
+    >
       <div class="flex items-center gap-2">
         {
           testimonials.map((_, index) => (
@@ -76,7 +78,9 @@ const testimonials = (await getCollection("testimonial")).sort(
 <script>
   import { gsap } from "@/lib/gsap"
 
-  const slider = document.querySelector<HTMLElement>("[data-testimonial-slider]")
+  const slider = document.querySelector<HTMLElement>(
+    "[data-testimonial-slider]"
+  )
   if (slider) {
     const slides = Array.from(
       slider.querySelectorAll<HTMLElement>("[data-slide]")
