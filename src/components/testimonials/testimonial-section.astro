@@ -1,0 +1,94 @@
+---
+import { getEntry } from "astro:content"
+
+const testimonialSection = await getEntry("section", "testimonial")
+
+if (!testimonialSection) {
+  console.error(
+    "Section entry 'testimonial.md' not found in content collection 'section'."
+  )
+  return ""
+}
+
+const { title, badge } = testimonialSection.data
+---
+
+<section
+  class="relative overflow-hidden border-y border-surface-variant px-6 py-20 lg:px-16"
+>
+  <div class="pointer-events-none absolute inset-0">
+    <svg
+      class="h-full w-full opacity-65"
+      viewBox="0 0 700 700"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      <defs>
+        <filter
+          id="testimonial-noise-filter"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+          filterUnits="objectBoundingBox"
+          primitiveUnits="userSpaceOnUse"
+          color-interpolation-filters="linearRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.2"
+            numOctaves="4"
+            seed="15"
+            stitchTiles="stitch"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+            result="turbulence"></feTurbulence>
+          <feSpecularLighting
+            id="testimonial-specular-light"
+            surfaceScale="15"
+            specularConstant="0.75"
+            specularExponent="20"
+            lighting-color="#ffffff"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+            in="turbulence"
+            result="specularLighting"
+          >
+            <feDistantLight azimuth="3" elevation="100"></feDistantLight>
+          </feSpecularLighting>
+        </filter>
+      </defs>
+      <rect width="700" height="700" fill="var(--color-deep-obsidian)"></rect>
+      <rect
+        width="700"
+        height="700"
+        fill="var(--color-secondary)"
+        filter="url(#testimonial-noise-filter)"></rect>
+    </svg>
+  </div>
+
+  <div class="relative z-10 mx-auto">
+    <p class="label-caps-style mb-5 text-on-surface">[ {badge} ]</p>
+    <h2 class="h1-style max-w-4xl text-on-surface uppercase">{title}</h2>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const specular = document.getElementById("testimonial-specular-light")
+
+  if (specular) {
+    gsap.to(specular, {
+      attr: { surfaceScale: 26 },
+      duration: 5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    })
+  }
+</script>
