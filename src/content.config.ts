@@ -3,7 +3,8 @@ import { defineCollection } from "astro:content"
 import { glob } from "astro/loaders"
 import { NavSchema, SiteSchema } from "@/config/site_nav.config"
 import { sectionSchema } from "@/config/section.config"
-import { serviceSchema } from "@/config/service.config" // Import serviceSchema
+import { serviceSchema } from "@/config/service.config"
+import { portfolioSchema } from "@/config/portfolio.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -23,9 +24,15 @@ const section = defineCollection({
 
 // Define the services collection
 const services = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/serviices" }), // Assuming services are Markdown files in src/content/serviices
+  loader: glob({ pattern: "*.md", base: "./src/content/services" }), // Assuming services are Markdown files in src/content/services
   schema: serviceSchema,
 })
 
+// Define the portfolio collection
+const portfolio = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/portfolio" }), // Corrected loader for portfolio items
+  schema: portfolioSchema,
+})
+
 // 3. Export the collections object
-export const collections = { nav, site, section, services }
+export const collections = { nav, site, section, services, portfolio }
