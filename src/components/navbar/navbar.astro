@@ -134,8 +134,8 @@ const isLinkActive = (href: string) =>
     <a
       href={header.cta.href}
       class={cn(
-        buttonVariants({ variant: "default", size: "lg" }),
-        "w-full py-10 text-xl font-bold tracking-widest"
+        buttonVariants({ variant: "outline", size: "lg" }),
+        "w-full border-2 border-on-surface bg-on-surface py-10 text-xl font-bold tracking-widest text-background hover:bg-secondary hover:text-on-secondary"
       )}
     >
       {header.cta.label}
