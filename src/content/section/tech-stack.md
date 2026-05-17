@@ -2,6 +2,15 @@
 title: "Tech Stack"
 tag: "// CORE_ARCHITECTURE"
 description: "A curated selection of modern technologies ensuring high performance, scalability, and robust security across all deployments."
+core_strengths:
+  - "Microservices"
+  - "REST API Architecture"
+  - "High-End Animations"
+  - "Scalable System Design"
+  - "Clean Code Practices"
+  - "Performance Optimization"
+  - "Secure Integrations"
+  - "Automation Workflows"
 technologies:
   - name: "React"
     icon: "react"

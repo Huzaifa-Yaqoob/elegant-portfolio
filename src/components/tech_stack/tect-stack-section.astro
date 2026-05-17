@@ -11,7 +11,8 @@ if (!techStackSection) {
   return ""
 }
 
-const { title, description, tag, technologies } = techStackSection.data
+const { title, description, tag, core_strengths, technologies } =
+  techStackSection.data
 ---
 
 <section class="relative my-16 border-y border-border-structural bg-surface-container-lowest py-20">
@@ -25,6 +26,19 @@ const { title, description, tag, technologies } = techStackSection.data
           {title.split(" ")[0]}<br />{title.split(" ").slice(1).join(" ")}
         </h2>
         <p class="body-lg-style text-on-surface-variant">{description}</p>
+
+        <div class="mt-6 border-t border-border-structural pt-5">
+          <p class="font-mono-label text-mono-label mb-3 text-on-surface uppercase">
+            Engineering Focus
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {(core_strengths ?? []).map((item: string) => (
+              <span class="font-mono-code text-mono-code border border-surface-variant px-2 py-1 text-on-surface-variant uppercase">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div class="lg:col-span-8">
