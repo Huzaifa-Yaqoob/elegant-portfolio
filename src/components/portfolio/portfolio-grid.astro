@@ -1,0 +1,74 @@
+---
+import { getCollection, getEntry } from "astro:content"
+
+const portfolioSection = await getEntry("section", "portfolio")
+const maxPortfolio =
+  typeof portfolioSection?.data?.max_portfolio === "number"
+    ? portfolioSection.data.max_portfolio
+    : 4
+
+const entries = await getCollection("portfolio")
+const projects = entries
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, maxPortfolio)
+
+const cardClasses = [
+  "md:col-span-8 min-h-[460px] bg-surface-dim hover:bg-surface-container-low",
+  "md:col-span-4 min-h-[460px] bg-inverse-surface hover:bg-primary-fixed",
+  "md:col-span-5 min-h-[420px] bg-surface-dim hover:bg-surface-container-low",
+  "md:col-span-7 min-h-[420px] bg-background hover:bg-surface",
+]
+---
+
+<div class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-12">
+  {
+    projects.map((project, index) => {
+      const tools = project.data.tools
+      const isLightCard = index % cardClasses.length === 1
+      const cardClass =
+        cardClasses[index % cardClasses.length] ??
+        "md:col-span-6 min-h-[520px] bg-surface-dim hover:bg-surface-container-low"
+
+      return (
+        <article
+          class={`group relative flex flex-col overflow-hidden border border-surface-variant transition-colors duration-300 ${cardClass}`}
+        >
+          <div class="relative border-b border-surface-variant bg-surface-container-low p-3">
+            <img
+              src={project.data.mainImage}
+              alt={project.data.title}
+              class="h-auto w-full grayscale transition-all duration-700 group-hover:grayscale-0"
+              loading="lazy"
+            />
+            <div class="absolute top-6 left-6 border border-outline bg-surface/85 px-3 py-1 backdrop-blur">
+              <span class="label-caps-style text-on-surface">
+                {project.data.slug}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex flex-col p-5 md:p-6">
+            <div>
+              <h3 class={`h3-style mb-3 uppercase ${isLightCard ? "text-inverse-on-surface" : "text-on-surface"}`}>
+                {project.data.title}
+              </h3>
+              <p class={`body-sm-style ${isLightCard ? "text-on-primary" : "text-on-surface-variant"}`}>
+                {project.data.description}
+              </p>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              {tools.map((tool) => (
+                <span
+                  class={`label-data-style px-2 py-1 uppercase ${isLightCard ? "border border-outline text-inverse-on-surface" : "border border-surface-variant text-outline"}`}
+                >
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </div>
+        </article>
+      )
+    })
+  }
+</div>
