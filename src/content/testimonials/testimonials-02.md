@@ -3,4 +3,5 @@ quote: "Bringing an incredible amount of energy and focus to the team, Huzaifa e
 author: "Muzammil Shakir"
 role: "CEO, Musketeers Tech"
 avatar_url: "/main_hero.png"
+order: 2
 ---

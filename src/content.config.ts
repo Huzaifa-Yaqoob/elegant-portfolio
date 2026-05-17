@@ -5,6 +5,7 @@ import { NavSchema, SiteSchema } from "@/config/site_nav.config"
 import { sectionSchema } from "@/config/section.config"
 import { serviceSchema } from "@/config/service.config"
 import { portfolioSchema } from "@/config/portfolio.config.ts"
+import { testimonialsSchema } from "@/config/testimonials.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -34,5 +35,17 @@ const portfolio = defineCollection({
   schema: portfolioSchema,
 })
 
+const testimonial = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/testimonials" }), // Corrected loader for portfolio items
+  schema: testimonialsSchema,
+})
+
 // 3. Export the collections object
-export const collections = { nav, site, section, services, portfolio }
+export const collections = {
+  nav,
+  site,
+  section,
+  services,
+  portfolio,
+  testimonial,
+}

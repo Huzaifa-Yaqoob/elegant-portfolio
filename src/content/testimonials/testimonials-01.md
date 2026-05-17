@@ -3,4 +3,5 @@ quote: "Huzaifa’s problem-solving approach is defined by exceptional clarity a
 author: "Zafar Ahmad"
 role: "CEO, Axtra Studio"
 avatar_url: "/main_hero.png"
+order: 1
 ---

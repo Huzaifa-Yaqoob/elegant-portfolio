@@ -3,4 +3,5 @@ quote: "Working closely with Huzaifa, I’ve seen firsthand his commitment to hi
 author: "Zain Ansari"
 role: "Senior Software Engineer, Axtra Studio"
 avatar_url: "/main_hero.png"
+order: 3
 ---
