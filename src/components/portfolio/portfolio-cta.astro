@@ -1,0 +1,18 @@
+---
+import { buttonVariants } from "@/lib/button-variants.ts"
+import { cn } from "@/lib/utils"
+import LucideIcon from "@/components/icons/LucideIcon"
+---
+
+<div class="mt-16 flex justify-center">
+  <a
+    href="/portfolio"
+    class={cn(
+      buttonVariants({ variant: "outline", size: "lg" }),
+      "border-2 border-on-surface px-12 py-8 font-heading text-sm text-on-surface uppercase"
+    )}
+  >
+    View All Projects
+    <LucideIcon name="ArrowRight" size={18} class="transition-transform group-hover/button:translate-x-0.5" />
+  </a>
+</div>

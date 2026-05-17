@@ -1,6 +1,7 @@
 ---
-import { getEntry, getCollection } from "astro:content"
+import { getEntry } from "astro:content"
 import PortfolioGrid from "./portfolio-grid.astro"
+import PortfolioCTA from "./portfolio-cta.astro"
 import SectionLayout from "@/layouts/section-layout.astro"
 
 // Fetch the service section data using getEntry
@@ -26,4 +27,5 @@ const { title, description, divider_text, badge } = serviceSection.data
   divider_text={divider_text}
 >
   <PortfolioGrid />
+  <PortfolioCTA />
 </SectionLayout>
