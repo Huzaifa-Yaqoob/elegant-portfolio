@@ -2,7 +2,17 @@ import { useId } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Field, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
 
 interface ContactReason {
   label: string
@@ -32,86 +42,136 @@ export function ContactForm({
   const messageId = useId()
 
   return (
-    <form action={endpoint} method={method} className="space-y-8 rounded-none border border-outline-variant bg-surface-container-low p-6 md:p-8">
+    <form
+      action={endpoint}
+      method={method}
+      className="space-y-8 rounded-none border border-outline-variant p-6 md:p-8"
+    >
       <div className="space-y-2 border-b border-outline-variant pb-4">
         <h3 className="h3-style text-on-surface uppercase">{title}</h3>
         <p className="body-sm-style text-on-surface-variant">{description}</p>
       </div>
 
       <FieldSet>
-        <FieldLegend className="label-caps-style text-on-surface-variant">What do you need help with?</FieldLegend>
-        <FieldGroup className="gap-4 md:grid md:grid-cols-3 md:gap-3">
-          {reasons.map((reason, index) => (
-            <Field key={reason.value} orientation="horizontal" className="items-center gap-2 rounded-none border border-outline-variant px-3 py-2">
-              <input
-                type="radio"
-                id={`reason-${reason.value}`}
-                name="reason"
-                value={reason.value}
-                defaultChecked={index === 0}
-                className="h-4 w-4 accent-primary"
-              />
-              <FieldLabel htmlFor={`reason-${reason.value}`} className="body-sm-style cursor-pointer text-on-surface normal-case tracking-normal">
-                {reason.label}
-              </FieldLabel>
-            </Field>
-          ))}
-        </FieldGroup>
+        <div className="border border-surface-variant p-6">
+          <FieldLegend className="label-caps-style mb-6 border-b border-surface-variant pb-2 text-on-surface-variant">
+            What do you need help with?
+          </FieldLegend>
+          <RadioGroup
+            name="reason"
+            defaultValue={reasons[0]?.value}
+            className="flex flex-col gap-6 md:flex-row md:gap-12"
+          >
+            {reasons.map((reason) => (
+              <div
+                key={reason.value}
+                className="group inline-flex items-center gap-3"
+              >
+                <RadioGroupItem
+                  id={`reason-${reason.value}`}
+                  value={reason.value}
+                />
+                <Label
+                  htmlFor={`reason-${reason.value}`}
+                  className="cursor-pointer body-sm-style tracking-normal text-on-surface normal-case transition-colors group-hover:text-inverse-surface"
+                >
+                  {reason.label}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
       </FieldSet>
 
       <FieldGroup className="gap-6">
         <Field>
-          <FieldLabel htmlFor={nameId} className="label-caps-style text-on-surface-variant">Name</FieldLabel>
-          <input
-            id={nameId}
-            name="name"
-            type="text"
-            required
-            autoComplete="name"
-            className="body-lg-style h-11 w-full rounded-none border border-outline-variant bg-surface px-3 text-on-surface outline-none focus:border-primary"
-          />
+          <div className="relative">
+            <Input
+              id={nameId}
+              name="name"
+              type="text"
+              required
+              autoComplete="name"
+              placeholder=" "
+              className="body-lg-style"
+            />
+            <label
+              htmlFor={nameId}
+              className="peer-focus:label-caps-style peer-not-placeholder-shown:label-caps-style pointer-events-none absolute top-4 left-0 body-lg-style text-on-surface-variant transition-all duration-200 peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-on-surface peer-focus:-top-4 peer-focus:text-on-surface"
+            >
+              Name
+            </label>
+          </div>
           <FieldError />
         </Field>
 
         <Field>
-          <FieldLabel htmlFor={emailId} className="label-caps-style text-on-surface-variant">Email</FieldLabel>
-          <input
-            id={emailId}
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="body-lg-style h-11 w-full rounded-none border border-outline-variant bg-surface px-3 text-on-surface outline-none focus:border-primary"
-          />
+          <div className="relative">
+            <Input
+              id={emailId}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder=" "
+              className="body-lg-style"
+            />
+            <label
+              htmlFor={emailId}
+              className="peer-focus:label-caps-style peer-not-placeholder-shown:label-caps-style pointer-events-none absolute top-4 left-0 body-lg-style text-on-surface-variant transition-all duration-200 peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-on-surface peer-focus:-top-4 peer-focus:text-on-surface"
+            >
+              Identifier [Email]
+            </label>
+          </div>
           <FieldError />
         </Field>
 
         <Field>
-          <FieldLabel htmlFor={subjectId} className="label-caps-style text-on-surface-variant">Subject</FieldLabel>
-          <input
-            id={subjectId}
-            name="subject"
-            type="text"
-            required
-            className="body-lg-style h-11 w-full rounded-none border border-outline-variant bg-surface px-3 text-on-surface outline-none focus:border-primary"
-          />
+          <div className="relative">
+            <Input
+              id={subjectId}
+              name="subject"
+              type="text"
+              required
+              placeholder=" "
+              className="body-lg-style"
+            />
+            <label
+              htmlFor={subjectId}
+              className="peer-focus:label-caps-style peer-not-placeholder-shown:label-caps-style pointer-events-none absolute top-4 left-0 body-lg-style text-on-surface-variant transition-all duration-200 peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-on-surface peer-focus:-top-4 peer-focus:text-on-surface"
+            >
+              Subject Line
+            </label>
+          </div>
           <FieldError />
         </Field>
 
         <Field>
-          <FieldLabel htmlFor={messageId} className="label-caps-style text-on-surface-variant">Message</FieldLabel>
-          <textarea
-            id={messageId}
-            name="message"
-            rows={6}
-            required
-            className="body-lg-style w-full rounded-none border border-outline-variant bg-surface px-3 py-2 text-on-surface outline-none focus:border-primary"
-          />
+          <div className="relative">
+            <Textarea
+              id={messageId}
+              name="message"
+              rows={6}
+              required
+              placeholder=" "
+              className="body-lg-style"
+            />
+            <label
+              htmlFor={messageId}
+              className="peer-focus:label-caps-style peer-not-placeholder-shown:label-caps-style pointer-events-none absolute top-4 left-0 body-lg-style text-on-surface-variant transition-all duration-200 peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-on-surface peer-focus:-top-4 peer-focus:text-on-surface"
+            >
+              Data Payload [Message]
+            </label>
+          </div>
           <FieldError />
         </Field>
       </FieldGroup>
 
-      <Button type="submit" size="lg" className="w-full md:w-auto">
+      <Button
+        type="submit"
+        size="lg"
+        className="h-16 w-full border-2 border-on-surface bg-transparent px-10 text-on-surface hover:bg-on-surface hover:text-primary-container md:w-auto"
+      >
         {submitLabel}
         <ArrowRight className="size-4" />
       </Button>
