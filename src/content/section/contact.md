@@ -1,0 +1,5 @@
+---
+title: "INITIATE CONTACT"
+tag: "// COMM_LINK_ESTABLISHED"
+badge: "STATUS: SECURE_CHANNEL_OPEN"
+---

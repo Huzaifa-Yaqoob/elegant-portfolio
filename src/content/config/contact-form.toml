@@ -1,0 +1,19 @@
+[form]
+title = "Send a Message"
+description = "Share your project goals, timeline, and any important details."
+endpoint = "https://example.com/api/contact"
+method = "POST"
+submit_label = "Send Message"
+response_time = "Typical response within 24 hours."
+
+[[form.reasons]]
+label = "New Project"
+value = "new-project"
+
+[[form.reasons]]
+label = "Contract Work"
+value = "contract-work"
+
+[[form.reasons]]
+label = "General Question"
+value = "general-question"

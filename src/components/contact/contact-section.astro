@@ -1,0 +1,71 @@
+---
+import { getEntry } from "astro:content"
+import ContactInfoMap from "@/components/contact/contact-info-map.astro"
+import { ContactForm } from "@/components/contact/contact-form"
+
+const contactSection = await getEntry("section", "contact")
+if (!contactSection) {
+  console.error(
+    "Contact section entry 'contact.md' not found in collection 'section'."
+  )
+  return ""
+}
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) {
+  console.error("Site config entry 'site.toml' not found in collection 'site'.")
+  return ""
+}
+
+const contactFormEntry = await getEntry("contactForm", "contact-form")
+if (!contactFormEntry) {
+  console.error(
+    "Contact form config entry 'contact-form.toml' not found in collection 'contactForm'."
+  )
+  return ""
+}
+
+const { title, tag, badge } = contactSection.data
+const { personal } = siteEntry.data
+const formConfig = contactFormEntry.data.form
+
+const addressLink = personal.address_link || "https://www.google.com/maps"
+---
+
+<section id="contact" class="px-6 py-16 lg:px-16">
+  <div
+    class="mb-10 flex flex-col gap-5 border-b border-outline-variant pb-8 md:flex-row md:items-end md:justify-between"
+  >
+    <h2 class="h1-style text-on-surface uppercase">
+      {title}
+    </h2>
+    <div class="text-left md:max-w-sm md:text-right">
+      <p class="label-caps-style text-on-surface-variant">{tag}</p>
+      <p class="label-caps-style mt-2 text-on-surface-variant">{badge}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <ContactInfoMap
+        name={personal.name}
+        email={personal.email}
+        phone={personal.phone}
+        address={personal.address}
+        addressLink={addressLink}
+        responseTime={formConfig.response_time}
+      />
+    </div>
+    <div class="lg:col-span-7">
+      <ContactForm
+        client:load
+        endpoint={formConfig.endpoint}
+        method={formConfig.method}
+        title={formConfig.title}
+        description={formConfig.description}
+        submitLabel={formConfig.submit_label}
+        reasons={formConfig.reasons}
+      />
+    </div>
+  </div>
+</section>
