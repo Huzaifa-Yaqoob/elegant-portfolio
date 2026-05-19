@@ -65,7 +65,8 @@ const { name, email, phone, address, addressLink, responseTime } = Astro.props
         src={addressLink}
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
-        class="h-full w-full border-0 grayscale contrast-125 brightness-90"></iframe>
+        class="h-full w-full border-0 brightness-90 contrast-125 grayscale"
+      ></iframe>
     </a>
     <p class="mt-4 body-sm-style text-on-surface-variant">{responseTime}</p>
   </div>

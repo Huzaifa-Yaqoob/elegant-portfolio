@@ -170,7 +170,8 @@ const isLinkActive = (href: string) =>
   import { gsap } from "@/lib/gsap"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-  const scrollY = ScrollTrigger.getScrollFunc(window) as (() => number) & ((pos: number) => void)
+  const scrollY = ScrollTrigger.getScrollFunc(window) as (() => number) &
+    ((pos: number) => void)
 
   const nav = document.getElementById("main-nav")
   const navContainer = document.getElementById("nav-container")

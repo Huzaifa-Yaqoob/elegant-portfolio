@@ -30,7 +30,7 @@ const { number, icon, title, description, tags } = Astro.props
       class="text-primary transition-colors group-hover:text-on-surface"
     />
   </div>
-  <h3 class="font-h3 text-h3 mb-4 tracking-tight text-on-surface uppercase">
+  <h3 class="mb-4 font-h3 text-h3 tracking-tight text-on-surface uppercase">
     {
       title.split("<br />").map((line) => (
         <>
@@ -40,13 +40,13 @@ const { number, icon, title, description, tags } = Astro.props
       ))
     }
   </h3>
-  <p class="font-body-sm text-body-sm mb-8 flex-grow text-on-surface-variant">
+  <p class="mb-8 flex-grow font-body-sm text-body-sm text-on-surface-variant">
     {description}
   </p>
   <div class="mt-auto flex flex-wrap gap-2">
     {
       tags.map((tag) => (
-        <span class="font-mono-label text-mono-label border border-surface-variant px-2 py-1 text-on-surface uppercase">
+        <span class="border border-surface-variant px-2 py-1 font-mono-label text-mono-label text-on-surface uppercase">
           {tag}
         </span>
       ))

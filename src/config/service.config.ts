@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from "astro:content"
 
 export const serviceSchema = z.object({
   number: z.string(),
@@ -7,6 +7,6 @@ export const serviceSchema = z.object({
   description: z.string(),
   tags: z.array(z.string()),
   order: z.number(),
-});
+})
 
-export type ServiceCard = z.infer<typeof serviceSchema>;
+export type ServiceCard = z.infer<typeof serviceSchema>

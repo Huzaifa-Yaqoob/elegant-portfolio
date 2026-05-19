@@ -30,7 +30,10 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
     <div
       class="hero-left z-10 order-2 flex items-center px-6 py-10 lg:order-1 lg:px-16"
     >
-      <div class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6">
+      <div
+        id="hero-content"
+        class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6"
+      >
         <!-- Name -->
         <h2 class="h1-style text-primary-container uppercase">
           {personal.name}.Dev
@@ -42,7 +45,7 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
         <h1 class="h2-style text-primary-container uppercase">
           {title}
         </h1>
-        <p class="body-lg-style max-w-md text-primary-container">
+        <p class="max-w-md body-lg-style text-primary-container">
           {description}
         </p>
 
@@ -109,33 +112,67 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
     const mm = gsap.matchMedia()
 
     mm.add("(min-width: 1024px)", () => {
-      // Desktop Animation: Vertical diagonal cut
+      const DURATION = 1.8
+
       gsap.fromTo(
         "#hero-diagonal-image",
-        { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%)" }, // From right edge (full height)
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%)" },
         {
-          clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)", // To visible diagonal
-          duration: 1.8,
+          clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          duration: DURATION,
           ease: "expo.out",
           force3D: true,
           opacity: 1,
         }
       )
+
+      const contentChildren = document.querySelector("#hero-content")?.children
+      if (contentChildren?.length) {
+        const each = DURATION / contentChildren.length
+        gsap.fromTo(
+          contentChildren,
+          { x: 80, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: each,
+            ease: "power2.out",
+            stagger: each,
+          }
+        )
+      }
     })
 
     mm.add("(max-width: 1023px)", () => {
-      // Mobile Animation: Horizontal diagonal cut (slanted bottom edge)
+      const DURATION = 1.8
+
       gsap.fromTo(
         "#hero-diagonal-image",
-        { clipPath: "polygon(0% 0%, 100% 0%, 100% 40%, 0% 100%)" }, // From hidden (collapsed top)
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 40%, 0% 100%)" },
         {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)", // To visible diagonal
-          duration: 1.8,
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)",
+          duration: DURATION,
           ease: "expo.out",
           force3D: true,
           opacity: 1,
         }
       )
+
+      const contentChildren = document.querySelector("#hero-content")?.children
+      if (contentChildren?.length) {
+        const each = DURATION / contentChildren.length
+        gsap.fromTo(
+          contentChildren,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: each,
+            ease: "power2.out",
+            stagger: each,
+          }
+        )
+      }
     })
   })
 </script>

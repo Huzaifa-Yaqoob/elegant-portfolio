@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from "astro:content"
 
 export const NavSchema = z.object({
   header: z.object({
@@ -21,7 +21,7 @@ export const NavSchema = z.object({
     copyright: z.string(),
     tagline: z.string().optional(),
   }),
-});
+})
 
 export const SiteSchema = z.object({
   site_name: z.string(),
@@ -46,4 +46,4 @@ export const SiteSchema = z.object({
     discord: z.string(),
     whatsapp: z.string(),
   }),
-});
+})
