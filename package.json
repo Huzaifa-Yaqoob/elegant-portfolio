@@ -13,6 +13,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.9",
     "@astrojs/react": "^4.4.2",
     "@base-ui/react": "^1.4.1",
     "@fontsource-variable/outfit": "^5.2.8",
@@ -42,7 +43,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript": "~5.9.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.57.1"
   }
 }

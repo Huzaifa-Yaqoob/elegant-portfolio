@@ -67,7 +67,7 @@ const isLinkActive = (href: string) =>
             data-active={isLinkActive(link.href) ? "true" : "false"}
             class={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "label-caps-style text-foreground hover:bg-transparent dark:hover:bg-transparent focus-visible:bg-transparent active:bg-transparent aria-expanded:bg-transparent dark:aria-expanded:bg-transparent"
+              "label-caps-style text-foreground hover:bg-transparent focus-visible:bg-transparent active:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent dark:aria-expanded:bg-transparent"
             )}
           >
             <span data-nav-link-text>
@@ -170,7 +170,7 @@ const isLinkActive = (href: string) =>
   import { gsap } from "@/lib/gsap"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-  const scrollY = ScrollTrigger.getScrollFunc(window)
+  const scrollY = ScrollTrigger.getScrollFunc(window) as (() => number) & ((pos: number) => void)
 
   const nav = document.getElementById("main-nav")
   const navContainer = document.getElementById("nav-container")
@@ -264,7 +264,7 @@ const isLinkActive = (href: string) =>
 
       // Add/remove glass effect based on scroll position
       if (nav) {
-        if (currentScrollY > scrollThreshold) {
+        if ((currentScrollY ?? 0) > scrollThreshold) {
           navGlass?.classList.add(
             "bg-background/80",
             "backdrop-blur-lg",
@@ -286,7 +286,7 @@ const isLinkActive = (href: string) =>
       }
 
       // 2. Visibility State (Headroom Logic: Skill: gsap-performance)
-      if (currentScrollY > 200) {
+      if ((currentScrollY ?? 0) > 200) {
         if (currentScrollY > lastScrollY && !isNavHidden) {
           // Scrolling Down - Hide using GSAP for smooth transition
           isNavHidden = true
