@@ -168,6 +168,9 @@ const isLinkActive = (href: string) =>
 
 <script>
   import { gsap } from "@/lib/gsap"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  const scrollY = ScrollTrigger.getScrollFunc(window)
 
   const nav = document.getElementById("main-nav")
   const navContainer = document.getElementById("nav-container")
@@ -181,7 +184,7 @@ const isLinkActive = (href: string) =>
     document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
   )
 
-  let lastScrollY = window.scrollY
+  let lastScrollY = scrollY()
   const scrollThreshold = 50
   let isNavHidden = false
 
@@ -257,7 +260,7 @@ const isLinkActive = (href: string) =>
       // Don't hide/show while menu is open
       if (!menuTl.reversed()) return
 
-      const currentScrollY = window.scrollY
+      const currentScrollY = scrollY()
 
       // Add/remove glass effect based on scroll position
       if (nav) {
@@ -320,7 +323,7 @@ const isLinkActive = (href: string) =>
 
   // Initial nav state on load (padding + blend mode)
   if (nav) {
-    if (window.scrollY > scrollThreshold) {
+    if (scrollY() > scrollThreshold) {
       navGlass?.classList.add(
         "bg-background/80",
         "backdrop-blur-lg",
