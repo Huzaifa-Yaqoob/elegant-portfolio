@@ -70,6 +70,7 @@ const CLICKABLE_SELECTOR =
   'a, button, [role="button"], [data-cursor="pointer"], summary, select, [data-slot="radio-group-item"], .cursor-pointer'
 
 export function Cursor() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const shapeRef = useRef<SVGPathElement>(null)
@@ -186,6 +187,167 @@ export function Cursor() {
   }, [])
 
   useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    class Node {
+      x = 0
+      y = 0
+      vx = 0
+      vy = 0
+    }
+
+    const config = {
+      friction: 0.5,
+      trails: 20,
+      size: 44,
+      dampening: 0.25,
+      tension: 0.98,
+    }
+
+    const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+    type Line = { spring: number; friction: number; nodes: Node[] }
+    let lines: Line[] = []
+    let huePhase = Math.random() * Math.PI * 2
+    let running = true
+    let rafId = 0
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    const createLines = () => {
+      lines = []
+      for (let i = 0; i < config.trails; i += 1) {
+        const nodes: Node[] = []
+        for (let n = 0; n < config.size; n += 1) {
+          const node = new Node()
+          node.x = pos.x
+          node.y = pos.y
+          nodes.push(node)
+        }
+        lines.push({
+          spring: 0.42 + (i / config.trails) * 0.03 + Math.random() * 0.03,
+          friction: config.friction + Math.random() * 0.02 - 0.01,
+          nodes,
+        })
+      }
+    }
+
+    const updateLine = (line: Line) => {
+      let spring = line.spring
+      let node = line.nodes[0]
+      node.vx += (pos.x - node.x) * spring
+      node.vy += (pos.y - node.y) * spring
+
+      for (let i = 0; i < line.nodes.length; i += 1) {
+        node = line.nodes[i]
+        if (i > 0) {
+          const prev = line.nodes[i - 1]
+          node.vx += (prev.x - node.x) * spring
+          node.vy += (prev.y - node.y) * spring
+          node.vx += prev.vx * config.dampening
+          node.vy += prev.vy * config.dampening
+        }
+        node.vx *= line.friction
+        node.vy *= line.friction
+        node.x += node.vx
+        node.y += node.vy
+        spring *= config.tension
+      }
+    }
+
+    const drawLine = (line: Line) => {
+      let x = line.nodes[0].x
+      let y = line.nodes[0].y
+      ctx.beginPath()
+      ctx.moveTo(x, y)
+
+      for (let i = 1; i < line.nodes.length - 2; i += 1) {
+        const current = line.nodes[i]
+        const next = line.nodes[i + 1]
+        x = (current.x + next.x) * 0.5
+        y = (current.y + next.y) * 0.5
+        ctx.quadraticCurveTo(current.x, current.y, x, y)
+      }
+
+      const current = line.nodes[line.nodes.length - 2]
+      const next = line.nodes[line.nodes.length - 1]
+      ctx.quadraticCurveTo(current.x, current.y, next.x, next.y)
+      ctx.stroke()
+      ctx.closePath()
+    }
+
+    const render = () => {
+      if (!running) return
+
+      ctx.globalCompositeOperation = "source-over"
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.globalCompositeOperation = "lighter"
+
+      huePhase += 0.0015
+      const hue = Math.round(285 + Math.sin(huePhase) * 12)
+      ctx.strokeStyle = `hsla(${hue}, 8%, 82%, 0.12)`
+      ctx.lineWidth = 1
+
+      for (let i = 0; i < lines.length; i += 1) {
+        updateLine(lines[i])
+        drawLine(lines[i])
+      }
+
+      rafId = window.requestAnimationFrame(render)
+    }
+
+    const onPointerMove = (e: MouseEvent | TouchEvent) => {
+      if ("touches" in e) {
+        if (!e.touches[0]) return
+        pos.x = e.touches[0].clientX
+        pos.y = e.touches[0].clientY
+      } else {
+        pos.x = e.clientX
+        pos.y = e.clientY
+      }
+    }
+
+    const onFocus = () => {
+      if (running) return
+      running = true
+      render()
+    }
+
+    const onBlur = () => {
+      running = false
+      cancelAnimationFrame(rafId)
+    }
+
+    resizeCanvas()
+    createLines()
+    render()
+
+    window.addEventListener("resize", resizeCanvas)
+    window.addEventListener("orientationchange", resizeCanvas)
+    document.addEventListener("mousemove", onPointerMove)
+    document.addEventListener("touchmove", onPointerMove, { passive: true })
+    window.addEventListener("focus", onFocus)
+    window.addEventListener("blur", onBlur)
+
+    return () => {
+      running = false
+      cancelAnimationFrame(rafId)
+      window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("orientationchange", resizeCanvas)
+      document.removeEventListener("mousemove", onPointerMove)
+      document.removeEventListener("touchmove", onPointerMove)
+      window.removeEventListener("focus", onFocus)
+      window.removeEventListener("blur", onBlur)
+    }
+  }, [])
+
+  useEffect(() => {
     const effectiveState: CursorState = state === "default" ? autoState : state
     const prevState = effectiveStateRef.current
 
@@ -285,62 +447,69 @@ export function Cursor() {
   }, [])
 
   return (
-    <div
-      ref={containerRef}
-      className="pointer-events-none fixed top-0 left-0 z-[9999]"
-      style={{
-        width: CURSOR_SIZE,
-        height: CURSOR_SIZE,
-        willChange: "transform",
-      }}
-    >
-      <svg
-        ref={svgRef}
-        width={CURSOR_SIZE}
-        height={CURSOR_SIZE}
-        viewBox={VIEW_BOX}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          ref={shapeRef}
-          d={SHAPES.default}
-          fill="#F5F5F5"
-          stroke="#141313"
-          strokeWidth="1"
-          style={{
-            opacity: 1,
-            transformOrigin: "center",
-            transformBox: "fill-box",
-            transform: "scale(1)",
-          }}
-        />
-        <path
-          ref={spinnerRef}
-          d={SPINNER_PATH}
-          fill="none"
-          stroke="#F5F5F5"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          style={{
-            opacity: 0,
-            transformOrigin: "center",
-            transformBox: "fill-box",
-          }}
-        />
-      </svg>
-
-      <span
-        ref={labelElRef}
-        className="label-caps-style absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-on-surface"
+    <>
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none fixed inset-0 z-[9998]"
+        aria-hidden="true"
+      />
+      <div
+        ref={containerRef}
+        className="pointer-events-none fixed top-0 left-0 z-[9999]"
         style={{
-          opacity: 0,
-          transform: "translate(-50%, -50%) scale(0.6)",
-          transformOrigin: "center",
+          width: CURSOR_SIZE,
+          height: CURSOR_SIZE,
+          willChange: "transform",
         }}
       >
-        {label}
-      </span>
-    </div>
+        <svg
+          ref={svgRef}
+          width={CURSOR_SIZE}
+          height={CURSOR_SIZE}
+          viewBox={VIEW_BOX}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            ref={shapeRef}
+            d={SHAPES.default}
+            fill="#F5F5F5"
+            stroke="#141313"
+            strokeWidth="1"
+            style={{
+              opacity: 1,
+              transformOrigin: "center",
+              transformBox: "fill-box",
+              transform: "scale(1)",
+            }}
+          />
+          <path
+            ref={spinnerRef}
+            d={SPINNER_PATH}
+            fill="none"
+            stroke="#F5F5F5"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            style={{
+              opacity: 0,
+              transformOrigin: "center",
+              transformBox: "fill-box",
+            }}
+          />
+        </svg>
+
+        <span
+          ref={labelElRef}
+          className="label-caps-style absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-on-surface"
+          style={{
+            opacity: 0,
+            transform: "translate(-50%, -50%) scale(0.6)",
+            transformOrigin: "center",
+          }}
+        >
+          {label}
+        </span>
+      </div>
+    </>
   )
 }
