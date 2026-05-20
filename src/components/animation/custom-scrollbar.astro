@@ -96,6 +96,9 @@
       },
     })
 
-    updateThumb(0)
+    const currentScroll = smoother.scrollTop()
+    const maxScroll = content.offsetHeight - window.innerHeight
+    const initialProgress = maxScroll > 0 ? currentScroll / maxScroll : 0
+    updateThumb(initialProgress)
   })()
 </script>
