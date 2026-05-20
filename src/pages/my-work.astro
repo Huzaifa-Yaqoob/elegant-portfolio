@@ -1,0 +1,24 @@
+---
+import Layout from "@/layouts/main.astro"
+import PortfolioPageHeader from "@/components/portfolio/portfolio-page-header.astro"
+import PortfolioShowcase from "@/components/portfolio/portfolio-showcase.astro"
+import { getCollection } from "astro:content"
+
+const portfolioIndex = await getCollection("portfolioIndex")
+const indexData = portfolioIndex[0]?.data
+
+if (!indexData) {
+  throw new Error("Portfolio index content not found")
+}
+---
+
+<Layout>
+  <PortfolioPageHeader
+    title={indexData.title}
+    description={indexData.description}
+    videoLink={indexData.videoLink}
+    mainImage={indexData.mainImage}
+  />
+
+  <PortfolioShowcase />
+</Layout>

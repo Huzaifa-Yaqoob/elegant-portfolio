@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+const entries = await getCollection("portfolio")
+const projects = entries.sort((a, b) => a.data.order - b.data.order)
+---
+
+<div id="portfolio-showcase" class="flex w-full flex-col">
+  {
+    projects.map((project, index) => {
+      const isEven = index % 2 === 0
+      const tools = project.data.tools
+      const projectNumber = String(index + 1).padStart(2, "0")
+
+      return (
+        <section
+          class={`relative w-full border-b border-surface-variant px-8 py-32 md:px-16 ${
+            !isEven ? "bg-surface-container-lowest" : ""
+          }`}
+        >
+          <div
+            class={`flex flex-col items-center gap-16 md:flex-row ${
+              !isEven ? "md:flex-row-reverse" : ""
+            }`}
+          >
+            {/* Image Container */}
+            <div class="relative w-full overflow-hidden border border-surface-variant md:w-3/5">
+              <div class="skew-card h-[400px] w-full md:h-[600px]">
+                <img
+                  src={project.data.mainImage}
+                  alt={project.data.title}
+                  class="h-full w-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            {/* Info Card - Overlapping */}
+            <div
+              class={`skewed-card relative z-10 w-full border border-surface-variant bg-background p-10 shadow-2xl md:w-2/5 ${
+                isEven ? "md:-ml-32" : "md:-mr-32"
+              }`}
+            >
+              <div class="counter-skew">
+                <span class="mb-4 block font-heading text-6xl font-black tracking-tighter text-surface-variant">
+                  {projectNumber}
+                </span>
+                <h2 class="mb-6 font-heading text-4xl font-black tracking-tighter text-on-background uppercase">
+                  {project.data.title}
+                </h2>
+                <p class="mb-10 leading-relaxed text-on-surface-variant">
+                  {project.data.description}
+                </p>
+                <div class="flex flex-wrap gap-3">
+                  {tools.map((tool) => (
+                    <span class="border border-surface-variant px-4 py-2 text-xs font-bold tracking-widest uppercase">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    })
+  }
+</div>
+
+<style>
+  .skew-card {
+    transform: skewY(-3deg);
+    transform-origin: center center;
+  }
+
+  .skewed-card {
+    transform: skewY(-3deg);
+    transform-origin: center center;
+  }
+
+  .counter-skew {
+    transform: skewY(3deg);
+  }
+</style>

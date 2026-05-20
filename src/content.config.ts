@@ -4,7 +4,10 @@ import { glob } from "astro/loaders"
 import { NavSchema, SiteSchema } from "@/config/site_nav.config"
 import { sectionSchema } from "@/config/section.config"
 import { serviceSchema } from "@/config/service.config"
-import { portfolioSchema } from "@/config/portfolio.config.ts"
+import {
+  portfolioSchema,
+  portfolioIndexSchema,
+} from "@/config/portfolio.config.ts"
 import { testimonialsSchema } from "@/config/testimonials.config.ts"
 import { contactFormSchema } from "@/config/contact-form.config.ts"
 
@@ -30,9 +33,18 @@ const services = defineCollection({
   schema: serviceSchema,
 })
 
-// Define the portfolio collection
+// Define the portfolio index collection
+const portfolioIndex = defineCollection({
+  loader: glob({ pattern: "**/-index.md", base: "./src/content/portfolio" }),
+  schema: portfolioIndexSchema,
+})
+
+// Define the portfolio items collection
 const portfolio = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/portfolio" }), // Corrected loader for portfolio items
+  loader: glob({
+    pattern: ["*.md", "!-index.md"],
+    base: "./src/content/portfolio",
+  }),
   schema: portfolioSchema,
 })
 
@@ -52,6 +64,7 @@ export const collections = {
   site,
   section,
   services,
+  portfolioIndex,
   portfolio,
   testimonial,
   contactForm,

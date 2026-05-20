@@ -1,0 +1,48 @@
+---
+interface Props {
+  title: string
+  description: string
+  videoLink: string
+  mainImage: string
+}
+
+const { title, description, videoLink, mainImage } = Astro.props
+---
+
+<header
+  id="portfolio-page-header"
+  class="relative w-full border-b border-surface-variant px-8 pt-40 pb-20 md:px-16"
+>
+  <div
+    class="absolute top-20 right-16 hidden font-heading text-[200px] font-black tracking-tighter opacity-20 select-none lg:block"
+    style="color: transparent; -webkit-text-stroke: 1px var(--outline-variant);"
+  >
+    00
+  </div>
+
+  <video
+    src={videoLink}
+    autoplay
+    muted
+    loop
+    playsinline
+    class="absolute inset-0 h-full w-full object-cover opacity-10"></video>
+
+  <img
+    src={mainImage}
+    alt={title}
+    class="absolute inset-0 h-full w-full object-cover"
+    loading="eager"
+  />
+
+  <div class="relative z-10 flex min-h-[614px] flex-col justify-end">
+    <h1 class="h1-style max-w-5xl text-on-surface uppercase">
+      {title}
+    </h1>
+    <p
+      class="mt-8 max-w-xl text-lg font-medium tracking-wide text-on-surface-variant"
+    >
+      {description}
+    </p>
+  </div>
+</header>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>OBSIDIAN EDGE - Engineered Works</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#353434",
+            "tertiary-fixed-dim": "#cac6c3",
+            "on-primary-fixed": "#1c1b1b",
+            "on-primary": "#313030",
+            "outline": "#8e9192",
+            "inverse-on-surface": "#313030",
+            "surface-container": "#201f1f",
+            "on-surface-variant": "#c4c7c7",
+            "secondary-fixed-dim": "#c6c6c7",
+            "secondary": "#c6c6c7",
+            "primary": "#c9c6c5",
+            "on-tertiary": "#32302f",
+            "primary-container": "#0a0a0a",
+            "surface": "#141313",
+            "on-secondary-container": "#b4b5b5",
+            "on-primary-fixed-variant": "#474646",
+            "surface-container-high": "#2b2a2a",
+            "on-tertiary-container": "#7c7977",
+            "inverse-primary": "#5f5e5e",
+            "surface-bright": "#3a3939",
+            "on-tertiary-fixed": "#1d1b1a",
+            "error": "#ffb4ab",
+            "tertiary-fixed": "#e6e1df",
+            "secondary-container": "#454747",
+            "primary-fixed": "#e5e2e1",
+            "on-error": "#690005",
+            "on-background": "#e5e2e1",
+            "inverse-surface": "#e5e2e1",
+            "error-container": "#93000a",
+            "outline-variant": "#444748",
+            "on-secondary": "#2f3131",
+            "surface-container-lowest": "#0e0e0e",
+            "surface-container-highest": "#353434",
+            "background": "#141313",
+            "secondary-fixed": "#e2e2e2",
+            "on-surface": "#e5e2e1",
+            "on-tertiary-fixed-variant": "#484645",
+            "surface-container-low": "#1c1b1b",
+            "surface-dim": "#141313",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#1a1c1c",
+            "tertiary-container": "#0b0a09",
+            "primary-fixed-dim": "#c9c6c5",
+            "on-primary-container": "#7b7979",
+            "tertiary": "#cac6c3",
+            "on-secondary-fixed-variant": "#454747",
+            "surface-tint": "#c9c6c5"
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "0px"
+          },
+          fontFamily: {
+            "headline": ["Public Sans"],
+            "display": ["Public Sans"],
+            "body": ["Public Sans"],
+            "label": ["Public Sans"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+      body { background-color: #0A0A0A; color: #F5F5F5; font-family: 'Public Sans', sans-serif; }
+      .parallax-bg { background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; }
+      .diagonal-section { clip-path: polygon(0 0, 100% 5vw, 100% 100%, 0 calc(100% - 5vw)); padding-top: 8vw; padding-bottom: 8vw; }
+      .diagonal-section-alt { clip-path: polygon(0 5vw, 100% 0, 100% calc(100% - 5vw), 0 100%); padding-top: 8vw; padding-bottom: 8vw; }
+      .outline-text { color: transparent; -webkit-text-stroke: 1px #444748; }
+  </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-[#F5F5F5] selection:text-[#0A0A0A]">
+<!-- TopNavBar -->
+<nav class="bg-[#0A0A0A] text-[#F5F5F5] font-['Public_Sans'] font-black tracking-tighter uppercase docked full-width top-0 border-b border-[#333333] border-b-px flex justify-between items-center w-full px-16 h-20 max-w-full z-50 sticky">
+  <div class="text-2xl font-black tracking-tighter text-[#F5F5F5]">
+    OBSIDIAN EDGE
+  </div>
+  <div class="hidden md:flex gap-8 items-center">
+    <a class="text-[#F5F5F5] border-b-2 border-[#F5F5F5] pb-1 hover:bg-[#F5F5F5] hover:text-[#0A0A0A] transition-all duration-200" href="#">WORK</a>
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0A0A] transition-all duration-200" href="#">ARCHIVE</a>
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0A0A] transition-all duration-200" href="#">LABS</a>
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0A0A] transition-all duration-200" href="#">CONTACT</a>
+  </div>
+  <div class="flex items-center">
+    <span class="material-symbols-outlined hover:bg-[#F5F5F5] hover:text-[#0A0A0A] transition-all duration-200 cursor-pointer p-2">terminal</span>
+  </div>
+</nav>
+<!-- Header Section -->
+<header class="w-full pt-40 pb-20 px-8 md:px-16 flex flex-col justify-end border-b border-surface-variant min-h-[614px] relative">
+  <div class="absolute top-20 right-16 text-[200px] font-black tracking-tighter outline-text opacity-20 select-none hidden lg:block">
+    00
+  </div>
+  <h1 class="text-6xl md:text-[84px] font-black tracking-tighter leading-none max-w-5xl uppercase">
+    ENGINEERED_<br/>WORKS
+  </h1>
+  <p class="mt-8 text-on-surface-variant text-lg max-w-xl font-medium tracking-wide">
+    A brutalist exhibition of high-performance technical architectures and precision user interfaces. Built for scale.
+  </p>
+</header>
+<main class="w-full flex flex-col">
+  <!-- Project 01 -->
+  <section class="w-full py-32 px-8 md:px-16 relative border-b border-surface-variant flex flex-col md:flex-row gap-16 items-center">
+    <div class="w-full md:w-3/5 h-[600px] parallax-bg grayscale hover:grayscale-0 transition-all duration-700 border border-surface-variant relative z-10" data-alt="abstract rendering of high performance server racks in a dark server room with sharp neon white lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJtRHm-ddAwGSFSqjqQCKiAnglsA1EMzhIxG7H_TORvEAuc7u9RWAwq8FKlCxn2bKIwT-1nJ9R0Lp_l7TlCYeVDp1cXdzV1dNTkyphRmYOyEJOGtGYSPPmAn8LK6zvc_cENWqUAnb0bamneZS8f4y_saubiLGfFXQ-RkXjJpOeMWYTepQs5Wn2v5fTcTxYONWt0FgTgLg1i_tuWbyxFFv2Y1PRwLpnRvukksbgUNufzHMzcxkqVz7CPmeufhSMtjuq_xDXgGiB9rU');">
+    </div>
+    <div class="w-full md:w-2/5 md:-ml-32 relative z-20 bg-background border border-surface-variant p-10 flex flex-col shadow-2xl">
+      <span class="text-surface-variant text-6xl font-black tracking-tighter mb-4">01</span>
+      <h2 class="text-4xl font-black tracking-tighter uppercase mb-6 text-on-background">NEURAL_SYS</h2>
+      <p class="text-on-surface-variant mb-10 leading-relaxed">
+        High-performance data aggregation platform built for real-time analytics. Subverts standard horizontal data flows with aggressive concurrent processing pipelines.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">React</span>
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">Rust</span>
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">PostgreSQL</span>
+      </div>
+    </div>
+  </section>
+  <!-- Project 02 -->
+  <section class="w-full py-32 px-8 md:px-16 relative border-b border-surface-variant flex flex-col md:flex-row-reverse gap-16 items-center bg-surface-container-lowest">
+    <div class="w-full md:w-3/5 h-[600px] parallax-bg grayscale hover:grayscale-0 transition-all duration-700 border border-surface-variant relative z-10" data-alt="monochrome brutalist architecture fragment showing sharp concrete angles and deep shadows" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2PHfykTHunIfoHmunEApQLnMCAMkeCKz7kQn916epBs8czqkiXisjY5uJdbzat0aOWeEWpUCseT31nJ9lwMXy1JNt0lJpuFFJTCUpkqnCH7XYv0qK2IyYv8G_0lWBXqVOP4ur2ijA5TzifuNlByyU2aQvGxoWOGYxnfiPj13yFoxSb-fdUTPK2ludmg1XwK9aS0euZNmUil8k1egid58WF9kUN89mmwYDeLxbnm8MWZh31t10LlUeVYs6IwBoFrUu_rekMttbpC4');">
+    </div>
+    <div class="w-full md:w-2/5 md:-mr-32 relative z-20 bg-background border border-surface-variant p-10 flex flex-col shadow-2xl">
+      <span class="text-surface-variant text-6xl font-black tracking-tighter mb-4">02</span>
+      <h2 class="text-4xl font-black tracking-tighter uppercase mb-6 text-on-background">VOID_COMMERCE</h2>
+      <p class="text-on-surface-variant mb-10 leading-relaxed">
+        Headless e-commerce architecture designed for sub-second load times. Employs aggressive edge caching and a minimal structural footprint.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">Next.js</span>
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">GraphQL</span>
+        <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">Redis</span>
+      </div>
+    </div>
+  </section>
+  <!-- Project 03 - Diagonal Interruption -->
+  <section class="w-full relative bg-surface-variant text-primary-container diagonal-section my-20 border-y border-surface-variant">
+    <div class="max-w-[1400px] mx-auto px-8 md:px-16 flex flex-col md:flex-row gap-16 items-start">
+      <div class="w-full md:w-1/2 flex flex-col pt-10">
+        <span class="text-background text-6xl font-black tracking-tighter mb-4">03</span>
+        <h2 class="text-5xl font-black tracking-tighter uppercase mb-6 text-background">APEX_FINANCE</h2>
+        <p class="text-surface-container-high font-medium mb-10 leading-relaxed max-w-md">
+          Institutional trading interface with aggressive websocket data streaming. Designed for zero-latency visual updates and extreme data density.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <span class="px-4 py-2 border border-surface-container-high text-background text-xs font-bold tracking-widest uppercase bg-surface-variant">Vue</span>
+          <span class="px-4 py-2 border border-surface-container-high text-background text-xs font-bold tracking-widest uppercase bg-surface-variant">Go</span>
+          <span class="px-4 py-2 border border-surface-container-high text-background text-xs font-bold tracking-widest uppercase bg-surface-variant">WebSockets</span>
+        </div>
+      </div>
+      <div class="w-full md:w-1/2 h-[500px] border-2 border-background p-2">
+        <div class="w-full h-full bg-cover bg-center grayscale" data-alt="abstract close up of dark glass office building reflecting sharp geometric lines" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDSbrnlAouWIn2TwnoBcN0-4jVfUC_JlUob9g4IbGE--4IfCNHzqGbapDY1OgdE2G4BN-4R9v8TDDKyVw2kHASm7iOuysK9-FnWTivyfF0SBfRsG4z8m3aegUQGMP5pCSZrBN44GAHZpi6rhkR6i-ztEeBOo-CKAWvLONhQifVh2koh956d0DP0lLATx0aFrc9FqP9NBQ6x_ggrFo_8-_OfwlcPgoYVAtVvutv2qKOVUvvBTFHzY9Se5JNgwqh89UaTGMYXEwA61VU');">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Project 04 -->
+  <section class="w-full py-32 px-8 md:px-16 relative flex flex-col items-center border-b border-surface-variant">
+    <div class="w-full max-w-[1600px] h-[700px] parallax-bg grayscale border border-surface-variant relative flex items-end justify-start p-10 md:p-20" data-alt="dark high contrast image of metal grid textures and sharp industrial design elements" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9D-gRfVIz0oS8Sbn9JBK98xE_jdJkaVPq3FGPH-YNmh9x01As_DgifBIQb08rWRVdhVZroD-AsMH8q1-0qWHDI3wuvU4wSy4Z70V-jDTVfhS8zDvRy0KAR6QxL0783ikN7v-cztfu7b6YpOmdx00OdGRw13sdrVwxJHfFMJCGb273B2XCqbG0JmdhKy6C3zCHv7ojbPpJQsCA_0i07-j5PuMadydQnTlLEks9xEN3SvCXAVTzd_8prIPpaO_gpMyEm4VYh0SqPwA');">
+      <div class="relative z-20 bg-background border border-surface-variant p-10 max-w-2xl shadow-2xl">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="text-4xl font-black tracking-tighter uppercase text-on-background">KINETIC_UI</h2>
+          <span class="text-surface-variant text-4xl font-black tracking-tighter">04</span>
+        </div>
+        <p class="text-on-surface-variant mb-10 leading-relaxed">
+          Brutalist component library for enterprise dashboards. Strips away decorative elements in favor of raw utility, sharp contrast, and predictable structural patterns.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">TypeScript</span>
+          <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">Tailwind</span>
+          <span class="px-4 py-2 border border-surface-variant text-xs font-bold tracking-widest uppercase">Storybook</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0A0A0A] text-[#F5F5F5] font-['Public_Sans'] text-[13px] font-semibold tracking-widest uppercase full-width border-t border-[#333333] mt-40 flex flex-col md:flex-row justify-between items-center w-full px-16 py-12 gap-8">
+  <div class="text-lg font-bold">
+    © 2024 ARCHITECTING DIGITAL PRECISION
+  </div>
+  <div class="flex gap-8">
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] underline decoration-2 underline-offset-4 transition-all duration-300 ease-in-out" href="#">GITHUB</a>
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] underline decoration-2 underline-offset-4 transition-all duration-300 ease-in-out" href="#">LINKEDIN</a>
+    <a class="text-[#8e9192] hover:text-[#F5F5F5] underline decoration-2 underline-offset-4 transition-all duration-300 ease-in-out" href="#">READ.CV</a>
+  </div>
+</footer>
+</body></html>
