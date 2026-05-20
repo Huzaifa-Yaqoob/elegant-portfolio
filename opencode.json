@@ -1,7 +1,33 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "lsp": true,
+  "formatter": true,
   "permission": {
-    "*": "ask"
+    "*": "ask",
+    "bash": {
+      "*": "ask",
+      "git *": "ask",
+      "npm *": "allow",
+      "rm *": "deny",
+      "grep *": "allow",
+      "bun *": "allow",
+      "bunx *": "allow"
+    },
+    "edit": "allow",
+    "glob": "allow",
+    "task": "allow",
+    "skill": "allow",
+    "lsp": "allow",
+    "question": "allow",
+    "grep": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "doom_loop": "allow",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    }
   }
 }
