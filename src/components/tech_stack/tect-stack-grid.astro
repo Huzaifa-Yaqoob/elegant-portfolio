@@ -72,7 +72,10 @@ const iconMap = {
       return (
         <div class="group relative aspect-square overflow-hidden border-r border-b border-border-structural p-5 transition-colors hover:bg-card-hover md:p-6">
           <div class="absolute inset-0 bg-gradient-to-br from-surface-container-high/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div class="relative z-10 flex h-full flex-col items-center justify-center text-center">
+          <div
+            data-stagger-item
+            class="relative z-10 flex h-full flex-col items-center justify-center text-center"
+          >
             {Icon && (
               <Icon class="mb-4 h-10 w-10 text-on-surface-variant transition-colors duration-300 group-hover:text-primary" />
             )}
@@ -85,3 +88,29 @@ const iconMap = {
     })
   }
 </div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  const items = document.querySelectorAll("[data-stagger-item]")
+
+  if (items.length) {
+    gsap.set(items, { y: 48, opacity: 0 })
+
+    ScrollTrigger.batch(items, {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          stagger: { each: 0.06, from: "start" },
+          overwrite: true,
+        })
+      },
+      start: "top 90%",
+      once: true,
+    })
+  }
+</script>
