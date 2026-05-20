@@ -67,7 +67,7 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
 
 const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_SIZE / 2 - 4} 0 1 1 4 ${CURSOR_SIZE / 2}`
 const CLICKABLE_SELECTOR =
-  'a, button, [role="button"], [data-cursor="pointer"], summary, select'
+  'a, button, [role="button"], [data-cursor="pointer"], summary, select, [data-slot="radio-group-item"], .cursor-pointer'
 
 export function Cursor() {
   const containerRef = useRef<HTMLDivElement>(null)

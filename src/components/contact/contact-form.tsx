@@ -70,21 +70,19 @@ export function ContactForm({
             className="flex flex-col gap-6 md:flex-row md:gap-12"
           >
             {reasons.map((reason) => (
-              <div
+              <label
                 key={reason.value}
-                className="group inline-flex items-center gap-3"
+                htmlFor={`reason-${reason.value}`}
+                className="group inline-flex cursor-pointer items-center gap-3"
               >
                 <RadioGroupItem
                   id={`reason-${reason.value}`}
                   value={reason.value}
                 />
-                <Label
-                  htmlFor={`reason-${reason.value}`}
-                  className="cursor-pointer body-sm-style tracking-normal text-on-surface normal-case transition-colors group-hover:text-inverse-surface"
-                >
+                <Label className="cursor-pointer body-sm-style tracking-normal text-on-surface normal-case transition-colors group-hover:text-inverse-surface">
                   {reason.label}
                 </Label>
-              </div>
+              </label>
             ))}
           </RadioGroup>
         </div>
