@@ -14,14 +14,14 @@ function poly(points: Point[]) {
 
 const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
   default: poly([
-    [11, 0],
-    [22, 22],
-    [0, 22],
-    [0, 22],
-    [0, 22],
-    [0, 22],
-    [0, 22],
-    [0, 22],
+    [11, 2.5],
+    [18.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
   ]),
   pointer: poly([
     [11, 1],
@@ -44,14 +44,14 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
     [8, 20],
   ]),
   grab: poly([
-    [1, 1],
-    [21, 1],
-    [21, 21],
-    [1, 21],
-    [1, 21],
-    [1, 21],
-    [1, 21],
-    [1, 21],
+    [4, 4],
+    [18, 4],
+    [18, 18],
+    [4, 18],
+    [4, 18],
+    [4, 18],
+    [4, 18],
+    [4, 18],
   ]),
   loading: poly([
     [5, 1],
@@ -78,10 +78,13 @@ export function Cursor() {
 
   const posRef = useRef({ x: -100, y: -100 })
   const pointerRef = useRef<{ x: number; y: number } | null>(null)
-  const rotationRef = useRef(-45)
+  const currentRotationRef = useRef(-45)
+  const targetRotationRef = useRef(-45)
   const rafRef = useRef(0)
   const spinnerTweenRef = useRef<gsap.core.Tween | null>(null)
-  const rotateToRef = useRef<((value: number) => void) | null>(null)
+  const shapeTweenRef = useRef<gsap.core.Tween | null>(null)
+  const labelTweenRef = useRef<gsap.core.Tween | null>(null)
+  const spinnerOpacityTweenRef = useRef<gsap.core.Tween | null>(null)
   const revealPendingRef = useRef(false)
   const effectiveStateRef = useRef<CursorState>("default")
 
@@ -118,13 +121,7 @@ export function Cursor() {
       return from + delta
     }
 
-    if (svgRef.current) {
-      gsap.set(svgRef.current, { rotation: rotationRef.current })
-      rotateToRef.current = gsap.quickTo(svgRef.current, "rotation", {
-        duration: 0.12,
-        ease: "power2.out",
-      })
-    }
+    if (svgRef.current) gsap.set(svgRef.current, { rotation: -45 })
 
     const onMove = (e: MouseEvent) => {
       const target = e.target as Element | null
@@ -144,10 +141,9 @@ export function Cursor() {
       const prev = pointerRef.current
       pointerRef.current = { x: e.clientX, y: e.clientY }
 
-      if (!prev || !rotateToRef.current || nextHoverKind === "text") {
+      if (!prev || nextHoverKind === "text") {
         if (nextHoverKind === "text") {
-          rotationRef.current = 0
-          rotateToRef.current?.(0)
+          targetRotationRef.current = 0
         }
         return
       }
@@ -157,9 +153,10 @@ export function Cursor() {
       if (Math.abs(dx) + Math.abs(dy) < 0.5) return
 
       const targetAngle = (Math.atan2(dy, dx) * 180) / Math.PI + 90
-      const nextAngle = shortestRotation(rotationRef.current, targetAngle)
-      rotationRef.current = nextAngle
-      rotateToRef.current(nextAngle)
+      targetRotationRef.current = shortestRotation(
+        currentRotationRef.current,
+        targetAngle
+      )
     }
 
     const tick = () => {
@@ -167,6 +164,13 @@ export function Cursor() {
       if (el) {
         const { x, y } = posRef.current
         el.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      }
+      if (svgRef.current) {
+        const current = currentRotationRef.current
+        const target = targetRotationRef.current
+        const next = current + (target - current) * 0.14
+        currentRotationRef.current = next
+        gsap.set(svgRef.current, { rotation: next })
       }
       rafRef.current = requestAnimationFrame(tick)
     }
@@ -177,7 +181,6 @@ export function Cursor() {
     return () => {
       window.removeEventListener("mousemove", onMove)
       cancelAnimationFrame(rafRef.current)
-      rotateToRef.current = null
       document.getElementById(styleId)?.remove()
     }
   }, [])
@@ -218,35 +221,44 @@ export function Cursor() {
     }
 
     if (renderState === "hidden" || renderState === "grabbing") {
+      shapeTweenRef.current?.kill()
+      labelTweenRef.current?.kill()
+      spinnerOpacityTweenRef.current?.kill()
       gsap.to([shape, spinner, labelEl], {
         opacity: 0,
         scale: 0.5,
-        duration: 0.14,
-        ease: "power2.in",
+        duration: 0.18,
+        ease: "power2.inOut",
       })
       return
     }
 
     const nextPath = SHAPES[renderState]
-    gsap.to(shape, {
+    shapeTweenRef.current?.kill()
+    shapeTweenRef.current = gsap.to(shape, {
       attr: { d: nextPath },
       opacity: 1,
       scale: 1,
-      duration: 0.22,
-      ease: "power2.out",
+      duration: 0.32,
+      ease: "power3.inOut",
+      overwrite: "auto",
     })
 
-    gsap.to(labelEl, {
+    labelTweenRef.current?.kill()
+    labelTweenRef.current = gsap.to(labelEl, {
       opacity: renderState === "type" && label ? 1 : 0,
       scale: renderState === "type" && label ? 1 : 0.6,
-      duration: 0.16,
-      ease: "power2.out",
+      duration: 0.2,
+      ease: "power2.inOut",
+      overwrite: "auto",
     })
 
-    gsap.to(spinner, {
+    spinnerOpacityTweenRef.current?.kill()
+    spinnerOpacityTweenRef.current = gsap.to(spinner, {
       opacity: renderState === "loading" ? 1 : 0,
-      duration: 0.18,
-      ease: "power2.out",
+      duration: 0.22,
+      ease: "power2.inOut",
+      overwrite: "auto",
     })
   }, [autoState, label, revealPending, state])
 
@@ -266,6 +278,9 @@ export function Cursor() {
   useEffect(() => {
     return () => {
       spinnerTweenRef.current?.kill()
+      shapeTweenRef.current?.kill()
+      labelTweenRef.current?.kill()
+      spinnerOpacityTweenRef.current?.kill()
     }
   }, [])
 
