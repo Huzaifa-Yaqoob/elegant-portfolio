@@ -21,7 +21,7 @@ const cardClasses = [
 ]
 ---
 
-<div class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-12">
+<div id="portfolio-grid" class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-12">
   {
     projects.map((project, index) => {
       const tools = project.data.tools
@@ -94,3 +94,26 @@ const cardClasses = [
     })
   }
 </div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const cards = gsap.utils.toArray<HTMLElement>("#portfolio-grid > article")
+
+  if (cards.length) {
+    let lastY = window.scrollY
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        const y = window.scrollY
+        const v = y - lastY
+        lastY = y
+
+        const skew = gsap.utils.clamp(-8, 8, v * 0.08)
+        gsap.set(cards, { skewY: skew })
+      },
+      { passive: true }
+    )
+  }
+</script>
