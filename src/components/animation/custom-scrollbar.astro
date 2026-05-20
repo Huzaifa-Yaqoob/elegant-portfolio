@@ -18,6 +18,7 @@
 
 <script>
   import { gsap } from "@/lib/gsap"
+  import { setCursorState } from "@/components/cursor"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
   import { ScrollSmoother } from "gsap/ScrollSmoother"
 
@@ -67,7 +68,9 @@
       if (!isThumb) scrollToClientY(e.clientY)
 
       isDragging = true
-      document.body.style.cursor = "grabbing"
+      setCursorState("hidden")
+      thumb.classList.add("bg-on-surface")
+      thumb.classList.remove("bg-on-surface-variant")
       document.body.style.userSelect = "none"
       e.preventDefault()
     }
@@ -78,12 +81,25 @@
     }
 
     function onPointerUp() {
+      if (!isDragging) return
       isDragging = false
-      document.body.style.cursor = ""
+      thumb.classList.remove("bg-on-surface")
+      thumb.classList.add("bg-on-surface-variant")
+      setCursorState(bar.matches(":hover") ? "grab" : "default")
       document.body.style.userSelect = ""
     }
 
+    function onEnter() {
+      if (!isDragging) setCursorState("grab")
+    }
+
+    function onLeave() {
+      if (!isDragging) setCursorState("default")
+    }
+
     bar.addEventListener("pointerdown", onPointerDown)
+    bar.addEventListener("pointerenter", onEnter)
+    bar.addEventListener("pointerleave", onLeave)
     document.addEventListener("pointermove", onPointerMove)
     document.addEventListener("pointerup", onPointerUp)
 

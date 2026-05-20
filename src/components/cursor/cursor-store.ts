@@ -1,4 +1,10 @@
-export type CursorState = "default" | "loading" | "type" | "hidden"
+export type CursorState =
+  | "default"
+  | "loading"
+  | "type"
+  | "grab"
+  | "grabbing"
+  | "hidden"
 
 export interface CursorStateOptions {
   label?: string

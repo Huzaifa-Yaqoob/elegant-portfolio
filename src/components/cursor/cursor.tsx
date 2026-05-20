@@ -12,6 +12,9 @@ const TRIANGLE_PATH = `M ${CURSOR_SIZE / 2} 0 L ${CURSOR_SIZE} ${CURSOR_SIZE} L 
 const SQUARE_PATH = `M 0 0 H ${CURSOR_SIZE} V ${CURSOR_SIZE} H 0 Z`
 
 const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_SIZE / 2 - 4} 0 1 1 4 ${CURSOR_SIZE / 2}`
+const TYPE_PATH = `M 7 3 H 15 M 11 3 V 19 M 7 19 H 15`
+const GRAB_PATH =
+  "M 11 2 L 14 5 H 12.5 V 9.5 H 17 V 8 L 20 11 L 17 14 V 12.5 H 12.5 V 17 H 14 L 11 20 L 8 17 H 9.5 V 12.5 H 5 V 14 L 2 11 L 5 8 V 9.5 H 9.5 V 5 H 8 Z"
 
 export function Cursor() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -20,6 +23,8 @@ export function Cursor() {
   const squareRef = useRef<SVGPathElement>(null)
   const labelElRef = useRef<HTMLSpanElement>(null)
   const spinnerRef = useRef<SVGPathElement>(null)
+  const typeRef = useRef<SVGPathElement>(null)
+  const grabRef = useRef<SVGPathElement>(null)
 
   const posRef = useRef({ x: -100, y: -100 })
   const pointerRef = useRef<{ x: number; y: number } | null>(null)
@@ -30,15 +35,26 @@ export function Cursor() {
 
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("")
+  const [isTextTarget, setIsTextTarget] = useState(false)
+  const textTargetRef = useRef(false)
 
   useEffect(() => {
+    const styleId = "custom-cursor-hide-native-style"
     const hideNative = () => {
-      document.body.style.cursor = "none"
-      document.documentElement.style.cursor = "none"
+      const existing = document.getElementById(styleId)
+      if (existing) return
+
+      const style = document.createElement("style")
+      style.id = styleId
+      style.textContent = `
+        *, *::before, *::after {
+          cursor: none !important;
+        }
+      `
+      document.head.appendChild(style)
     }
     const showNative = () => {
-      document.body.style.cursor = ""
-      document.documentElement.style.cursor = ""
+      document.getElementById(styleId)?.remove()
     }
 
     hideNative()
@@ -57,6 +73,17 @@ export function Cursor() {
     }
 
     const onMove = (e: MouseEvent) => {
+      const target = e.target as Element | null
+      const nextIsTextTarget = Boolean(
+        target?.closest(
+          'input, textarea, [contenteditable=""], [contenteditable="true"]'
+        )
+      )
+      if (nextIsTextTarget !== textTargetRef.current) {
+        textTargetRef.current = nextIsTextTarget
+        setIsTextTarget(nextIsTextTarget)
+      }
+
       posRef.current.x = e.clientX - CURSOR_SIZE / 2
       posRef.current.y = e.clientY - CURSOR_SIZE / 2
 
@@ -95,27 +122,32 @@ export function Cursor() {
   }, [])
 
   useEffect(() => {
+    const effectiveState: CursorState = isTextTarget ? "type" : state
+
     const triangle = triangleRef.current
     const square = squareRef.current
     const labelEl = labelElRef.current
     const spinner = spinnerRef.current
+    const typeEl = typeRef.current
+    const grabEl = grabRef.current
 
-    if (!triangle || !square || !labelEl || !spinner) return
+    if (!triangle || !square || !labelEl || !spinner || !typeEl || !grabEl)
+      return
 
-    if (state === "loading" && spinnerTweenRef.current === null) {
+    if (effectiveState === "loading" && spinnerTweenRef.current === null) {
       spinnerTweenRef.current = gsap.to(spinner, {
         rotation: 360,
         duration: 1,
         ease: "none",
         repeat: -1,
       })
-    } else if (state !== "loading" && spinnerTweenRef.current) {
+    } else if (effectiveState !== "loading" && spinnerTweenRef.current) {
       spinnerTweenRef.current.kill()
       spinnerTweenRef.current = null
       gsap.set(spinner, { rotation: 0 })
     }
 
-    switch (state) {
+    switch (effectiveState) {
       case "default":
         gsap.to(triangle, {
           opacity: 1,
@@ -123,7 +155,7 @@ export function Cursor() {
           duration: 0.2,
           ease: "power2.out",
         })
-        gsap.to([square, labelEl, spinner], {
+        gsap.to([square, labelEl, spinner, typeEl, grabEl], {
           opacity: 0,
           scale: 0.5,
           duration: 0.15,
@@ -144,7 +176,7 @@ export function Cursor() {
           duration: 0.2,
           ease: "power2.out",
         })
-        gsap.to(labelEl, {
+        gsap.to([labelEl, typeEl, grabEl], {
           opacity: 0,
           scale: 0.5,
           duration: 0.15,
@@ -157,13 +189,13 @@ export function Cursor() {
         break
 
       case "type":
-        gsap.to([triangle, square, spinner], {
+        gsap.to([triangle, square, spinner, labelEl, grabEl], {
           opacity: 0,
           scale: 0.5,
           duration: 0.15,
           ease: "power2.in",
         })
-        gsap.to(labelEl, {
+        gsap.to(typeEl, {
           opacity: 1,
           scale: 1,
           duration: 0.2,
@@ -171,8 +203,32 @@ export function Cursor() {
         })
         break
 
+      case "grab":
+        gsap.to([triangle, spinner, labelEl, typeEl, grabEl], {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.15,
+          ease: "power2.in",
+        })
+        gsap.to(square, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.2,
+          ease: "power2.out",
+        })
+        break
+
+      case "grabbing":
+        gsap.to([triangle, square, spinner, labelEl, typeEl, grabEl], {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.15,
+          ease: "power2.in",
+        })
+        break
+
       case "hidden":
-        gsap.to([triangle, square, labelEl, spinner], {
+        gsap.to([triangle, square, labelEl, spinner, typeEl, grabEl], {
           opacity: 0,
           scale: 0.5,
           duration: 0.15,
@@ -180,7 +236,7 @@ export function Cursor() {
         })
         break
     }
-  }, [state, label])
+  }, [isTextTarget, state, label])
 
   useEffect(() => {
     const cleanup = onCursorStateChange(({ state: s, options }) => {
@@ -255,6 +311,35 @@ export function Cursor() {
             opacity: 0,
             transformOrigin: "center",
             transformBox: "fill-box",
+          }}
+        />
+
+        <path
+          ref={typeRef}
+          d={TYPE_PATH}
+          fill="none"
+          stroke="#F5F5F5"
+          strokeWidth="1.75"
+          strokeLinecap="square"
+          style={{
+            opacity: 0,
+            transformOrigin: "center",
+            transformBox: "fill-box",
+            transform: "scale(0.5)",
+          }}
+        />
+
+        <path
+          ref={grabRef}
+          d={GRAB_PATH}
+          fill="#F5F5F5"
+          stroke="#141313"
+          strokeWidth="1"
+          style={{
+            opacity: 0,
+            transformOrigin: "center",
+            transformBox: "fill-box",
+            transform: "scale(0.5)",
           }}
         />
       </svg>
