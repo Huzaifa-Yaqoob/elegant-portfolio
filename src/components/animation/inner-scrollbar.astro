@@ -1,0 +1,153 @@
+---
+interface Props {
+  target: string
+  position?: "left" | "right"
+}
+
+const { target, position = "right" } = Astro.props
+---
+
+<script is:inline define:vars={{ target, position }}>
+  ;(function boot() {
+    const targetEl = document.querySelector(target)
+    if (!targetEl) {
+      const observer = new MutationObserver(function () {
+        const el = document.querySelector(target)
+        if (el) {
+          observer.disconnect()
+          initScrollbar(el)
+        }
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      return
+    }
+    initScrollbar(targetEl)
+
+    function initScrollbar(targetEl) {
+      const parent = targetEl.parentElement
+      if (!parent) return
+
+      parent.style.position = "relative"
+
+      const isLeft = position === "left"
+      const container = document.createElement("div")
+      container.style.cssText =
+        "position:absolute;top:0;" +
+        (isLeft ? "left:0" : "right:0") +
+        ";height:100%;width:4px;z-index:10;pointer-events:none;" +
+        "transition:opacity 200ms;opacity:1;"
+      container.className = "inner-scrollbar"
+
+      const thumb = document.createElement("div")
+      thumb.style.cssText =
+        "position:absolute;left:50%;transform:translateX(-50%);" +
+        "background-color:rgba(196,199,199,0.6);width:2px;" +
+        "cursor:grab;transition:all 200ms ease-out;"
+      thumb.className = "inner-scrollbar-thumb"
+
+      container.appendChild(thumb)
+      parent.appendChild(container)
+
+      /** @type {ReturnType<typeof setTimeout>} */
+      let hideTimer
+      let isDragging = false
+      let startY = 0
+      let startScrollTop = 0
+
+      function getThumbHeight() {
+        const trackH = container.offsetHeight
+        const totalH = targetEl.scrollHeight
+        const viewportH = targetEl.clientHeight
+        return Math.max(24, trackH * (viewportH / totalH))
+      }
+
+      function getThumbTop() {
+        const trackH = container.offsetHeight
+        const thumbH = thumb.offsetHeight
+        const scrollable = targetEl.scrollHeight - targetEl.clientHeight
+        if (scrollable <= 0) return 0
+        return (targetEl.scrollTop / scrollable) * (trackH - thumbH)
+      }
+
+      function updateThumb() {
+        const thumbH = getThumbHeight()
+        const thumbT = getThumbTop()
+        thumb.style.height = thumbH + "px"
+        thumb.style.top = thumbT + "px"
+      }
+
+      function show() {
+        clearTimeout(hideTimer)
+        container.style.opacity = "1"
+      }
+
+      function hide() {
+        container.style.opacity = "0"
+      }
+
+      function resetTimer() {
+        hideTimer = setTimeout(hide, 1500)
+      }
+
+      function checkOverflow() {
+        const needsScroll = targetEl.scrollHeight > targetEl.clientHeight
+        container.style.display = needsScroll ? "block" : "none"
+        if (needsScroll) {
+          updateThumb()
+          resetTimer()
+        }
+      }
+
+      targetEl.addEventListener("scroll", function () {
+        updateThumb()
+        show()
+        resetTimer()
+      })
+
+      container.addEventListener("pointerenter", function () {
+        show()
+        clearTimeout(hideTimer)
+        thumb.style.width = "6px"
+      })
+
+      container.addEventListener("pointerleave", function () {
+        if (!isDragging) resetTimer()
+        thumb.style.width = "2px"
+      })
+
+      thumb.addEventListener("pointerdown", function (e) {
+        isDragging = true
+        startY = e.clientY
+        startScrollTop = targetEl.scrollTop
+        thumb.style.cursor = "grabbing"
+        document.body.style.userSelect = "none"
+        e.preventDefault()
+      })
+
+      document.addEventListener("pointermove", function (e) {
+        if (!isDragging) return
+        const deltaY = e.clientY - startY
+        const trackH = container.offsetHeight
+        const thumbH = thumb.offsetHeight
+        const scrollable = targetEl.scrollHeight - targetEl.clientHeight
+        const available = trackH - thumbH
+        if (available <= 0) return
+        const ratio = deltaY / available
+        targetEl.scrollTop = startScrollTop + ratio * scrollable
+      })
+
+      document.addEventListener("pointerup", function () {
+        if (!isDragging) return
+        isDragging = false
+        thumb.style.cursor = "grab"
+        document.body.style.userSelect = ""
+      })
+
+      targetEl.style.scrollbarWidth = "none"
+
+      checkOverflow()
+      const ro = new ResizeObserver(checkOverflow)
+      ro.observe(targetEl)
+    }
+  })()
+</script>

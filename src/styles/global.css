@@ -303,6 +303,13 @@
     letter-spacing: 0.12em;
 }
 
+@utility no-scrollbar {
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 @utility font-mono-label {
     font-family: var(--font-heading);
     font-weight: 600;

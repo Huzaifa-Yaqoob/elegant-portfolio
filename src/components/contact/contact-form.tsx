@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { InnerScrollbar } from "@/components/ui/inner-scrollbar"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
@@ -42,6 +43,7 @@ export function ContactForm({
   const subjectId = useId()
   const messageId = useId()
   const formRef = useRef<HTMLFormElement>(null)
+  const messageRef = useRef<HTMLTextAreaElement>(null)
 
   useSkewScroll(formRef)
 
@@ -88,7 +90,7 @@ export function ContactForm({
         </div>
       </FieldSet>
 
-      <FieldGroup className="gap-6">
+      <FieldGroup className="gap-8">
         <Field>
           <div className="relative">
             <Input
@@ -154,12 +156,13 @@ export function ContactForm({
         <Field>
           <div className="relative">
             <Textarea
+              ref={messageRef}
               id={messageId}
               name="message"
               rows={6}
               required
               placeholder=" "
-              className="body-lg-style"
+              className="mt-2 body-lg-style"
             />
             <label
               htmlFor={messageId}
@@ -167,6 +170,7 @@ export function ContactForm({
             >
               Data Payload [Message]
             </label>
+            <InnerScrollbar targetRef={messageRef} position="right" />
           </div>
           <FieldError />
         </Field>
