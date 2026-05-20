@@ -1,0 +1,44 @@
+---
+
+---
+
+<div
+  id="custom-scrollbar"
+  class="fixed top-1/2 right-3 z-50 hidden -translate-y-1/2 select-none md:block"
+  style="height: clamp(200px, 40vh, 400px)"
+>
+  <div class="relative h-full w-[2px] bg-surface-container-high">
+    <div
+      id="scrollbar-thumb"
+      class="absolute left-1/2 w-[6px] -translate-x-1/2 rounded-full bg-on-surface-variant"
+    >
+    </div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  const bar = document.getElementById("custom-scrollbar")!
+  const thumb = document.getElementById("scrollbar-thumb")!
+  const content = document.getElementById("smooth-content")!
+
+  function update(progress: number) {
+    const trackH = bar.offsetHeight
+    const totalH = content.offsetHeight
+    const viewportH = window.innerHeight
+    const thumbH = Math.max(24, trackH * (viewportH / totalH))
+    const thumbT = progress * (trackH - thumbH)
+
+    thumb.style.height = `${thumbH}px`
+    thumb.style.top = `${thumbT}px`
+  }
+
+  ScrollTrigger.create({
+    trigger: "#smooth-content",
+    start: "top top",
+    end: "bottom bottom",
+    onUpdate: (self) => update(self.progress),
+  })
+</script>
