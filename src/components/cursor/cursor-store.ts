@@ -1,5 +1,6 @@
 export type CursorState =
   | "default"
+  | "pointer"
   | "loading"
   | "type"
   | "grab"

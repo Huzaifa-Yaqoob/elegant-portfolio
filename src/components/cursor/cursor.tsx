@@ -1,31 +1,80 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { gsap } from "@/lib/gsap"
 import { onCursorStateChange, type CursorState } from "./cursor-store"
 
 const CURSOR_SIZE = 22
-
 const VIEW_BOX = `0 0 ${CURSOR_SIZE} ${CURSOR_SIZE}`
 
-const TRIANGLE_PATH = `M ${CURSOR_SIZE / 2} 0 L ${CURSOR_SIZE} ${CURSOR_SIZE} L 0 ${CURSOR_SIZE} Z`
+type Point = [number, number]
 
-const SQUARE_PATH = `M 0 0 H ${CURSOR_SIZE} V ${CURSOR_SIZE} H 0 Z`
+function poly(points: Point[]) {
+  return `M ${points.map(([x, y]) => `${x} ${y}`).join(" L ")} Z`
+}
+
+const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
+  default: poly([
+    [11, 0],
+    [22, 22],
+    [0, 22],
+    [0, 22],
+    [0, 22],
+    [0, 22],
+    [0, 22],
+    [0, 22],
+  ]),
+  pointer: poly([
+    [2, 2],
+    [19, 9],
+    [12, 11],
+    [14, 19],
+    [10, 20],
+    [8, 12],
+    [3, 15],
+    [2, 2],
+  ]),
+  type: poly([
+    [8, 2],
+    [14, 2],
+    [14, 5],
+    [12, 5],
+    [12, 17],
+    [14, 17],
+    [14, 20],
+    [8, 20],
+  ]),
+  grab: poly([
+    [1, 1],
+    [21, 1],
+    [21, 21],
+    [1, 21],
+    [1, 21],
+    [1, 21],
+    [1, 21],
+    [1, 21],
+  ]),
+  loading: poly([
+    [5, 1],
+    [17, 1],
+    [21, 5],
+    [21, 17],
+    [17, 21],
+    [5, 21],
+    [1, 17],
+    [1, 5],
+  ]),
+}
 
 const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_SIZE / 2 - 4} 0 1 1 4 ${CURSOR_SIZE / 2}`
-const TYPE_PATH =
-  "M 9 3.5 H 13 M 11 3.5 V 18.5 M 9 18.5 H 13 M 8 6.5 H 14 M 8 15.5 H 14"
-const GRAB_PATH =
-  "M 11 2 L 14 5 H 12.5 V 9.5 H 17 V 8 L 20 11 L 17 14 V 12.5 H 12.5 V 17 H 14 L 11 20 L 8 17 H 9.5 V 12.5 H 5 V 14 L 2 11 L 5 8 V 9.5 H 9.5 V 5 H 8 Z"
+const CLICKABLE_SELECTOR =
+  'a, button, [role="button"], [data-cursor="pointer"], summary, select'
 
 export function Cursor() {
   const containerRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
-  const triangleRef = useRef<SVGPathElement>(null)
-  const squareRef = useRef<SVGPathElement>(null)
-  const labelElRef = useRef<HTMLSpanElement>(null)
+  const shapeRef = useRef<SVGPathElement>(null)
   const spinnerRef = useRef<SVGPathElement>(null)
-  const typeRef = useRef<SVGPathElement>(null)
-  const grabRef = useRef<SVGPathElement>(null)
+  const labelElRef = useRef<HTMLSpanElement>(null)
 
   const posRef = useRef({ x: -100, y: -100 })
   const pointerRef = useRef<{ x: number; y: number } | null>(null)
@@ -33,35 +82,36 @@ export function Cursor() {
   const rafRef = useRef(0)
   const spinnerTweenRef = useRef<gsap.core.Tween | null>(null)
   const rotateToRef = useRef<((value: number) => void) | null>(null)
+  const revealPendingRef = useRef(false)
+  const effectiveStateRef = useRef<CursorState>("default")
 
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("")
-  const [isTextTarget, setIsTextTarget] = useState(false)
+  const [hoverKind, setHoverKind] = useState<"none" | "text" | "pointer">(
+    "none"
+  )
   const [revealPending, setRevealPending] = useState(false)
-  const revealPendingRef = useRef(false)
-  const textTargetRef = useRef(false)
-  const effectiveStateRef = useRef<CursorState>("default")
+
+  const autoState = useMemo<CursorState>(() => {
+    if (hoverKind === "text") return "type"
+    if (hoverKind === "pointer") return "pointer"
+    return "default"
+  }, [hoverKind])
+
+  useEffect(() => {
+    revealPendingRef.current = revealPending
+  }, [revealPending])
 
   useEffect(() => {
     const styleId = "custom-cursor-hide-native-style"
-    const hideNative = () => {
-      const existing = document.getElementById(styleId)
-      if (existing) return
-
-      const style = document.createElement("style")
-      style.id = styleId
-      style.textContent = `
-        *, *::before, *::after {
-          cursor: none !important;
-        }
-      `
-      document.head.appendChild(style)
-    }
-    const showNative = () => {
-      document.getElementById(styleId)?.remove()
-    }
-
-    hideNative()
+    const style = document.createElement("style")
+    style.id = styleId
+    style.textContent = `
+      *, *::before, *::after {
+        cursor: none !important;
+      }
+    `
+    document.head.appendChild(style)
 
     const shortestRotation = (from: number, to: number) => {
       const delta = ((to - from + 540) % 360) - 180
@@ -78,19 +128,14 @@ export function Cursor() {
 
     const onMove = (e: MouseEvent) => {
       const target = e.target as Element | null
-      const nextIsTextTarget = Boolean(
+      const isText = Boolean(
         target?.closest(
           'input, textarea, [contenteditable=""], [contenteditable="true"]'
         )
       )
-      if (nextIsTextTarget !== textTargetRef.current) {
-        textTargetRef.current = nextIsTextTarget
-        setIsTextTarget(nextIsTextTarget)
-        if (nextIsTextTarget && rotateToRef.current) {
-          rotationRef.current = 0
-          rotateToRef.current(0)
-        }
-      }
+      const isPointer = !isText && Boolean(target?.closest(CLICKABLE_SELECTOR))
+      const nextHoverKind = isText ? "text" : isPointer ? "pointer" : "none"
+      setHoverKind((prev) => (prev === nextHoverKind ? prev : nextHoverKind))
 
       posRef.current.x = e.clientX - CURSOR_SIZE / 2
       posRef.current.y = e.clientY - CURSOR_SIZE / 2
@@ -98,7 +143,14 @@ export function Cursor() {
 
       const prev = pointerRef.current
       pointerRef.current = { x: e.clientX, y: e.clientY }
-      if (!prev || !rotateToRef.current || nextIsTextTarget) return
+
+      if (!prev || !rotateToRef.current || nextHoverKind === "text") {
+        if (nextHoverKind === "text") {
+          rotationRef.current = 0
+          rotateToRef.current?.(0)
+        }
+        return
+      }
 
       const dx = e.clientX - prev.x
       const dy = e.clientY - prev.y
@@ -126,12 +178,12 @@ export function Cursor() {
       window.removeEventListener("mousemove", onMove)
       cancelAnimationFrame(rafRef.current)
       rotateToRef.current = null
-      showNative()
+      document.getElementById(styleId)?.remove()
     }
   }, [])
 
   useEffect(() => {
-    const effectiveState: CursorState = isTextTarget ? "type" : state
+    const effectiveState: CursorState = state === "default" ? autoState : state
     const prevState = effectiveStateRef.current
 
     if (prevState === "hidden" && effectiveState !== "hidden") {
@@ -143,125 +195,60 @@ export function Cursor() {
         setRevealPending(true)
       }
     }
-
     effectiveStateRef.current = effectiveState
-    revealPendingRef.current = revealPending
 
-    const triangle = triangleRef.current
-    const square = squareRef.current
-    const labelEl = labelElRef.current
+    const shape = shapeRef.current
     const spinner = spinnerRef.current
-    const typeEl = typeRef.current
-    const grabEl = grabRef.current
+    const labelEl = labelElRef.current
+    if (!shape || !spinner || !labelEl) return
 
-    if (!triangle || !square || !labelEl || !spinner || !typeEl || !grabEl)
-      return
+    const renderState: CursorState = revealPending ? "hidden" : effectiveState
 
-    if (effectiveState === "loading" && spinnerTweenRef.current === null) {
+    if (renderState === "loading" && spinnerTweenRef.current === null) {
       spinnerTweenRef.current = gsap.to(spinner, {
         rotation: 360,
         duration: 1,
         ease: "none",
         repeat: -1,
       })
-    } else if (effectiveState !== "loading" && spinnerTweenRef.current) {
+    } else if (renderState !== "loading" && spinnerTweenRef.current) {
       spinnerTweenRef.current.kill()
       spinnerTweenRef.current = null
       gsap.set(spinner, { rotation: 0 })
     }
 
-    const renderState: CursorState = revealPending ? "hidden" : effectiveState
-
-    switch (renderState) {
-      case "default":
-        gsap.to(triangle, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        })
-        gsap.to([square, labelEl, spinner, typeEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        break
-
-      case "loading":
-        gsap.to(triangle, {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        gsap.to(square, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        })
-        gsap.to([labelEl, typeEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        gsap.to(spinner, {
-          opacity: 1,
-          duration: 0.2,
-        })
-        break
-
-      case "type":
-        gsap.to([triangle, square, spinner, labelEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        gsap.to(typeEl, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        })
-        break
-
-      case "grab":
-        gsap.to([triangle, spinner, labelEl, typeEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        gsap.to(square, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        })
-        break
-
-      case "grabbing":
-        gsap.to([triangle, square, spinner, labelEl, typeEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        break
-
-      case "hidden":
-        gsap.to([triangle, square, labelEl, spinner, typeEl, grabEl], {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.15,
-          ease: "power2.in",
-        })
-        break
+    if (renderState === "hidden" || renderState === "grabbing") {
+      gsap.to([shape, spinner, labelEl], {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.14,
+        ease: "power2.in",
+      })
+      return
     }
-  }, [isTextTarget, revealPending, state, label])
+
+    const nextPath = SHAPES[renderState]
+    gsap.to(shape, {
+      attr: { d: nextPath },
+      opacity: 1,
+      scale: 1,
+      duration: 0.22,
+      ease: "power2.out",
+    })
+
+    gsap.to(labelEl, {
+      opacity: renderState === "type" && label ? 1 : 0,
+      scale: renderState === "type" && label ? 1 : 0.6,
+      duration: 0.16,
+      ease: "power2.out",
+    })
+
+    gsap.to(spinner, {
+      opacity: renderState === "loading" ? 1 : 0,
+      duration: 0.18,
+      ease: "power2.out",
+    })
+  }, [autoState, label, revealPending, state])
 
   useEffect(() => {
     const cleanup = onCursorStateChange(({ state: s, options }) => {
@@ -278,9 +265,7 @@ export function Cursor() {
 
   useEffect(() => {
     return () => {
-      if (spinnerTweenRef.current) {
-        spinnerTweenRef.current.kill()
-      }
+      spinnerTweenRef.current?.kill()
     }
   }, [])
 
@@ -303,8 +288,8 @@ export function Cursor() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          ref={triangleRef}
-          d={TRIANGLE_PATH}
+          ref={shapeRef}
+          d={SHAPES.default}
           fill="#F5F5F5"
           stroke="#141313"
           strokeWidth="1"
@@ -315,21 +300,6 @@ export function Cursor() {
             transform: "scale(1)",
           }}
         />
-
-        <path
-          ref={squareRef}
-          d={SQUARE_PATH}
-          fill="#F5F5F5"
-          stroke="#141313"
-          strokeWidth="1"
-          style={{
-            opacity: 0,
-            transformOrigin: "center",
-            transformBox: "fill-box",
-            transform: "scale(0.5)",
-          }}
-        />
-
         <path
           ref={spinnerRef}
           d={SPINNER_PATH}
@@ -343,36 +313,6 @@ export function Cursor() {
             transformBox: "fill-box",
           }}
         />
-
-        <path
-          ref={typeRef}
-          d={TYPE_PATH}
-          fill="none"
-          stroke="#F5F5F5"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{
-            opacity: 0,
-            transformOrigin: "center",
-            transformBox: "fill-box",
-            transform: "scale(0.5)",
-          }}
-        />
-
-        <path
-          ref={grabRef}
-          d={GRAB_PATH}
-          fill="#F5F5F5"
-          stroke="#141313"
-          strokeWidth="1"
-          style={{
-            opacity: 0,
-            transformOrigin: "center",
-            transformBox: "fill-box",
-            transform: "scale(0.5)",
-          }}
-        />
       </svg>
 
       <span
@@ -380,7 +320,7 @@ export function Cursor() {
         className="label-caps-style absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-on-surface"
         style={{
           opacity: 0,
-          transform: "translate(-50%, -50%) scale(0.5)",
+          transform: "translate(-50%, -50%) scale(0.6)",
           transformOrigin: "center",
         }}
       >
