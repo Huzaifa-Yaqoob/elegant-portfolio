@@ -1,7 +1,8 @@
-import { useId } from "react"
+import { useId, useRef } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { useSkewScroll } from "@/components/animation/use-skew-scroll"
 import {
   Field,
   FieldError,
@@ -40,9 +41,13 @@ export function ContactForm({
   const emailId = useId()
   const subjectId = useId()
   const messageId = useId()
+  const formRef = useRef<HTMLFormElement>(null)
+
+  useSkewScroll(formRef)
 
   return (
     <form
+      ref={formRef}
       action={endpoint}
       method={method}
       className="space-y-8 rounded-none border border-outline-variant p-6 md:p-8"

@@ -52,11 +52,14 @@ services.sort((a, b) => a.data.order - b.data.order)
 
 <script>
   import { gsap } from "@/lib/gsap"
+  import { initSkewScroll } from "@/components/animation/skew-scroll"
 
   const grid = document.getElementById("service-grid")
   const cards = grid ? Array.from(grid.children) : []
 
   if (cards.length) {
+    initSkewScroll("#service-grid > *")
+
     gsap.matchMedia().add(
       {
         threeCol: "(min-width: 1024px)",

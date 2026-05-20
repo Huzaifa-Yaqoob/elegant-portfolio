@@ -45,7 +45,7 @@ const addressLink = personal.address_link || "https://www.google.com/maps"
     </div>
   </div>
 
-  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+  <div id="contact-grid" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
     <div class="lg:col-span-5">
       <ContactInfoMap
         name={personal.name}
@@ -69,3 +69,9 @@ const addressLink = personal.address_link || "https://www.google.com/maps"
     </div>
   </div>
 </section>
+
+<script>
+  import { initSkewScroll } from "@/components/animation/skew-scroll"
+
+  initSkewScroll("#contact-grid > *")
+</script>
