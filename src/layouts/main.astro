@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar/navbar.astro"
 import Footer from "@/components/footer/footer.astro"
 import SmoothScroller from "./smooth-scroller.astro"
 import CustomScrollbar from "@/components/animation/custom-scrollbar.astro"
+import CustomCursor from "@/components/cursor/cursor.astro"
 ---
 
 <html lang="en">
@@ -16,6 +17,7 @@ import CustomScrollbar from "@/components/animation/custom-scrollbar.astro"
   <body class="flex min-h-svh flex-col">
     <Navbar />
     <CustomScrollbar />
+    <CustomCursor />
     <SmoothScroller>
       <main class="grow">
         <slot />
