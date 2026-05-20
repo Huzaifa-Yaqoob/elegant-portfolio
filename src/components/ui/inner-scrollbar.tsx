@@ -173,7 +173,7 @@ export function InnerScrollbar({
     }
   }, [targetRef])
 
-  const thumbWidth = expanded ? 6 : 2
+  const thumbWidth = expanded ? 8 : 4
 
   return (
     <div
@@ -183,7 +183,7 @@ export function InnerScrollbar({
         top: 0,
         [position]: 0,
         height: "100%",
-        width: "4px",
+        width: "12px",
         zIndex: 10,
         pointerEvents: "none",
         transition: "opacity 200ms",
@@ -200,6 +200,7 @@ export function InnerScrollbar({
           width: `${thumbWidth}px`,
           cursor: "grab",
           transition: "all 200ms ease-out",
+          pointerEvents: "auto",
         }}
       />
     </div>
