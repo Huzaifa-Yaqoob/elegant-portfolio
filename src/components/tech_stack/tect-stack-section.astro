@@ -41,7 +41,7 @@ const { title, description, tag, core_strengths, technologies } =
           </p>
           <div class="flex flex-wrap gap-2">
             {
-              (core_strengths ?? []).map((item: string) => (
+              (core_strengths ?? [])?.map((item: string) => (
                 <span class="border border-surface-variant px-2 py-1 font-mono-code text-mono-code text-on-surface-variant uppercase">
                   {item}
                 </span>

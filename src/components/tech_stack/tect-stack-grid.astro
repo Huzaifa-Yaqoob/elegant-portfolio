@@ -33,7 +33,7 @@ interface Props {
   technologies: TechnologyItem[]
 }
 
-const { technologies } = Astro.props
+const { technologies } = Astro.props as Props
 
 const iconMap = {
   react: ReactIcon,
