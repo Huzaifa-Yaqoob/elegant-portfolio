@@ -8,6 +8,8 @@ export type CursorState =
 
 export interface CursorStateOptions {
   label?: string
+  x?: number
+  y?: number
 }
 
 interface CursorStateEventDetail {

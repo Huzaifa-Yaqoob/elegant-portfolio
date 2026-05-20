@@ -68,7 +68,7 @@
       if (!isThumb) scrollToClientY(e.clientY)
 
       isDragging = true
-      setCursorState("hidden")
+      setCursorState("hidden", { x: e.clientX, y: e.clientY })
       thumb.classList.add("bg-on-surface")
       thumb.classList.remove("bg-on-surface-variant")
       document.body.style.userSelect = "none"
@@ -77,15 +77,19 @@
 
     function onPointerMove(e: PointerEvent) {
       if (!isDragging) return
+      setCursorState("hidden", { x: e.clientX, y: e.clientY })
       scrollToClientY(e.clientY)
     }
 
-    function onPointerUp() {
+    function onPointerUp(e: PointerEvent) {
       if (!isDragging) return
       isDragging = false
       thumb.classList.remove("bg-on-surface")
       thumb.classList.add("bg-on-surface-variant")
-      setCursorState(bar.matches(":hover") ? "grab" : "default")
+      setCursorState(bar.matches(":hover") ? "grab" : "default", {
+        x: e.clientX,
+        y: e.clientY,
+      })
       document.body.style.userSelect = ""
     }
 

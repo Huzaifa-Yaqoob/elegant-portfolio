@@ -12,7 +12,8 @@ const TRIANGLE_PATH = `M ${CURSOR_SIZE / 2} 0 L ${CURSOR_SIZE} ${CURSOR_SIZE} L 
 const SQUARE_PATH = `M 0 0 H ${CURSOR_SIZE} V ${CURSOR_SIZE} H 0 Z`
 
 const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_SIZE / 2 - 4} 0 1 1 4 ${CURSOR_SIZE / 2}`
-const TYPE_PATH = `M 7 3 H 15 M 11 3 V 19 M 7 19 H 15`
+const TYPE_PATH =
+  "M 9 3.5 H 13 M 11 3.5 V 18.5 M 9 18.5 H 13 M 8 6.5 H 14 M 8 15.5 H 14"
 const GRAB_PATH =
   "M 11 2 L 14 5 H 12.5 V 9.5 H 17 V 8 L 20 11 L 17 14 V 12.5 H 12.5 V 17 H 14 L 11 20 L 8 17 H 9.5 V 12.5 H 5 V 14 L 2 11 L 5 8 V 9.5 H 9.5 V 5 H 8 Z"
 
@@ -36,7 +37,10 @@ export function Cursor() {
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("")
   const [isTextTarget, setIsTextTarget] = useState(false)
+  const [revealPending, setRevealPending] = useState(false)
+  const revealPendingRef = useRef(false)
   const textTargetRef = useRef(false)
+  const effectiveStateRef = useRef<CursorState>("default")
 
   useEffect(() => {
     const styleId = "custom-cursor-hide-native-style"
@@ -82,14 +86,19 @@ export function Cursor() {
       if (nextIsTextTarget !== textTargetRef.current) {
         textTargetRef.current = nextIsTextTarget
         setIsTextTarget(nextIsTextTarget)
+        if (nextIsTextTarget && rotateToRef.current) {
+          rotationRef.current = 0
+          rotateToRef.current(0)
+        }
       }
 
       posRef.current.x = e.clientX - CURSOR_SIZE / 2
       posRef.current.y = e.clientY - CURSOR_SIZE / 2
+      if (revealPendingRef.current) setRevealPending(false)
 
       const prev = pointerRef.current
       pointerRef.current = { x: e.clientX, y: e.clientY }
-      if (!prev || !rotateToRef.current) return
+      if (!prev || !rotateToRef.current || nextIsTextTarget) return
 
       const dx = e.clientX - prev.x
       const dy = e.clientY - prev.y
@@ -123,6 +132,20 @@ export function Cursor() {
 
   useEffect(() => {
     const effectiveState: CursorState = isTextTarget ? "type" : state
+    const prevState = effectiveStateRef.current
+
+    if (prevState === "hidden" && effectiveState !== "hidden") {
+      if (pointerRef.current) {
+        posRef.current.x = pointerRef.current.x - CURSOR_SIZE / 2
+        posRef.current.y = pointerRef.current.y - CURSOR_SIZE / 2
+        setRevealPending(false)
+      } else {
+        setRevealPending(true)
+      }
+    }
+
+    effectiveStateRef.current = effectiveState
+    revealPendingRef.current = revealPending
 
     const triangle = triangleRef.current
     const square = squareRef.current
@@ -147,7 +170,9 @@ export function Cursor() {
       gsap.set(spinner, { rotation: 0 })
     }
 
-    switch (effectiveState) {
+    const renderState: CursorState = revealPending ? "hidden" : effectiveState
+
+    switch (renderState) {
       case "default":
         gsap.to(triangle, {
           opacity: 1,
@@ -236,10 +261,15 @@ export function Cursor() {
         })
         break
     }
-  }, [isTextTarget, state, label])
+  }, [isTextTarget, revealPending, state, label])
 
   useEffect(() => {
     const cleanup = onCursorStateChange(({ state: s, options }) => {
+      if (typeof options?.x === "number" && typeof options?.y === "number") {
+        pointerRef.current = { x: options.x, y: options.y }
+        posRef.current.x = options.x - CURSOR_SIZE / 2
+        posRef.current.y = options.y - CURSOR_SIZE / 2
+      }
       setState(s)
       setLabel(options?.label ?? "")
     })
@@ -319,8 +349,9 @@ export function Cursor() {
           d={TYPE_PATH}
           fill="none"
           stroke="#F5F5F5"
-          strokeWidth="1.75"
-          strokeLinecap="square"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           style={{
             opacity: 0,
             transformOrigin: "center",
