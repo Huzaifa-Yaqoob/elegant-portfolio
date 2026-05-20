@@ -1,10 +1,16 @@
 import { useEffect } from "react"
 import { gsap } from "@/lib/gsap"
+import { ScrollSmoother } from "gsap/ScrollSmoother"
 
 export interface SkewScrollOptions {
   minSkew?: number
   maxSkew?: number
   multiplier?: number
+}
+
+function getScrollPos(): number {
+  const s = ScrollSmoother.get()
+  return s ? s.scrollTop() : window.scrollY
 }
 
 export function useSkewScroll<T extends HTMLElement>(
@@ -17,18 +23,23 @@ export function useSkewScroll<T extends HTMLElement>(
     const el = ref.current
     if (!el) return
 
-    let lastY = window.scrollY
+    let lastPos = getScrollPos()
 
-    const handler = () => {
-      const y = window.scrollY
-      const v = y - lastY
-      lastY = y
-      const skew = gsap.utils.clamp(minSkew, maxSkew, v * multiplier)
-      gsap.set(el, { skewY: skew })
+    const tick = () => {
+      const pos = getScrollPos()
+      const v = pos - lastPos
+      lastPos = pos
+
+      if (Math.abs(v) > 0.5) {
+        const skew = gsap.utils.clamp(minSkew, maxSkew, v * multiplier)
+        gsap.set(el, { skewY: skew })
+      } else {
+        gsap.set(el, { skewY: 0 })
+      }
     }
 
-    window.addEventListener("scroll", handler, { passive: true })
+    gsap.ticker.add(tick)
 
-    return () => window.removeEventListener("scroll", handler)
+    return () => gsap.ticker.remove(tick)
   }, [ref, minSkew, maxSkew, multiplier])
 }
