@@ -25,8 +25,12 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
             }`}
           >
             {/* Image Container */}
-            <div data-speed-sm="0.9" data-speed-lg="0.85" class="skew-target relative w-full overflow-hidden border border-surface-variant lg:w-3/5">
-              <div class="h-[280px] w-full md:h-[450px] lg:h-[650px]">
+            <div
+              data-speed-sm="0.9"
+              data-speed-lg="0.85"
+              class="skew-target relative w-full overflow-hidden border border-surface-variant lg:w-3/5"
+            >
+              <div class="h-70 w-full md:h-112.5 lg:h-162.5">
                 <img
                   src={project.data.mainImage}
                   alt={project.data.title}
@@ -105,7 +109,9 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
   }
 
   applyResponsiveSpeeds()
-  window.matchMedia("(min-width: 1024px)").addEventListener("change", applyResponsiveSpeeds)
+  window
+    .matchMedia("(min-width: 1024px)")
+    .addEventListener("change", applyResponsiveSpeeds)
 
   function getScrollPos(): number {
     const s = ScrollSmoother.get()

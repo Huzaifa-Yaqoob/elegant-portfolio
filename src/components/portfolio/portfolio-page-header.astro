@@ -20,13 +20,15 @@ const { title, description, videoLink, mainImage } = Astro.props
     00
   </div>
 
-  <video
-    src={videoLink}
-    autoplay
-    muted
-    loop
-    playsinline
-    class="absolute inset-0 h-full w-full object-cover opacity-10"></video>
+  {videoLink && (
+    <video
+      src={videoLink}
+      autoplay
+      muted
+      loop
+      playsinline
+      class="absolute inset-0 h-full w-full object-cover opacity-10"></video>
+  )}
 
   <img
     src={mainImage}
