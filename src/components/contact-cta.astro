@@ -61,18 +61,21 @@
   </div>
 
   <div class="relative z-10 flex w-full items-center justify-center">
-    <a
-      href="/contact"
-      id="magnetic-cta"
-      class="group relative z-10 mx-auto flex aspect-square w-70 items-center justify-center border border-on-surface bg-background transition-colors duration-500 hover:bg-on-surface hover:text-background md:w-[360px] lg:w-[420px]"
-    >
-      <span
-        id="magnetic-cta-text"
-        class="font-heading text-4xl font-black tracking-tighter uppercase transition-transform duration-500 group-hover:scale-110 md:text-5xl lg:text-6xl"
+    <div id="magnetic-cta-zone" class="relative">
+      <a
+        href="/contact"
+        id="magnetic-cta"
+        data-lag="0.5"
+        class="group relative z-10 mx-auto flex aspect-square w-70 items-center justify-center border border-on-surface bg-background transition-colors duration-500 hover:bg-on-surface hover:text-background md:w-[360px] lg:w-[420px]"
       >
-        Let's<br />Talk
-      </span>
-    </a>
+        <span
+          id="magnetic-cta-text"
+          class="font-heading text-4xl font-black tracking-tighter uppercase transition-transform duration-500 group-hover:scale-110 md:text-5xl lg:text-6xl"
+        >
+          Let's<br />Talk
+        </span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -97,22 +100,27 @@
     )
   }
 
+  const zone = document.getElementById("magnetic-cta-zone")
+  if (!zone) throw new Error("Magnetic CTA zone not found")
+
   const btn = document.getElementById("magnetic-cta")
   if (!btn) throw new Error("Magnetic CTA not found")
 
   const textEl = document.getElementById("magnetic-cta-text")
   if (!textEl) throw new Error("Magnetic CTA text not found")
 
-  const maxDisplacement = 30
-  const distance = 80
+  const magneticPadding = 80
+  const maxDisplacement = 150
   const duration = 0.2
   let isHovering = false
   let rafId: number | null = null
   let latestEvent: { clientX: number; clientY: number } | null = null
-  let textRect: DOMRect
+  let btnRect: DOMRect
+
+  zone.style.padding = `${magneticPadding}px`
 
   const handleMouseEnter = () => {
-    textRect = textEl.getBoundingClientRect()
+    btnRect = btn.getBoundingClientRect()
   }
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -121,47 +129,34 @@
     if (rafId === null) {
       rafId = requestAnimationFrame(() => {
         rafId = null
-        if (!latestEvent || !textRect) return
+        if (!latestEvent || !btnRect) return
 
-        const centerX = textRect.left + textRect.width / 2
-        const centerY = textRect.top + textRect.height / 2
+        const centerX = btnRect.left + btnRect.width / 2
+        const centerY = btnRect.top + btnRect.height / 2
 
         const deltaX = latestEvent.clientX - centerX
         const deltaY = latestEvent.clientY - centerY
         const dist = Math.hypot(deltaX, deltaY)
 
-        if (dist < distance) {
-          if (!isHovering) {
-            isHovering = true
-            setCursorState("hidden")
-          }
+        const maxDist =
+          Math.max(btnRect.width, btnRect.height) / 2 + magneticPadding
+        const normalizedDist = dist / maxDist
+        const attenuation = Math.pow(1 - normalizedDist, 1.5)
+        const moveX = deltaX * attenuation * (maxDisplacement / maxDist)
+        const moveY = deltaY * attenuation * (maxDisplacement / maxDist)
 
-          const normalizedDist = dist / distance
-          const attenuation = Math.pow(1 - normalizedDist, 2)
-          const moveX =
-            deltaX * attenuation * (maxDisplacement / (distance * 0.5))
-          const moveY =
-            deltaY * attenuation * (maxDisplacement / (distance * 0.5))
-
-          gsap.to(btn, {
-            x: moveX,
-            y: moveY,
-            duration,
-            ease: "power3.out",
-            overwrite: true,
-          })
-        } else if (isHovering) {
-          isHovering = false
-          setCursorState("default")
-
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.5)",
-            overwrite: true,
-          })
+        if (!isHovering) {
+          isHovering = true
+          setCursorState("hidden")
         }
+
+        gsap.to(btn, {
+          x: moveX,
+          y: moveY,
+          duration,
+          ease: "power3.out",
+          overwrite: true,
+        })
       })
     }
   }
@@ -185,7 +180,7 @@
     })
   }
 
-  btn.addEventListener("mouseenter", handleMouseEnter)
-  btn.addEventListener("mousemove", handleMouseMove)
-  btn.addEventListener("mouseleave", handleMouseLeave)
+  zone.addEventListener("mouseenter", handleMouseEnter)
+  zone.addEventListener("mousemove", handleMouseMove)
+  zone.addEventListener("mouseleave", handleMouseLeave)
 </script>
