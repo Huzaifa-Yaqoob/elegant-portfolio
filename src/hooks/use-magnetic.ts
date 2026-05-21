@@ -1,59 +1,101 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
+import { gsap } from "@/lib/gsap"
 
 interface UseMagneticProps {
   enabled?: boolean
-  strength?: number
+  /** Maximum displacement in pixels (default: 20) */
+  maxDisplacement?: number
+  /** Activation radius in pixels from element center (default: 75) */
   distance?: number
+  /** Tween duration for mouse move in seconds (default: 0.25) */
+  duration?: number
 }
 
-export function useMagnetic({
+export function useMagnetic<T extends HTMLElement = HTMLButtonElement>({
   enabled = false,
-  strength = 0.35,
-  distance = 100,
+  maxDisplacement = 20,
+  distance = 75,
+  duration = 0.25,
 }: UseMagneticProps = {}) {
-  const ref = useRef<HTMLButtonElement>(null)
-  const [isHovering, setIsHovering] = useState(false)
+  const ref = useRef<T>(null)
+  const rectRef = useRef<DOMRect | null>(null)
+  const tweenRef = useRef<gsap.core.Tween | null>(null)
 
   useEffect(() => {
-    if (!enabled || !ref.current) return
+    if (!enabled || typeof window === "undefined") return
 
     const element = ref.current
+    if (!element) return
+
+    const updateRect = () => {
+      rectRef.current = element.getBoundingClientRect()
+    }
+
+    const handleMouseEnter = () => {
+      updateRect()
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = element.getBoundingClientRect()
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
+      if (!rectRef.current) return
+
+      const { left, top, width, height } = rectRef.current
+      const centerX = left + width / 2
+      const centerY = top + height / 2
 
       const deltaX = e.clientX - centerX
       const deltaY = e.clientY - centerY
-      const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+      const dist = Math.hypot(deltaX, deltaY)
 
       if (dist < distance) {
-        const factor = (1 - dist / distance) * strength
-        const moveX = deltaX * factor
-        const moveY = deltaY * factor
+        const normalizedDist = dist / distance
+        const attenuation = Math.pow(1 - normalizedDist, 2.5)
+        const moveX = deltaX * attenuation * (maxDisplacement / distance)
+        const moveY = deltaY * attenuation * (maxDisplacement / distance)
 
-        element.style.transform = `translate(${moveX}px, ${moveY}px)`
-        setIsHovering(true)
-      } else if (isHovering) {
-        element.style.transform = "translate(0px, 0px)"
-        setIsHovering(false)
+        if (tweenRef.current) {
+          tweenRef.current.kill()
+        }
+
+        tweenRef.current = gsap.to(element, {
+          x: moveX,
+          y: moveY,
+          duration,
+          ease: "expo.out",
+          overwrite: true,
+        })
       }
     }
 
     const handleMouseLeave = () => {
-      element.style.transform = "translate(0px, 0px)"
-      setIsHovering(false)
+      if (tweenRef.current) {
+        tweenRef.current.kill()
+      }
+
+      tweenRef.current = gsap.to(element, {
+        x: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "elastic.out(1, 0.75)",
+        overwrite: true,
+      })
+
+      rectRef.current = null
     }
 
-    document.addEventListener("mousemove", handleMouseMove)
+    element.addEventListener("mouseenter", handleMouseEnter)
+    element.addEventListener("mousemove", handleMouseMove)
     element.addEventListener("mouseleave", handleMouseLeave)
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove)
+      element.removeEventListener("mouseenter", handleMouseEnter)
+      element.removeEventListener("mousemove", handleMouseMove)
       element.removeEventListener("mouseleave", handleMouseLeave)
+
+      if (tweenRef.current) {
+        tweenRef.current.kill()
+      }
     }
-  }, [enabled, strength, distance, isHovering])
+  }, [enabled, maxDisplacement, distance, duration])
 
   return { ref }
 }

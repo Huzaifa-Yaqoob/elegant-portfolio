@@ -2,20 +2,94 @@
 
 ---
 
-<a
-  href="/contact"
-  id="magnetic-cta"
-  class="group relative z-10 mx-auto flex aspect-square w-70 items-center justify-center border border-on-surface bg-background transition-colors duration-500 hover:bg-on-surface hover:text-background md:w-[360px] lg:w-[420px]"
+<section
+  class="relative overflow-hidden border-y border-surface-variant px-8 py-32 lg:px-16"
 >
-  <span
-    class="font-heading text-4xl font-black tracking-tighter uppercase transition-transform duration-500 group-hover:scale-110 md:text-5xl lg:text-6xl"
-  >
-    Let's<br />Talk
-  </span>
-</a>
+  <div class="pointer-events-none absolute inset-0">
+    <svg
+      class="h-full w-full opacity-65"
+      viewBox="0 0 700 700"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      <defs>
+        <filter
+          id="cta-noise-filter"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+          filterUnits="objectBoundingBox"
+          primitiveUnits="userSpaceOnUse"
+          color-interpolation-filters="linearRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.2"
+            numOctaves="4"
+            seed="15"
+            stitchTiles="stitch"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+            result="turbulence"></feTurbulence>
+          <feSpecularLighting
+            id="cta-specular-light"
+            surfaceScale="15"
+            specularConstant="0.75"
+            specularExponent="20"
+            lighting-color="#ffffff"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+            in="turbulence"
+            result="specularLighting"
+          >
+            <feDistantLight azimuth="3" elevation="100"></feDistantLight>
+          </feSpecularLighting>
+        </filter>
+      </defs>
+      <rect width="700" height="700" fill="var(--color-deep-obsidian)"></rect>
+      <rect
+        width="700"
+        height="700"
+        fill="var(--color-secondary)"
+        filter="url(#cta-noise-filter)"></rect>
+    </svg>
+  </div>
+
+  <div class="relative z-10 flex w-full items-center justify-center">
+    <a
+      href="/contact"
+      id="magnetic-cta"
+      class="group relative z-10 mx-auto flex aspect-square w-70 items-center justify-center border border-on-surface bg-background transition-colors duration-500 hover:bg-on-surface hover:text-background md:w-[360px] lg:w-[420px]"
+    >
+      <span
+        id="magnetic-cta-text"
+        class="font-heading text-4xl font-black tracking-tighter uppercase transition-transform duration-500 group-hover:scale-110 md:text-5xl lg:text-6xl"
+      >
+        Let's<br />Talk
+      </span>
+    </a>
+  </div>
+</section>
 
 <script>
   import { gsap } from "@/lib/gsap"
+
+  const specular = document.getElementById("cta-specular-light")
+
+  if (specular) {
+    gsap.to(specular, {
+      attr: { surfaceScale: 26 },
+      duration: 5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    })
+  }
 
   const setCursorState = (state: string) => {
     window.dispatchEvent(
@@ -26,11 +100,20 @@
   const btn = document.getElementById("magnetic-cta")
   if (!btn) throw new Error("Magnetic CTA not found")
 
-  const strength = 0.35
-  const distance = 200
+  const textEl = document.getElementById("magnetic-cta-text")
+  if (!textEl) throw new Error("Magnetic CTA text not found")
+
+  const maxDisplacement = 30
+  const distance = 80
+  const duration = 0.2
   let isHovering = false
   let rafId: number | null = null
   let latestEvent: { clientX: number; clientY: number } | null = null
+  let textRect: DOMRect
+
+  const handleMouseEnter = () => {
+    textRect = textEl.getBoundingClientRect()
+  }
 
   const handleMouseMove = (e: MouseEvent) => {
     latestEvent = { clientX: e.clientX, clientY: e.clientY }
@@ -38,16 +121,14 @@
     if (rafId === null) {
       rafId = requestAnimationFrame(() => {
         rafId = null
+        if (!latestEvent || !textRect) return
 
-        if (!latestEvent) return
-
-        const rect = btn.getBoundingClientRect()
-        const centerX = rect.left + rect.width / 2
-        const centerY = rect.top + rect.height / 2
+        const centerX = textRect.left + textRect.width / 2
+        const centerY = textRect.top + textRect.height / 2
 
         const deltaX = latestEvent.clientX - centerX
         const deltaY = latestEvent.clientY - centerY
-        const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+        const dist = Math.hypot(deltaX, deltaY)
 
         if (dist < distance) {
           if (!isHovering) {
@@ -55,26 +136,29 @@
             setCursorState("hidden")
           }
 
-          const factor = (1 - dist / distance) * strength
-          const moveX = deltaX * factor
-          const moveY = deltaY * factor
+          const normalizedDist = dist / distance
+          const attenuation = Math.pow(1 - normalizedDist, 2)
+          const moveX =
+            deltaX * attenuation * (maxDisplacement / (distance * 0.5))
+          const moveY =
+            deltaY * attenuation * (maxDisplacement / (distance * 0.5))
 
           gsap.to(btn, {
             x: moveX,
             y: moveY,
-            duration: 0.4,
-            ease: "power2.out",
+            duration,
+            ease: "power3.out",
             overwrite: true,
           })
         } else if (isHovering) {
           isHovering = false
-          setCursorState("pointer")
+          setCursorState("default")
 
           gsap.to(btn, {
             x: 0,
             y: 0,
-            duration: 0.7,
-            ease: "elastic.out(1, 0.3)",
+            duration: 0.5,
+            ease: "elastic.out(1, 0.5)",
             overwrite: true,
           })
         }
@@ -85,7 +169,7 @@
   const handleMouseLeave = () => {
     isHovering = false
     latestEvent = null
-    setCursorState("pointer")
+    setCursorState("default")
 
     if (rafId !== null) {
       cancelAnimationFrame(rafId)
@@ -95,12 +179,13 @@
     gsap.to(btn, {
       x: 0,
       y: 0,
-      duration: 0.7,
-      ease: "elastic.out(1, 0.3)",
+      duration: 0.5,
+      ease: "elastic.out(1, 0.5)",
       overwrite: true,
     })
   }
 
-  document.addEventListener("mousemove", handleMouseMove)
+  btn.addEventListener("mouseenter", handleMouseEnter)
+  btn.addEventListener("mousemove", handleMouseMove)
   btn.addEventListener("mouseleave", handleMouseLeave)
 </script>
