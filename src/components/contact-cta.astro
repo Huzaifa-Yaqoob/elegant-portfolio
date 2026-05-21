@@ -1,0 +1,106 @@
+---
+
+---
+
+<a
+  href="/contact"
+  id="magnetic-cta"
+  class="group relative z-10 mx-auto flex aspect-square w-70 items-center justify-center border border-on-surface bg-background transition-colors duration-500 hover:bg-on-surface hover:text-background md:w-[360px] lg:w-[420px]"
+>
+  <span
+    class="font-heading text-4xl font-black tracking-tighter uppercase transition-transform duration-500 group-hover:scale-110 md:text-5xl lg:text-6xl"
+  >
+    Let's<br />Talk
+  </span>
+</a>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const setCursorState = (state: string) => {
+    window.dispatchEvent(
+      new CustomEvent("cursor-state-change", { detail: { state } })
+    )
+  }
+
+  const btn = document.getElementById("magnetic-cta")
+  if (!btn) throw new Error("Magnetic CTA not found")
+
+  const strength = 0.35
+  const distance = 200
+  let isHovering = false
+  let rafId: number | null = null
+  let latestEvent: { clientX: number; clientY: number } | null = null
+
+  const handleMouseMove = (e: MouseEvent) => {
+    latestEvent = { clientX: e.clientX, clientY: e.clientY }
+
+    if (rafId === null) {
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+
+        if (!latestEvent) return
+
+        const rect = btn.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+
+        const deltaX = latestEvent.clientX - centerX
+        const deltaY = latestEvent.clientY - centerY
+        const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+        if (dist < distance) {
+          if (!isHovering) {
+            isHovering = true
+            setCursorState("hidden")
+          }
+
+          const factor = (1 - dist / distance) * strength
+          const moveX = deltaX * factor
+          const moveY = deltaY * factor
+
+          gsap.to(btn, {
+            x: moveX,
+            y: moveY,
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: true,
+          })
+        } else if (isHovering) {
+          isHovering = false
+          setCursorState("pointer")
+
+          gsap.to(btn, {
+            x: 0,
+            y: 0,
+            duration: 0.7,
+            ease: "elastic.out(1, 0.3)",
+            overwrite: true,
+          })
+        }
+      })
+    }
+  }
+
+  const handleMouseLeave = () => {
+    isHovering = false
+    latestEvent = null
+    setCursorState("pointer")
+
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId)
+      rafId = null
+    }
+
+    gsap.to(btn, {
+      x: 0,
+      y: 0,
+      duration: 0.7,
+      ease: "elastic.out(1, 0.3)",
+      overwrite: true,
+    })
+  }
+
+  document.addEventListener("mousemove", handleMouseMove)
+  btn.addEventListener("mouseleave", handleMouseLeave)
+</script>

@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { gsap } from "@/lib/gsap"
-import { onCursorStateChange, type CursorState } from "./cursor-store"
+import {
+  onCursorReinit,
+  onCursorStateChange,
+  type CursorState,
+} from "./cursor-store"
 
 const CURSOR_SIZE = 22
 const VIEW_BOX = `0 0 ${CURSOR_SIZE} ${CURSOR_SIZE}`
@@ -70,6 +74,7 @@ const CLICKABLE_SELECTOR =
   'a, button, [role="button"], [data-cursor="pointer"], summary, select, [data-slot="radio-group-item"], .cursor-pointer'
 
 export function Cursor() {
+  const log = (...args: unknown[]) => console.log("[cursor.tsx]", ...args)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
@@ -88,6 +93,7 @@ export function Cursor() {
   const spinnerOpacityTweenRef = useRef<gsap.core.Tween | null>(null)
   const revealPendingRef = useRef(false)
   const effectiveStateRef = useRef<CursorState>("default")
+  const [initCycle, setInitCycle] = useState(0)
 
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("")
@@ -95,6 +101,37 @@ export function Cursor() {
     "none"
   )
   const [revealPending, setRevealPending] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+
+  useEffect(() => {
+    const onPageLoad = () => {
+      log("lifecycle event received; re-init cycle +1")
+      setInitCycle((prev) => prev + 1)
+    }
+
+    log("bind lifecycle listeners")
+    document.addEventListener("astro:page-load", onPageLoad)
+    const cleanupReinit = onCursorReinit(onPageLoad)
+
+    return () => {
+      log("cleanup lifecycle listeners")
+      document.removeEventListener("astro:page-load", onPageLoad)
+      cleanupReinit()
+    }
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    log("visibility effect run", {
+      initCycle,
+      matches: mq.matches,
+      readyState: document.readyState,
+    })
+    setIsVisible(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsVisible(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [initCycle])
 
   const autoState = useMemo<CursorState>(() => {
     if (hoverKind === "text") return "type"
@@ -107,6 +144,7 @@ export function Cursor() {
   }, [revealPending])
 
   useEffect(() => {
+    log("pointer/shape setup effect run", { initCycle })
     const styleId = "custom-cursor-hide-native-style"
     const style = document.createElement("style")
     style.id = styleId
@@ -178,20 +216,29 @@ export function Cursor() {
 
     window.addEventListener("mousemove", onMove)
     rafRef.current = requestAnimationFrame(tick)
+    log("mousemove + raf attached")
 
     return () => {
+      log("pointer/shape setup cleanup")
       window.removeEventListener("mousemove", onMove)
       cancelAnimationFrame(rafRef.current)
       document.getElementById(styleId)?.remove()
     }
-  }, [])
+  }, [initCycle])
 
   useEffect(() => {
+    log("trail canvas effect run", { initCycle })
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas) {
+      log("trail canvas missing")
+      return
+    }
 
     const ctx = canvas.getContext("2d")
-    if (!ctx) return
+    if (!ctx) {
+      log("2d context missing")
+      return
+    }
 
     class Node {
       x = 0
@@ -327,6 +374,7 @@ export function Cursor() {
     resizeCanvas()
     createLines()
     render()
+    log("trail render loop started")
 
     window.addEventListener("resize", resizeCanvas)
     window.addEventListener("orientationchange", resizeCanvas)
@@ -336,6 +384,7 @@ export function Cursor() {
     window.addEventListener("blur", onBlur)
 
     return () => {
+      log("trail canvas effect cleanup")
       running = false
       cancelAnimationFrame(rafId)
       window.removeEventListener("resize", resizeCanvas)
@@ -345,9 +394,10 @@ export function Cursor() {
       window.removeEventListener("focus", onFocus)
       window.removeEventListener("blur", onBlur)
     }
-  }, [])
+  }, [initCycle])
 
   useEffect(() => {
+    log("cursor state effect", { state, autoState, label, revealPending })
     const effectiveState: CursorState = state === "default" ? autoState : state
     const prevState = effectiveStateRef.current
 
@@ -425,7 +475,9 @@ export function Cursor() {
   }, [autoState, label, revealPending, state])
 
   useEffect(() => {
+    log("bind cursor-state-change listener")
     const cleanup = onCursorStateChange(({ state: s, options }) => {
+      log("cursor-state-change received", { state: s, options })
       if (typeof options?.x === "number" && typeof options?.y === "number") {
         pointerRef.current = { x: options.x, y: options.y }
         posRef.current.x = options.x - CURSOR_SIZE / 2
@@ -439,12 +491,15 @@ export function Cursor() {
 
   useEffect(() => {
     return () => {
+      log("kill GSAP tweens")
       spinnerTweenRef.current?.kill()
       shapeTweenRef.current?.kill()
       labelTweenRef.current?.kill()
       spinnerOpacityTweenRef.current?.kill()
     }
   }, [])
+
+  if (!isVisible) return null
 
   return (
     <>

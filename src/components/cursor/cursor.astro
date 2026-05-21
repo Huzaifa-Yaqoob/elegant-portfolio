@@ -2,6 +2,25 @@
 import { Cursor } from "./cursor"
 ---
 
-<div class="hidden md:block">
-  <Cursor client:load />
-</div>
+<Cursor client:load />
+
+<script is:inline data-astro-rerun>
+  const log = (...args) => console.log("[cursor.astro]", ...args)
+
+  const emitCursorLifecycleReinit = () => {
+    log("dispatch cursor-reinit")
+    window.dispatchEvent(new CustomEvent("cursor-reinit"))
+  }
+
+  if (document.readyState === "loading") {
+    log("document still loading; waiting for DOMContentLoaded")
+    document.addEventListener("DOMContentLoaded", emitCursorLifecycleReinit, {
+      once: true,
+    })
+  } else {
+    log("document already ready:", document.readyState)
+  }
+
+  log("bind astro:page-load listener")
+  document.addEventListener("astro:page-load", emitCursorLifecycleReinit)
+</script>

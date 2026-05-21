@@ -1,4 +1,6 @@
 export {
+  emitCursorReinit,
+  onCursorReinit,
   setCursorState,
   onCursorStateChange,
   type CursorState,
