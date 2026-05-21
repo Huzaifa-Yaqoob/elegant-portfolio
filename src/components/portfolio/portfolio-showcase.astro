@@ -15,18 +15,18 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
 
       return (
         <section
-          class={`showcase-section relative w-full border-b border-surface-variant px-8 py-32 md:px-16 ${
+          class={`showcase-section relative w-full border-b border-surface-variant px-8 py-32 lg:px-16 ${
             !isEven ? "bg-surface-container-lowest" : ""
           }`}
         >
           <div
-            class={`flex flex-col items-center gap-16 md:flex-row ${
-              !isEven ? "md:flex-row-reverse" : ""
+            class={`flex flex-col items-center gap-8 lg:flex-row ${
+              !isEven ? "lg:flex-row-reverse" : ""
             }`}
           >
             {/* Image Container */}
-            <div class="skew-target relative w-full overflow-hidden border border-surface-variant md:w-3/5">
-              <div class="h-[400px] w-full md:h-[600px]">
+            <div data-speed-sm="0.9" data-speed-lg="0.85" class="skew-target relative w-full overflow-hidden border border-surface-variant lg:w-3/5">
+              <div class="h-[280px] w-full md:h-[450px] lg:h-[650px]">
                 <img
                   src={project.data.mainImage}
                   alt={project.data.title}
@@ -38,8 +38,10 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
 
             {/* Info Card - Overlapping */}
             <div
-              class={`skew-target relative z-10 w-full border border-surface-variant bg-background p-10 shadow-2xl md:w-2/5 ${
-                isEven ? "md:-ml-32" : "md:-mr-32"
+              data-speed-sm="1.05"
+              data-speed-lg="1.1"
+              class={`skew-target relative z-10 w-full border border-surface-variant bg-background p-10 shadow-2xl lg:w-2/5 ${
+                isEven ? "lg:-ml-32" : "lg:-mr-32"
               }`}
             >
               <div class="counter-skew-content">
@@ -62,15 +64,20 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
                 <h2 class="mb-6 font-heading text-4xl font-black tracking-tighter text-on-background uppercase">
                   {project.data.title}
                 </h2>
-                <p class="mb-10 leading-relaxed text-on-surface-variant">
+                <p class="mb-10 line-clamp-5 leading-relaxed text-on-surface-variant">
                   {project.data.description}
                 </p>
-                <div class="flex flex-wrap gap-3">
-                  {tools.map((tool) => (
-                    <span class="border border-surface-variant px-4 py-2 text-xs font-bold tracking-widest uppercase">
+                <div class="flex flex-wrap gap-2">
+                  {tools.slice(0, 4).map((tool) => (
+                    <span class="border border-surface-variant px-3 py-1.5 text-xs font-bold tracking-widest uppercase">
                       {tool}
                     </span>
                   ))}
+                  {tools.length > 4 && (
+                    <span class="border border-surface-variant px-3 py-1.5 text-xs font-bold tracking-widest uppercase">
+                      +{tools.length - 4} more
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -84,6 +91,21 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
 <script>
   import { gsap } from "@/lib/gsap"
   import { ScrollSmoother } from "gsap/ScrollSmoother"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  function applyResponsiveSpeeds() {
+    const isLg = window.matchMedia("(min-width: 1024px)").matches
+    const speedAttr = isLg ? "data-speed-lg" : "data-speed-sm"
+
+    document.querySelectorAll<HTMLElement>("[data-speed-lg]").forEach((el) => {
+      el.setAttribute("data-speed", el.getAttribute(speedAttr) || "1")
+    })
+
+    ScrollTrigger.refresh()
+  }
+
+  applyResponsiveSpeeds()
+  window.matchMedia("(min-width: 1024px)").addEventListener("change", applyResponsiveSpeeds)
 
   function getScrollPos(): number {
     const s = ScrollSmoother.get()
@@ -91,7 +113,9 @@ const projects = entries.sort((a, b) => a.data.order - b.data.order)
   }
 
   const cards = document.querySelectorAll<HTMLElement>(".skew-target")
-  const counters = document.querySelectorAll<HTMLElement>(".counter-skew-content")
+  const counters = document.querySelectorAll<HTMLElement>(
+    ".counter-skew-content"
+  )
 
   if (cards.length) {
     let lastPos = getScrollPos()

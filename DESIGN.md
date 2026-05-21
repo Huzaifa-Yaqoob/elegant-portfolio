@@ -16,7 +16,7 @@ colors:
   outline: '#8e9192'
   outline-variant: '#444748'
   surface-tint: '#c9c6c5'
-  primary: '#c9c6c5'
+  primary: '#c9c6c5'Learn advance stuff related to rust which includes attributes and backend server
   on-primary: '#313030'
   primary-container: '#0a0a0a'
   on-primary-container: '#7b7979'
