@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { gsap } from "@/lib/gsap"
+import { gsap, useGSAP } from "@/lib/gsap"
 import {
   onCursorReinit,
   onCursorStateChange,
@@ -148,7 +148,7 @@ export function Cursor() {
     revealPendingRef.current = revealPending
   }, [revealPending])
 
-  useEffect(() => {
+  useGSAP(() => {
     log("pointer/shape setup effect run", { initCycle })
     const styleId = "custom-cursor-hide-native-style"
     const style = document.createElement("style")
@@ -410,7 +410,7 @@ export function Cursor() {
     }
   }, [initCycle])
 
-  useEffect(() => {
+  useGSAP(() => {
     log("cursor state effect", { state, autoState, label, revealPending })
     const effectiveState: CursorState = state === "default" ? autoState : state
     const prevState = effectiveStateRef.current
@@ -511,28 +511,18 @@ export function Cursor() {
     return cleanup
   }, [])
 
-  useEffect(() => {
-    return () => {
-      log("kill GSAP tweens")
-      spinnerTweenRef.current?.kill()
-      shapeTweenRef.current?.kill()
-      labelTweenRef.current?.kill()
-      spinnerOpacityTweenRef.current?.kill()
-    }
-  }, [])
-
   if (!isVisible) return null
 
   return (
     <>
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-[9998]"
+        className="pointer-events-none fixed inset-0 z-9998"
         aria-hidden="true"
       />
       <div
         ref={containerRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999]"
+        className="pointer-events-none fixed top-0 left-0 z-9999"
         style={{
           width: CURSOR_SIZE,
           height: CURSOR_SIZE,
