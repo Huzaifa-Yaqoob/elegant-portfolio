@@ -8,6 +8,7 @@ const { target, position = "right" } = Astro.props
 ---
 
 <script is:inline define:vars={{ target, position }}>
+  // @ts-nocheck
   ;(function boot() {
     const targetEl = document.querySelector(target)
     if (!targetEl) {

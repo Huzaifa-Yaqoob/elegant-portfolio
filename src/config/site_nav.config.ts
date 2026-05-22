@@ -1,4 +1,4 @@
-import { z } from "astro:content"
+import { z } from "astro/zod"
 
 export const NavSchema = z.object({
   header: z.object({

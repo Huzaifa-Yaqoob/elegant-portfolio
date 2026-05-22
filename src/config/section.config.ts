@@ -1,4 +1,4 @@
-import { z } from "astro:content"
+import { z } from "astro/zod"
 
 // Define a base schema for all sections, allowing for additional properties
 export const sectionSchema = z

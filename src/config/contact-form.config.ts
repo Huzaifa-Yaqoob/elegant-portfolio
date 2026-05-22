@@ -1,4 +1,4 @@
-import { z } from "astro:content"
+import { z } from "astro/zod"
 
 const contactReasonSchema = z.object({
   label: z.string(),
