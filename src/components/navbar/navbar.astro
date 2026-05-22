@@ -168,7 +168,7 @@ const isLinkActive = (href: string) =>
 </div>
 
 <script>
-  import { gsap } from "@/lib/gsap"
+  import { gsap, SplitText } from "@/lib/gsap"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
 
   const scrollY = ScrollTrigger.getScrollFunc(window) as (() => number) &
@@ -221,35 +221,67 @@ const isLinkActive = (href: string) =>
 
     const isActive = link.dataset.active === "true"
     const displayText = isActive ? `[${rawLabel}]` : rawLabel
-    textWrapper.textContent = ""
 
-    const chars = Array.from(displayText).map((char) => {
-      const span = document.createElement("span")
-      span.dataset.char = "true"
-      span.style.display = "inline-block"
-      span.style.fontStyle = "normal"
-      span.textContent = char === " " ? "\u00A0" : char
-      textWrapper.appendChild(span)
-      return span
+    textWrapper.textContent = displayText
+
+    // Split into individual characters using SplitText
+    // (Skill: gsap-plugins → SplitText)
+    const split = SplitText.create(textWrapper, {
+      type: "chars",
+      charsClass: "nav-char",
+    })
+    const chars = split.chars as HTMLElement[]
+
+    chars.forEach((c) => {
+      c.style.display = "inline-block"
+      c.style.willChange = "transform"
     })
 
+    let hoverTl: gsap.core.Timeline | null = null
+
     link.addEventListener("mouseenter", () => {
-      gsap.killTweensOf(chars)
-      gsap.to(chars, {
-        fontStyle: "italic",
-        duration: 0.22,
-        ease: "power2.out",
-        stagger: 0.025,
+      hoverTl?.kill()
+      hoverTl = gsap.timeline()
+
+      // Stagger left → right: each character smoothly slants into italic
+      // skewX animates the slant visually over time; fontStyle loads proper
+      // italic glyphs at the start so they're ready when the skew peaks
+      // (Skill: gsap-timeline → position parameter for staggering)
+      chars.forEach((char, i) => {
+        hoverTl!.to(
+          char,
+          {
+            skewX: -11,
+            duration: 0.38,
+            ease: "power3.out",
+            onStart() {
+              char.style.fontStyle = "italic"
+            },
+          },
+          i * 0.06
+        )
       })
     })
 
     link.addEventListener("mouseleave", () => {
-      gsap.killTweensOf(chars)
-      gsap.to(chars, {
-        fontStyle: "normal",
-        duration: 0.2,
-        ease: "power2.out",
-        stagger: 0.02,
+      hoverTl?.kill()
+      hoverTl = gsap.timeline()
+
+      // Reverse right → left for echo-back feel
+      chars.forEach((char, i) => {
+        const delay = (chars.length - 1 - i) * 0.045
+        hoverTl!.to(
+          char,
+          {
+            skewX: 0,
+            duration: 0.3,
+            ease: "power2.inOut",
+            onStart() {
+              char.style.fontStyle = "normal"
+            },
+          },
+          delay
+        )
       })
     })
   }
