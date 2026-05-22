@@ -29,13 +29,13 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
   ]),
   pointer: poly([
     [11, 1],
-    [13.5, 8.5],
+    [16, 6],
     [21, 11],
-    [13.5, 13.5],
+    [16, 16],
     [11, 21],
-    [8.5, 13.5],
+    [6, 16],
     [1, 11],
-    [8.5, 8.5],
+    [6, 6],
   ]),
   type: poly([
     [8, 2],
@@ -96,6 +96,11 @@ export function Cursor() {
   const [initCycle, setInitCycle] = useState(0)
 
   const [state, setState] = useState<CursorState>("default")
+  const stateRef = useRef<CursorState>("default")
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
+
   const [label, setLabel] = useState("")
   const [hoverKind, setHoverKind] = useState<"none" | "text" | "pointer">(
     "none"
@@ -180,12 +185,21 @@ export function Cursor() {
       const prev = pointerRef.current
       pointerRef.current = { x: e.clientX, y: e.clientY }
 
-      if (!prev || nextHoverKind === "text") {
-        if (nextHoverKind === "text") {
-          targetRotationRef.current = 0
-        }
+      const nextAutoState =
+        nextHoverKind === "text"
+          ? "type"
+          : nextHoverKind === "pointer"
+            ? "pointer"
+            : "default"
+      const nextEffectiveState =
+        stateRef.current === "default" ? nextAutoState : stateRef.current
+
+      if (nextEffectiveState !== "default") {
+        targetRotationRef.current = 0
         return
       }
+
+      if (!prev) return
 
       const dx = e.clientX - prev.x
       const dy = e.clientY - prev.y
@@ -447,10 +461,18 @@ export function Cursor() {
 
     const nextPath = SHAPES[renderState]
     shapeTweenRef.current?.kill()
+
+    let targetScale = 1
+    if (renderState === "pointer") {
+      targetScale = 1.35
+    } else if (renderState === "type") {
+      targetScale = 0.85
+    }
+
     shapeTweenRef.current = gsap.to(shape, {
       attr: { d: nextPath },
       opacity: 1,
-      scale: 1,
+      scale: targetScale,
       duration: 0.32,
       ease: "power3.inOut",
       overwrite: "auto",
