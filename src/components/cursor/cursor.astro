@@ -1,8 +1,8 @@
 ---
-import { Cursor } from "./cursor"
+import { Cursor as CursorComponent } from "./cursor"
 ---
 
-<Cursor client:load />
+<CursorComponent client:load />
 
 <script is:inline data-astro-rerun>
   const log = (...args) => console.log("[cursor.astro]", ...args)
