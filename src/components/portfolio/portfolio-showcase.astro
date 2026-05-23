@@ -6,6 +6,25 @@ const entries = await getCollection("portfolio")
 const projects = entries.sort((a, b) => a.data.order - b.data.order)
 ---
 
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: projects.map((project, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: project.data.title,
+        description: project.data.description,
+        url: project.data.url || undefined,
+      },
+    })),
+  })}
+/>
+
 <div id="portfolio-showcase" class="flex w-full flex-col">
   {
     projects.map((project, index) => {

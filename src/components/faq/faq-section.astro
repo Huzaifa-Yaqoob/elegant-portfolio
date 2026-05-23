@@ -23,6 +23,23 @@ const { showDivider = true } = Astro.props
   badge={section.badge}
   showDivider={showDivider}
 >
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    })}
+  />
+
   <div id="faq-list" class="mx-auto mt-16 max-w-3xl divide-y divide-border">
     {
       items.map((item, i) => (
