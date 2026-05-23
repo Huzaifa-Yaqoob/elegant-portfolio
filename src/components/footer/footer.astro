@@ -42,14 +42,17 @@ const labelMap: Record<string, string> = {
   <div class="mb-10 h-0.5 w-full -rotate-1 bg-border"></div>
   <div class="relative z-10 mx-auto px-6 lg:px-16">
     <div class="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
-      <!-- Copyright & Tagline -->
-      <div class="flex flex-col gap-4">
+      <!-- Brand, Copyright & Tagline -->
+      <div class="flex flex-col gap-2">
+        <p class="font-heading text-5xl font-black tracking-tighter text-primary uppercase md:text-7xl">
+          {personal.name}
+        </p>
         <p class="body-sm-style text-on-surface-variant">
           {copyrightText}
         </p>
         {
           footer.tagline && (
-            <p class="body-sm-style text-on-surface-variant">
+            <p class="body-sm-style mt-2 max-w-xs text-on-surface-variant">
               {footer.tagline}
             </p>
           )
@@ -61,13 +64,13 @@ const labelMap: Record<string, string> = {
         <h3 class="h3-style text-primary uppercase">Contact</h3>
         <a
           href={`mailto:${personal.email}`}
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
+          class="body-lg-style relative w-fit text-on-surface after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-primary after:origin-right after:scale-x-0 after:transition-transform after:duration-300 hover:text-primary hover:after:origin-left hover:after:scale-x-100"
         >
           {personal.email}
         </a>
         <a
           href={`tel:${personal.phone}`}
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
+          class="body-lg-style relative w-fit text-on-surface after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-primary after:origin-right after:scale-x-0 after:transition-transform after:duration-300 hover:text-primary hover:after:origin-left hover:after:scale-x-100"
         >
           {personal.phone}
         </a>
@@ -75,7 +78,7 @@ const labelMap: Record<string, string> = {
           href={personal.address_link}
           target="_blank"
           rel="noopener noreferrer"
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
+          class="body-lg-style relative w-fit text-on-surface after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-primary after:origin-right after:scale-x-0 after:transition-transform after:duration-300 hover:text-primary hover:after:origin-left hover:after:scale-x-100"
         >
           {personal.address}
         </a>
