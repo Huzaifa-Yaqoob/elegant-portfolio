@@ -1,10 +1,10 @@
 [form]
-title = "Send a Message"
-description = "Share your project goals, timeline, and any important details."
+title = "INITIATE CONTACT"
+description = "Tell me about your project, timeline, and what you are looking to build. I typically respond within 24 hours."
 endpoint = "https://example.com/api/contact"
 method = "POST"
 submit_label = "Send Message"
-response_time = "Typical response within 24 hours."
+response_time = "Typical response within 24 hours. Based in Shahdara, Lahore, Pakistan. Available for remote work with clients worldwide."
 
 [[form.reasons]]
 label = "New Project"

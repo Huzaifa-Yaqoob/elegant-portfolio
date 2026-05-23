@@ -1,6 +1,6 @@
 ---
 title: "IT Portfolio"
-description: "A lightweight, production-ready static one-page portfolio website tailored for showcase layouts. Engineered to translate complex layout structures directly from Figma designs into pixel-perfect, completely fluid responsive code. It utilizes a modern build configuration optimization using Tailwind CSS utility classes to offer rapid page speeds and optimal search engine optimization (SEO) performance for tech professionals and business displays."
+description: "A clean, one-page portfolio site built with vanilla HTML, CSS, and Tailwind. Translates Figma designs into pixel-perfect responsive layouts with fast load times and strong SEO fundamentals. Lightweight enough to deploy anywhere, flexible enough for any tech professional or agency showcase."
 slug: "it-portfolio"
 order: 3
 url: "https://github.com/Huzaifa-Yaqoob/IT-Portfolio"
@@ -14,4 +14,4 @@ tools:
   - "JavaScript"
 ---
 
-A lightweight, production-ready static one-page portfolio website tailored for showcase layouts. Engineered to translate complex layout structures directly from Figma designs into pixel-perfect, completely fluid responsive code. It utilizes a modern build configuration optimization using Tailwind CSS utility classes to offer rapid page speeds and optimal search engine optimization (SEO) performance for tech professionals and business displays.
+A clean, one-page portfolio site built with vanilla HTML, CSS, and Tailwind. Translates Figma designs into pixel-perfect responsive layouts with fast load times and strong SEO fundamentals. Lightweight enough to deploy anywhere, flexible enough for any tech professional or agency showcase.

@@ -2,7 +2,7 @@
 number: "04"
 icon: "layout-grid"
 title: "UI/UX Engineering"
-description: "Bridging the gap between complex functionality and intuitive, brutalist design."
+description: "Clean, brutalist interfaces backed by design systems and user research. Complex functionality turned into intuitive experiences that users trust."
 tags: ["FIGMA", "DESIGN SYSTEMS", "UX FLOWS"]
 order: 4
 ---

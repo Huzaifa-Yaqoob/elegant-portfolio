@@ -1,6 +1,6 @@
 ---
 title: "Go Visualize"
-description: "A powerful canvas-based design automation SaaS platform built for generating and editing professional marketing graphics and editable SVGs. The system utilizes parallelized asset generation workflows orchestrated by multi-agent AI systems (Gemini 3 Flash Preview & Claude) to turn natural language prompts into structured, customizable visual layouts. Built on top of a fast, custom WebAssembly layout engine for editing vectors, it features full custom canvas interactions, collaborative layout tools, and a complete credit ledger 'Top-Up' subscription purchase flow integrated through Stripe."
+description: "A canvas-based design automation SaaS that turns plain language prompts into production-ready marketing graphics and editable SVGs. Multi-agent AI (Gemini 3 Flash Preview and Claude) handles parallelized asset generation. At the core is a custom WebAssembly vector layout engine written in Rust. It handles real-time canvas interactions and collaborative editing on Fabric.js. Includes a credit-based subscription flow through Stripe."
 slug: "go-visualize"
 order: 5
 url: "Musketeers"
@@ -18,4 +18,4 @@ tools:
   - "Stripe (Clover API)"
 ---
 
-A powerful canvas-based design automation SaaS platform built for generating and editing professional marketing graphics and editable SVGs. The system utilizes parallelized asset generation workflows orchestrated by multi-agent AI systems (Gemini 3 Flash Preview & Claude) to turn natural language prompts into structured, customizable visual layouts. Built on top of a fast, custom WebAssembly layout engine for editing vectors, it features full custom canvas interactions, collaborative layout tools, and a complete credit ledger 'Top-Up' subscription purchase flow integrated through Stripe.
+A canvas-based design automation SaaS that turns plain language prompts into production-ready marketing graphics and editable SVGs. Multi-agent AI (Gemini 3 Flash Preview and Claude) handles parallelized asset generation. At the core is a custom WebAssembly vector layout engine written in Rust. It handles real-time canvas interactions and collaborative editing on Fabric.js. Includes a credit-based subscription flow through Stripe.

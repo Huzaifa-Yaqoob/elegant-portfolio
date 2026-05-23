@@ -1,6 +1,6 @@
 ---
 title: "AutoProv"
-description: "A comprehensive B2B vehicle provenance and digital compliance platform tailored for UK automotive dealers. The application connects directly to 44 vehicle manufacturer databases (including BMW, Audi, Mercedes-Benz) to retrieve official digital service history, validate mileage consistency, and perform HPI/outstanding finance checks powered by Experian and DVLA data. Key features include a suite of free consumer/dealer compliance tools: PDI reports, a Distance Sale Pack builder, an automated Remote Vehicle Appraisal tool, and an AI-powered Dispute Response Builder fully compliant with the Consumer Rights Act 2015 (CRA) and Consumer Contracts Regulations 2013 (CCR)."
+description: "A B2B vehicle provenance and compliance platform built for UK automotive dealers. It connects directly to 44 manufacturer databases (BMW, Audi, Mercedes-Benz, and others) to pull official service history, flag mileage inconsistencies, and run HPI and finance checks through Experian and DVLA. Also ships with compliance tools: PDI reports, a Distance Sale Pack builder, automated vehicle appraisal, and an AI dispute response generator that stays compliant with the Consumer Rights Act 2015 and Consumer Contracts Regulations 2013."
 slug: "autoprov"
 order: 1
 url: "https://autoprov.ai/"
@@ -18,4 +18,4 @@ tools:
   - "Stripe (Clover API)"
 ---
 
-A comprehensive B2B vehicle provenance and digital compliance platform tailored for UK automotive dealers. The application connects directly to 44 vehicle manufacturer databases (including BMW, Audi, Mercedes-Benz) to retrieve official digital service history, validate mileage consistency, and perform HPI/outstanding finance checks powered by Experian and DVLA data. Key features include a suite of free consumer/dealer compliance tools: PDI reports, a Distance Sale Pack builder, an automated Remote Vehicle Appraisal tool, and an AI-powered Dispute Response Builder fully compliant with the Consumer Rights Act 2015 (CRA) and Consumer Contracts Regulations 2013 (CCR).
+A B2B vehicle provenance and compliance platform built for UK automotive dealers. It connects directly to 44 manufacturer databases (BMW, Audi, Mercedes-Benz, and others) to pull official service history, flag mileage inconsistencies, and run HPI and finance checks through Experian and DVLA. Also ships with compliance tools: PDI reports, a Distance Sale Pack builder, automated vehicle appraisal, and an AI dispute response generator that stays compliant with the Consumer Rights Act 2015 and Consumer Contracts Regulations 2013.

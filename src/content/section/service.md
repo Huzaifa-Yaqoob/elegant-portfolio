@@ -1,6 +1,6 @@
 ---
 title: "Engineering Precision"
-description: "Architecting robust, scalable solutions with uncompromising attention to detail and performance."
+description: "End-to-end web development services covering frontend, backend, cloud infrastructure, and everything in between. Every project engineered for scale, performance, and maintainability."
 divider_text: "SYS_CORE"
 badge: "CAPABILITIES"
 ---

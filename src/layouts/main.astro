@@ -5,6 +5,28 @@ import Footer from "@/components/footer/footer.astro"
 import SmoothScroller from "./smooth-scroller.astro"
 import CustomScrollbar from "@/components/animation/custom-scrollbar.astro"
 import CustomCursor from "@/components/cursor/cursor.astro"
+import { getCollection } from "astro:content"
+
+interface Props {
+  pageTitle?: string
+  pageDescription?: string
+  pageImage?: string
+  canonicalUrl?: string
+  ogType?: string
+}
+
+const {
+  pageTitle = "Expert Full-Stack Web Developer | React, TypeScript, Node.js | Huzaifa.Dev",
+  pageDescription = "Expert full-stack web developer specializing in React, TypeScript, and Node.js. Based in Shahdara, Pakistan — building scalable, high-performance web applications for global clients since 2019.",
+  pageImage = "/og-default.png",
+  canonicalUrl = "https://huzaifa.dev",
+  ogType = "website",
+} = Astro.props
+
+const siteData = await getCollection("site")
+const site = siteData[0]?.data
+const siteUrl = "https://huzaifa.dev"
+const socialLinks = site?.social
 ---
 
 <html lang="en">
@@ -12,7 +34,104 @@ import CustomCursor from "@/components/cursor/cursor.astro"
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Huzaifa.Dev Portfolio</title>
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={`${siteUrl}${pageImage}`} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Huzaifa.Dev" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={`${siteUrl}${pageImage}`} />
+
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="PK" />
+    <meta name="geo.placename" content="Shahdara, Lahore, Pakistan" />
+
+    <!-- JSON-LD Structured Data -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            name: "Huzaifa",
+            jobTitle: "Full-Stack Web Developer & Technical Architect",
+            url: siteUrl,
+            sameAs: [
+              socialLinks?.github,
+              socialLinks?.x,
+              socialLinks?.instagram,
+              socialLinks?.facebook,
+            ].filter(Boolean),
+            knowsAbout: [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Node.js",
+              "JavaScript",
+              "Tailwind CSS",
+              "PostgreSQL",
+              "MongoDB",
+              "Docker",
+              "AWS",
+              "GraphQL",
+              "REST API",
+              "GSAP",
+              "Astro",
+              "System Design",
+            ],
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Shahdara",
+              addressRegion: "Lahore",
+              addressCountry: "PK",
+            },
+          },
+          {
+            "@type": "WebSite",
+            name: "Huzaifa.Dev",
+            url: siteUrl,
+            description: pageDescription,
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: `${siteUrl}/?q={search_term_string}`,
+              },
+              "query-input": "required name=search_term_string",
+            },
+          },
+          {
+            "@type": "LocalBusiness",
+            name: "Huzaifa.Dev",
+            url: siteUrl,
+            description: pageDescription,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Shahdara",
+              addressRegion: "Lahore",
+              addressCountry: "PK",
+            },
+            areaServed: "PK",
+            priceRange: "$$",
+          },
+        ],
+      })}
+    />
   </head>
   <body class="flex min-h-svh flex-col">
     <Navbar />

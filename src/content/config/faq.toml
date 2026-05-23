@@ -1,24 +1,24 @@
 [section]
 title = "Frequently Asked Questions"
-description = "Quick answers to the things you're probably wondering."
+description = "Quick answers to the things you are probably wondering."
 badge = "FAQ"
 
 [[items]]
 question = "What technologies do you specialize in?"
-answer = "I focus on modern web technologies: React, TypeScript, Astro, Node.js, and Tailwind CSS. I also work with PostgreSQL, Docker, and cloud platforms like AWS."
+answer = "I work primarily with React, TypeScript, Next.js, Node.js, and Tailwind CSS. On the infrastructure side, that is PostgreSQL, Docker, and AWS. If your stack is different, I can likely work with it. I pick up new tools fast and have shipped production code across a wide range of environments."
 
 [[items]]
-question = "What is your typical project timeline?"
-answer = "It depends on scope. A landing page can take 1–2 weeks, while a full-scale web application can range from 4–12 weeks. I'll give you a clear estimate after the initial consultation."
+question = "How long does it take to build a web application?"
+answer = "Depends on the scope. A landing page or brochure site can be ready in 1 to 2 weeks. A full-scale web application with authentication, databases, and third-party integrations typically runs 4 to 12 weeks. I will give you a clear timeline after the initial consultation, and I stick to it."
 
 [[items]]
-question = "Do you offer post-launch support?"
-answer = "Absolutely. I provide maintenance, performance monitoring, and feature additions post-launch. We can agree on a support retainer or handle it on a per-task basis."
+question = "Do you offer maintenance and support after launch?"
+answer = "I do. Post-launch, I can handle performance monitoring, bug fixes, feature additions, and general upkeep. We can set up a monthly retainer or work on a per-task basis, whatever fits your budget and needs."
 
 [[items]]
-question = "How do we get started?"
-answer = "Reach out via the contact form with a brief overview of your project. We'll schedule a call to discuss goals, timeline, and next steps — no commitment required."
+question = "How do we get started working together?"
+answer = "Fill out the contact form with a brief overview of your project, what you are building, your timeline, and any specific requirements. I will review it and we can schedule a quick call to discuss goals, scope, and next steps. No commitment required on that first call."
 
 [[items]]
-question = "Can you work with existing codebases?"
-answer = "Yes. I regularly audit, refactor, and extend existing projects. Whether it's improving performance, adding features, or cleaning up technical debt — I've got you covered."
+question = "Can you work with my existing codebase?"
+answer = "Yes, and I do this often. I regularly audit existing projects for performance bottlenecks, refactor messy codebases, add new features, and clean up technical debt. Whether it is a modern JavaScript frontend, a Node.js API, or a legacy codebase that needs modernization, I can jump in and contribute from day one."

@@ -1,6 +1,6 @@
 ---
 title: "Capex"
-description: "A high-performance, modern frontend dashboard built using React and TypeScript designed for corporate capital expenditure (Capex) management. The interface features tracking for financial budgets, asset management lifecycles, and nested corporate reporting flows. It leverages a strict layout architecture built with Tailwind CSS and custom modular UI layers utilizing shadcn/ui components to deliver professional analytics dashboards, financial data visualization charts, and smooth interactive workflows."
+description: "A frontend dashboard for corporate capital expenditure management. It tracks budgets, asset lifecycles, and multi-level reporting flows across the organization. Uses Tailwind CSS and shadcn/ui to deliver financial data visualizations, interactive analytics, and a clean interface for finance teams."
 slug: "capex"
 order: 2
 url: "https://github.com/Huzaifa-Yaqoob/capex-frontend"
@@ -17,4 +17,4 @@ tools:
   - "Context API / State Management"
 ---
 
-A high-performance, modern frontend dashboard built using React and TypeScript designed for corporate capital expenditure (Capex) management. The interface features tracking for financial budgets, asset management lifecycles, and nested corporate reporting flows. It leverages a strict layout architecture built with Tailwind CSS and custom modular UI layers utilizing shadcn/ui components to deliver professional analytics dashboards, financial data visualization charts, and smooth interactive workflows.
+A frontend dashboard for corporate capital expenditure management. It tracks budgets, asset lifecycles, and multi-level reporting flows across the organization. Uses Tailwind CSS and shadcn/ui to deliver financial data visualizations, interactive analytics, and a clean interface for finance teams.

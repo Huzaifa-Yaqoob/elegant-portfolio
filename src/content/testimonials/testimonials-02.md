@@ -1,5 +1,5 @@
 ---
-quote: "Bringing an incredible amount of energy and focus to the team, Huzaifa exemplifies high-velocity development. He is a remarkably hardworking engineer who is deeply dedicated to his craft and consistently drives momentum."
+quote: "Huzaifa brings an incredible level of energy and focus to every project he touches. He works fast without cutting corners — rare combination. His dedication to the craft is obvious in the code he produces and the momentum he drives across the team."
 author: "Muzammil Shakir"
 role: "CEO, Musketeers Tech"
 avatar_url: "/main_hero.png"

@@ -9,12 +9,28 @@ interface Props {
   videoLink: string
   mainImage: string
   showCTA?: boolean
+  pageTitle?: string
+  pageDescription?: string
+  canonicalUrl?: string
 }
 
-const { title, description, videoLink, mainImage, showCTA = true } = Astro.props
+const {
+  title,
+  description,
+  videoLink,
+  mainImage,
+  showCTA = true,
+  pageTitle,
+  pageDescription,
+  canonicalUrl,
+} = Astro.props
 ---
 
-<Layout>
+<Layout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonicalUrl}
+>
   <PageHeader
     title={title}
     description={description}

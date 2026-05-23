@@ -1,6 +1,6 @@
 ---
 title: "Musketeers Portfolio"
-description: "A production-ready, ultra-high-performance corporate agency portfolio engineered for maximum speed and absolute SEO-optimization. Built using Astro's modern structural architecture, the codebase utilizes Astro Content Collections paired with MDX files for clean, scalable case-study content management. The user interface features intricate micro-interactions, rich visual aesthetics, and completely fluid, responsive layout designs built to display the agency's full software development capabilities with near-perfect Lighthouse scores."
+description: "A corporate agency portfolio built with Astro 5 that scores near-perfect Lighthouse numbers. Content lives in Astro Content Collections and MDX files, so updating case studies never requires touching markup. Micro-interactions and fluid responsive layouts showcase the agency's full development capabilities."
 slug: "musketeers-portfolio"
 order: 6
 url: "Musketeers"
@@ -15,4 +15,4 @@ tools:
   - "Framer Motion"
 ---
 
-A production-ready, ultra-high-performance corporate agency portfolio engineered for maximum speed and absolute SEO-optimization. Built using Astro's modern structural architecture, the codebase utilizes Astro Content Collections paired with MDX files for clean, scalable case-study content management. The user interface features intricate micro-interactions, rich visual aesthetics, and completely fluid, responsive layout designs built to display the agency's full software development capabilities with near-perfect Lighthouse scores.
+A corporate agency portfolio built with Astro 5 that scores near-perfect Lighthouse numbers. Content lives in Astro Content Collections and MDX files, so updating case studies never requires touching markup. Micro-interactions and fluid responsive layouts showcase the agency's full development capabilities.

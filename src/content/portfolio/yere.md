@@ -1,6 +1,6 @@
 ---
 title: "Yere"
-description: "A high-performance Learning Management System (LMS) designed to connect elite student talent with educational institutions. The platform allows students to enroll in free or subscription-based tiers and take advanced dynamic quizzes. The system leverages AI models to automatically generate custom multiple-choice questions (MCQs) or extract them directly from uploaded textbooks and scanned documents. Features a robust admin dashboard that filters top-performing student analytics, enabling premium data-monetization pipelines where universities and institutions can identify top candidates for specialized recruitment and scholarships."
+description: "A full-stack LMS connecting high-performing students with universities and recruiters. Students enroll in free or tiered plans and take AI-generated quizzes pulled from textbooks and scanned documents. The admin dashboard surfaces top performers, and universities buy access to that data for scholarship and recruitment targeting. Built with React Query and Express.js, integrated with Gemini and OpenAI APIs."
 slug: "yere"
 order: 4
 url: "Axtra"
@@ -17,4 +17,4 @@ tools:
   - "Gemini API / OpenAI API"
 ---
 
-A high-performance Learning Management System (LMS) designed to connect elite student talent with educational institutions. The platform allows students to enroll in free or subscription-based tiers and take advanced dynamic quizzes. The system leverages AI models to automatically generate custom multiple-choice questions (MCQs) or extract them directly from uploaded textbooks and scanned documents. Features a robust admin dashboard that filters top-performing student analytics, enabling premium data-monetization pipelines where universities and institutions can identify top candidates for specialized recruitment and scholarships.
+A full-stack LMS connecting high-performing students with universities and recruiters. Students enroll in free or tiered plans and take AI-generated quizzes pulled from textbooks and scanned documents. The admin dashboard surfaces top performers, and universities buy access to that data for scholarship and recruitment targeting. Built with React Query and Express.js, integrated with Gemini and OpenAI APIs.

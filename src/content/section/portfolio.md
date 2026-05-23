@@ -1,6 +1,6 @@
 ---
 title: "Featured Work."
-description: "A selection of our most recent and impactful architectural projects, demonstrating our commitment to structural precision and brutalist aesthetics."
+description: "Real projects shipping to production. SaaS platforms, compliance systems, design tools, and more. Built for startups and enterprises around the world."
 divider_text: "ARCH_BRUT"
 badge: "PORTFOLIO"
 max_portfolio: 4
