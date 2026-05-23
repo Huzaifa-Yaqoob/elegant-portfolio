@@ -1,0 +1,87 @@
+---
+import { getEntry } from "astro:content"
+import SectionLayout from "@/layouts/section-layout.astro"
+
+interface Props {
+  showDivider?: boolean
+}
+
+const faqEntry = await getEntry("faq", "faq")
+
+if (!faqEntry) {
+  console.error("FAQ entry 'faq.toml' not found in content collection 'faq'.")
+  return ""
+}
+
+const { section, items } = faqEntry.data
+const { showDivider = true } = Astro.props
+---
+
+<SectionLayout
+  title={section.title}
+  description={section.description}
+  badge={section.badge}
+  showDivider={showDivider}
+>
+  <div id="faq-list" class="mx-auto mt-16 max-w-3xl divide-y divide-border">
+    {
+      items.map((item, i) => (
+        <div class="faq-item group border-border">
+          <button
+            class="faq-trigger flex w-full items-center justify-between gap-4 px-0 py-6 text-left transition-colors duration-300 hover:text-primary"
+            aria-expanded="false"
+            data-index={i}
+          >
+            <span class="body-lg-style font-medium">{item.question}</span>
+            <span class="faq-icon shrink-0 text-2xl text-on-surface-variant transition-transform duration-300">
+              +
+            </span>
+          </button>
+          <div
+            class="faq-content grid overflow-hidden transition-all duration-300"
+            style="grid-template-rows: 0fr;"
+          >
+            <div class="min-h-0">
+              <p class="px-0 pb-6 body-sm-style text-on-surface-variant">
+                {item.answer}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</SectionLayout>
+
+<script>
+  const list = document.getElementById("faq-list")
+  if (!list) throw new Error("FAQ list not found")
+
+  const items = list.querySelectorAll<HTMLElement>(".faq-item")
+
+  items.forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>(".faq-trigger")!
+    const content = item.querySelector<HTMLElement>(".faq-content")!
+    const icon = item.querySelector<HTMLElement>(".faq-icon")!
+
+    trigger.addEventListener("click", () => {
+      const isOpen = trigger.getAttribute("aria-expanded") === "true"
+
+      // close all
+      items.forEach((other) => {
+        const t = other.querySelector<HTMLButtonElement>(".faq-trigger")!
+        const c = other.querySelector<HTMLElement>(".faq-content")!
+        const ic = other.querySelector<HTMLElement>(".faq-icon")!
+        t.setAttribute("aria-expanded", "false")
+        c.style.gridTemplateRows = "0fr"
+        ic.style.transform = "rotate(0deg)"
+      })
+
+      if (!isOpen) {
+        trigger.setAttribute("aria-expanded", "true")
+        content.style.gridTemplateRows = "1fr"
+        icon.style.transform = "rotate(45deg)"
+      }
+    })
+  })
+</script>

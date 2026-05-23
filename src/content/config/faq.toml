@@ -1,0 +1,24 @@
+[section]
+title = "Frequently Asked Questions"
+description = "Quick answers to the things you're probably wondering."
+badge = "FAQ"
+
+[[items]]
+question = "What technologies do you specialize in?"
+answer = "I focus on modern web technologies: React, TypeScript, Astro, Node.js, and Tailwind CSS. I also work with PostgreSQL, Docker, and cloud platforms like AWS."
+
+[[items]]
+question = "What is your typical project timeline?"
+answer = "It depends on scope. A landing page can take 1–2 weeks, while a full-scale web application can range from 4–12 weeks. I'll give you a clear estimate after the initial consultation."
+
+[[items]]
+question = "Do you offer post-launch support?"
+answer = "Absolutely. I provide maintenance, performance monitoring, and feature additions post-launch. We can agree on a support retainer or handle it on a per-task basis."
+
+[[items]]
+question = "How do we get started?"
+answer = "Reach out via the contact form with a brief overview of your project. We'll schedule a call to discuss goals, timeline, and next steps — no commitment required."
+
+[[items]]
+question = "Can you work with existing codebases?"
+answer = "Yes. I regularly audit, refactor, and extend existing projects. Whether it's improving performance, adding features, or cleaning up technical debt — I've got you covered."

@@ -6,9 +6,16 @@ interface Props {
   description?: string
   divider_text?: string
   badge?: string
+  showDivider?: boolean
 }
 
-const { title, description, divider_text, badge } = Astro.props
+const {
+  title,
+  description,
+  divider_text,
+  badge,
+  showDivider = true,
+} = Astro.props
 ---
 
 <section class="px-6 py-10 lg:px-16">
@@ -33,5 +40,5 @@ const { title, description, divider_text, badge } = Astro.props
 
   <slot />
 
-  <div class="mx-auto mt-8 h-1 max-w-80 bg-foreground"></div>
+  {showDivider && <div class="mx-auto mt-8 h-1 max-w-80 bg-foreground" />}
 </section>

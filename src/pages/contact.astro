@@ -2,6 +2,7 @@
 import PageLayout from "@/layouts/page-layout.astro"
 import ContactPageContent from "@/components/contact/contact-page-content.astro"
 import ContactSocial from "@/components/contact/contact-social.astro"
+import FaqSection from "@/components/faq/faq-section.astro"
 import { getCollection } from "astro:content"
 
 const contactIndex = await getCollection("contactIndex")
@@ -20,5 +21,6 @@ if (!indexData) {
   showCTA={false}
 >
   <ContactPageContent />
+  <FaqSection showDivider={false} />
   <ContactSocial />
 </PageLayout>
