@@ -17,6 +17,7 @@ function poly(points: Point[]) {
 }
 
 const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
+  // Triangle arrow — padded to 12 points so morph is smooth
   default: poly([
     [11, 2.5],
     [18.5, 19.5],
@@ -26,7 +27,12 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
     [3.5, 19.5],
     [3.5, 19.5],
     [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
+    [3.5, 19.5],
   ]),
+  // Diamond / octagon — padded to 12 points
   pointer: poly([
     [11, 1],
     [16, 6],
@@ -36,17 +42,27 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
     [6, 16],
     [1, 11],
     [6, 6],
+    [6, 6],
+    [6, 6],
+    [6, 6],
+    [6, 6],
   ]),
+  // Proper I-beam: top serif → right stem edge → bottom serif → left stem edge
   type: poly([
-    [8, 2],
-    [14, 2],
-    [14, 5],
-    [12, 5],
-    [12, 17],
-    [14, 17],
-    [14, 20],
-    [8, 20],
+    [6, 2], //  top-left of top serif
+    [16, 2], // top-right of top serif
+    [16, 5], // bottom-right of top serif
+    [13, 5], // right edge of stem (top)
+    [13, 17], // right edge of stem (bottom)
+    [16, 17], // top-right of bottom serif
+    [16, 20], // bottom-right of bottom serif
+    [6, 20], //  bottom-left of bottom serif
+    [6, 17], //  top-left of bottom serif
+    [9, 17], //  left edge of stem (bottom)
+    [9, 5], //   left edge of stem (top)
+    [6, 5], //   bottom-left of top serif
   ]),
+  // Square — padded to 12 points
   grab: poly([
     [4, 4],
     [18, 4],
@@ -56,7 +72,12 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
     [4, 18],
     [4, 18],
     [4, 18],
+    [4, 18],
+    [4, 18],
+    [4, 18],
+    [4, 18],
   ]),
+  // Octagon — padded to 12 points
   loading: poly([
     [5, 1],
     [17, 1],
@@ -65,6 +86,10 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
     [17, 21],
     [5, 21],
     [1, 17],
+    [1, 5],
+    [1, 5],
+    [1, 5],
+    [1, 5],
     [1, 5],
   ]),
 }
