@@ -2,6 +2,7 @@
 
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
+import mdx from "@astrojs/mdx"
 import react from "@astrojs/react"
 import sitemap from "@astrojs/sitemap"
 
@@ -20,5 +21,5 @@ export default defineConfig({
       include: ["react", "react-dom", "react-dom/client"],
     },
   },
-  integrations: [react(), sitemap()],
+  integrations: [mdx(), react(), sitemap()],
 })

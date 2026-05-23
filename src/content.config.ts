@@ -25,33 +25,39 @@ const site = defineCollection({
 
 // Define the sections collection
 const section = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/section" }), // Assuming sections are Markdown files in src/content/section
+  loader: glob({ pattern: ["*.md", "*.mdx"], base: "./src/content/section" }),
   schema: sectionSchema,
 })
 
 // Define the services collection
 const services = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/services" }), // Assuming services are Markdown files in src/content/services
+  loader: glob({ pattern: ["*.md", "*.mdx"], base: "./src/content/services" }),
   schema: serviceSchema,
 })
 
 // Define the portfolio index collection
 const portfolioIndex = defineCollection({
-  loader: glob({ pattern: "**/-index.md", base: "./src/content/portfolio" }),
+  loader: glob({
+    pattern: ["**/-index.md", "**/-index.mdx"],
+    base: "./src/content/portfolio",
+  }),
   schema: portfolioIndexSchema,
 })
 
 // Define the portfolio items collection
 const portfolio = defineCollection({
   loader: glob({
-    pattern: ["*.md", "!-index.md"],
+    pattern: ["*.md", "*.mdx", "!-index.md", "!-index.mdx"],
     base: "./src/content/portfolio",
   }),
   schema: portfolioSchema,
 })
 
 const testimonial = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/testimonials" }), // Corrected loader for portfolio items
+  loader: glob({
+    pattern: ["*.md", "*.mdx"],
+    base: "./src/content/testimonials",
+  }),
   schema: testimonialsSchema,
 })
 
@@ -61,7 +67,10 @@ const contactForm = defineCollection({
 })
 
 const contactIndex = defineCollection({
-  loader: glob({ pattern: "**/-index.md", base: "./src/content/contact" }),
+  loader: glob({
+    pattern: ["**/-index.md", "**/-index.mdx"],
+    base: "./src/content/contact",
+  }),
   schema: contactIndexSchema,
 })
 
