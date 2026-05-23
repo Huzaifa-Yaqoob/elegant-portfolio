@@ -8,9 +8,10 @@ interface Props {
   description: string
   videoLink: string
   mainImage: string
+  showCTA?: boolean
 }
 
-const { title, description, videoLink, mainImage } = Astro.props
+const { title, description, videoLink, mainImage, showCTA = true } = Astro.props
 ---
 
 <Layout>
@@ -23,5 +24,5 @@ const { title, description, videoLink, mainImage } = Astro.props
 
   <slot />
 
-  <ContactCTA />
+  {showCTA && <ContactCTA />}
 </Layout>

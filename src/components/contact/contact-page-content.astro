@@ -1,0 +1,55 @@
+---
+import { getEntry } from "astro:content"
+import ContactInfoMap from "@/components/contact/contact-info-map.astro"
+import { ContactForm } from "@/components/contact/contact-form"
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) {
+  console.error("Site config entry 'site.toml' not found in collection 'site'.")
+  return ""
+}
+
+const contactFormEntry = await getEntry("contactForm", "contact-form")
+if (!contactFormEntry) {
+  console.error(
+    "Contact form config entry 'contact-form.toml' not found in collection 'contactForm'."
+  )
+  return ""
+}
+
+const { personal } = siteEntry.data
+const formConfig = contactFormEntry.data.form
+
+const addressLink = personal.address_link || "https://www.google.com/maps"
+---
+
+<section id="contact-page" class="px-8 py-20 md:px-16">
+  <div id="contact-grid" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <ContactInfoMap
+        email={personal.email}
+        phone={personal.phone}
+        address={personal.address}
+        addressLink={addressLink}
+        responseTime={formConfig.response_time}
+      />
+    </div>
+    <div class="lg:col-span-7">
+      <ContactForm
+        client:load
+        endpoint={formConfig.endpoint}
+        method={formConfig.method}
+        title={formConfig.title}
+        description={formConfig.description}
+        submitLabel={formConfig.submit_label}
+        reasons={formConfig.reasons}
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initSkewScroll } from "@/components/animation/skew-scroll"
+
+  initSkewScroll("#contact-grid > *")
+</script>

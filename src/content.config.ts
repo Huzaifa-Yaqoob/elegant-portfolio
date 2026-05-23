@@ -10,6 +10,7 @@ import {
 } from "@/config/portfolio.config.ts"
 import { testimonialsSchema } from "@/config/testimonials.config.ts"
 import { contactFormSchema } from "@/config/contact-form.config.ts"
+import { contactIndexSchema } from "@/config/contact.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -58,6 +59,11 @@ const contactForm = defineCollection({
   schema: contactFormSchema,
 })
 
+const contactIndex = defineCollection({
+  loader: glob({ pattern: "**/-index.md", base: "./src/content/contact" }),
+  schema: contactIndexSchema,
+})
+
 // 3. Export the collections object
 export const collections = {
   nav,
@@ -68,4 +74,5 @@ export const collections = {
   portfolio,
   testimonial,
   contactForm,
+  contactIndex,
 }

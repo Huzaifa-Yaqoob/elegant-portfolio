@@ -1,0 +1,22 @@
+---
+import PageLayout from "@/layouts/page-layout.astro"
+import ContactPageContent from "@/components/contact/contact-page-content.astro"
+import { getCollection } from "astro:content"
+
+const contactIndex = await getCollection("contactIndex")
+const indexData = contactIndex[0]?.data
+
+if (!indexData) {
+  throw new Error("Contact index content not found")
+}
+---
+
+<PageLayout
+  title={indexData.title}
+  description={indexData.description}
+  videoLink={indexData.videoLink}
+  mainImage={indexData.mainImage}
+  showCTA={false}
+>
+  <ContactPageContent />
+</PageLayout>
