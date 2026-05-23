@@ -1,0 +1,57 @@
+---
+import { getEntry } from "astro:content"
+import SparkleLayout from "@/layouts/sparkle-layout.astro"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) return ""
+
+const { social } = siteEntry.data
+
+interface SocialLink {
+  label: string
+  url: string
+  icon: string
+}
+
+const links: SocialLink[] = [
+  { label: "GitHub", url: social.github, icon: "Github" },
+  { label: "Twitter", url: social.twitter, icon: "Twitter" },
+  { label: "Instagram", url: social.instagram, icon: "Instagram" },
+  { label: "Facebook", url: social.facebook, icon: "Facebook" },
+  { label: "Discord", url: social.discord, icon: "Discord" },
+  { label: "WhatsApp", url: social.whatsapp, icon: "MessageCircle" },
+]
+---
+
+<SparkleLayout id="social" class="border-y border-surface-variant px-8 py-24 md:px-16">
+  <div class="mx-auto max-w-7xl">
+    <h2
+      class="mb-4 font-heading text-4xl font-black tracking-tighter text-on-surface uppercase"
+    >
+      Find Me Elsewhere
+    </h2>
+    <p class="mb-16 max-w-lg text-lg text-on-surface-variant">
+      Beyond the inbox — catch me across the digital landscape.
+    </p>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+      {links.map(({ label, url, icon }) => (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex flex-col items-center justify-center gap-3 border border-surface-variant bg-background p-8 transition-colors duration-300 hover:bg-on-surface"
+        >
+          <LucideIcon
+            name={icon}
+            size={28}
+            class="text-on-surface transition-colors duration-300 group-hover:text-background"
+          />
+          <span class="label-caps-style text-on-surface-variant transition-colors duration-300 group-hover:text-background">
+            {label}
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</SparkleLayout>
