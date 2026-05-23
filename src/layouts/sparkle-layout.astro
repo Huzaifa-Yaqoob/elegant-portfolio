@@ -8,9 +8,7 @@ const { id, class: className } = Astro.props
 const filterId = `sparkle-filter-${id}`
 ---
 
-<section
-  class:list={["relative overflow-hidden", className]}
->
+<section class:list={["relative overflow-hidden", className]}>
   <div class="pointer-events-none absolute inset-0">
     <svg
       class="h-full w-full opacity-65"
@@ -39,8 +37,7 @@ const filterId = `sparkle-filter-${id}`
             y="0%"
             width="100%"
             height="100%"
-            result="turbulence"
-          ></feTurbulence>
+            result="turbulence"></feTurbulence>
           <feSpecularLighting
             class="sparkle-specular"
             surfaceScale="15"
@@ -63,8 +60,7 @@ const filterId = `sparkle-filter-${id}`
         width="700"
         height="700"
         fill="var(--color-secondary)"
-        filter={`url(#${filterId})`}
-      ></rect>
+        filter={`url(#${filterId})`}></rect>
     </svg>
   </div>
 

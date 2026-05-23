@@ -1,7 +1,12 @@
 ---
 import { getEntry } from "astro:content"
 import SparkleLayout from "@/layouts/sparkle-layout.astro"
-import LucideIcon from "@/components/icons/LucideIcon"
+import GithubIcon from "@/components/icons/tech_stack/github.astro"
+import XIcon from "@/components/icons/tech_stack/x.astro"
+import InstagramIcon from "@/components/icons/tech_stack/instagram.astro"
+import FacebookIcon from "@/components/icons/tech_stack/facebook.astro"
+import DiscordIcon from "@/components/icons/tech_stack/discord.astro"
+import WhatsAppIcon from "@/components/icons/tech_stack/whatsapp.astro"
 
 const siteEntry = await getEntry("site", "site")
 if (!siteEntry) return ""
@@ -11,20 +16,23 @@ const { social } = siteEntry.data
 interface SocialLink {
   label: string
   url: string
-  icon: string
+  icon: typeof GithubIcon
 }
 
 const links: SocialLink[] = [
-  { label: "GitHub", url: social.github, icon: "Github" },
-  { label: "Twitter", url: social.twitter, icon: "Twitter" },
-  { label: "Instagram", url: social.instagram, icon: "Instagram" },
-  { label: "Facebook", url: social.facebook, icon: "Facebook" },
-  { label: "Discord", url: social.discord, icon: "Discord" },
-  { label: "WhatsApp", url: social.whatsapp, icon: "MessageCircle" },
+  { label: "GitHub", url: social.github, icon: GithubIcon },
+  { label: "X [TWITTER]", url: social.x, icon: XIcon },
+  { label: "Instagram", url: social.instagram, icon: InstagramIcon },
+  { label: "Facebook", url: social.facebook, icon: FacebookIcon },
+  { label: "Discord", url: social.discord, icon: DiscordIcon },
+  { label: "WhatsApp", url: social.whatsapp, icon: WhatsAppIcon },
 ]
 ---
 
-<SparkleLayout id="social" class="border-y border-surface-variant px-8 py-24 md:px-16">
+<SparkleLayout
+  id="social"
+  class="border-y border-surface-variant px-8 py-24 md:px-16"
+>
   <div class="mx-auto max-w-7xl">
     <h2
       class="mb-4 font-heading text-4xl font-black tracking-tighter text-on-surface uppercase"
@@ -35,23 +43,21 @@ const links: SocialLink[] = [
       Beyond the inbox — catch me across the digital landscape.
     </p>
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-      {links.map(({ label, url, icon }) => (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group flex flex-col items-center justify-center gap-3 border border-surface-variant bg-background p-8 transition-colors duration-300 hover:bg-on-surface"
-        >
-          <LucideIcon
-            name={icon}
-            size={28}
-            class="text-on-surface transition-colors duration-300 group-hover:text-background"
-          />
-          <span class="label-caps-style text-on-surface-variant transition-colors duration-300 group-hover:text-background">
-            {label}
-          </span>
-        </a>
-      ))}
+      {
+        links.map(({ label, url, icon: Icon }) => (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col items-center justify-center gap-3 border border-surface-variant bg-background p-8 transition-colors duration-300 hover:bg-on-surface"
+          >
+            <Icon class="h-7 w-7 text-on-surface transition-colors duration-300 group-hover:text-background" />
+            <span class="label-caps-style text-on-surface-variant transition-colors duration-300 group-hover:text-background">
+              {label}
+            </span>
+          </a>
+        ))
+      }
     </div>
   </div>
 </SparkleLayout>

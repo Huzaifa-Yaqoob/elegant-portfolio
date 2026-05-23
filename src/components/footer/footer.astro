@@ -1,7 +1,11 @@
 ---
 import { getEntry } from "astro:content"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/lib/button-variants"
+import GithubIcon from "@/components/icons/tech_stack/github.astro"
+import XIcon from "@/components/icons/tech_stack/x.astro"
+import InstagramIcon from "@/components/icons/tech_stack/instagram.astro"
+import FacebookIcon from "@/components/icons/tech_stack/facebook.astro"
+import DiscordIcon from "@/components/icons/tech_stack/discord.astro"
+import WhatsAppIcon from "@/components/icons/tech_stack/whatsapp.astro"
 
 const navEntry = await getEntry("nav", "nav")
 if (!navEntry) throw new Error("Navigation configuration not found")
@@ -14,6 +18,24 @@ const { personal, social } = siteEntry.data
 
 const currentYear = new Date().getFullYear()
 const copyrightText = footer.copyright.replace("{year}", currentYear.toString())
+
+const iconMap: Record<string, typeof GithubIcon> = {
+  github: GithubIcon,
+  x: XIcon,
+  instagram: InstagramIcon,
+  facebook: FacebookIcon,
+  discord: DiscordIcon,
+  whatsapp: WhatsAppIcon,
+}
+
+const labelMap: Record<string, string> = {
+  github: "GitHub",
+  x: "X [TWITTER]",
+  instagram: "Instagram",
+  facebook: "Facebook",
+  discord: "Discord",
+  whatsapp: "WhatsApp",
+}
 ---
 
 <footer class="relative overflow-hidden pt-24 pb-12">
@@ -64,19 +86,20 @@ const copyrightText = footer.copyright.replace("{year}", currentYear.toString())
         <h3 class="h3-style text-primary uppercase">Connect</h3>
         <div class="flex flex-wrap gap-4">
           {
-            Object.entries(social).map(([platform, url]) => (
-              <a
-                href={url as string}
-                target="_blank"
-                rel="noopener noreferrer"
-                class={cn(
-                  buttonVariants({ variant: "outline", size: "sm" }),
-                  "label-caps-style"
-                )}
-              >
-                {platform}
-              </a>
-            ))
+            Object.entries(social).map(([platform, url]) => {
+              const Icon = iconMap[platform]
+              return (
+                <a
+                  href={url as string}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="label-caps-style inline-flex items-center justify-center gap-2 border-2 border-border bg-transparent px-4 py-2 text-on-surface uppercase transition-colors duration-300 hover:bg-on-surface hover:text-background"
+                >
+                  {Icon && <Icon class="h-4 w-4" />}
+                  {labelMap[platform] || platform}
+                </a>
+              )
+            })
           }
         </div>
       </div>

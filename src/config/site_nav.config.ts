@@ -40,7 +40,7 @@ export const SiteSchema = z.object({
   }),
   social: z.object({
     github: z.string(),
-    twitter: z.string(),
+    x: z.string(),
     instagram: z.string(),
     facebook: z.string(),
     discord: z.string(),
