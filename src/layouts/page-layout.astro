@@ -1,0 +1,27 @@
+---
+import Layout from "@/layouts/main.astro"
+import PageHeader from "@/components/page-header.astro"
+import ContactCTA from "@/components/contact-cta.astro"
+
+interface Props {
+  title: string
+  description: string
+  videoLink: string
+  mainImage: string
+}
+
+const { title, description, videoLink, mainImage } = Astro.props
+---
+
+<Layout>
+  <PageHeader
+    title={title}
+    description={description}
+    videoLink={videoLink}
+    mainImage={mainImage}
+  />
+
+  <slot />
+
+  <ContactCTA />
+</Layout>

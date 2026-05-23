@@ -1,8 +1,6 @@
 ---
-import Layout from "@/layouts/main.astro"
-import PortfolioPageHeader from "@/components/portfolio/portfolio-page-header.astro"
+import PageLayout from "@/layouts/page-layout.astro"
 import PortfolioShowcase from "@/components/portfolio/portfolio-showcase.astro"
-import ContactCTA from "@/components/contact-cta.astro"
 import { getCollection } from "astro:content"
 
 const portfolioIndex = await getCollection("portfolioIndex")
@@ -13,15 +11,11 @@ if (!indexData) {
 }
 ---
 
-<Layout>
-  <PortfolioPageHeader
-    title={indexData.title}
-    description={indexData.description}
-    videoLink={indexData.videoLink}
-    mainImage={indexData.mainImage}
-  />
-
+<PageLayout
+  title={indexData.title}
+  description={indexData.description}
+  videoLink={indexData.videoLink}
+  mainImage={indexData.mainImage}
+>
   <PortfolioShowcase />
-
-  <ContactCTA />
-</Layout>
+</PageLayout>
