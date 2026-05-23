@@ -13,6 +13,7 @@ interface Props {
   pageImage?: string
   canonicalUrl?: string
   ogType?: string
+  pageKeywords?: string
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   pageImage = "/main_hero.png",
   canonicalUrl,
   ogType = "website",
+  pageKeywords,
 } = Astro.props
 
 const siteData = await getCollection("site")
@@ -52,7 +54,8 @@ if (pathname !== "/") {
     <meta name="description" content={pageDescription} />
     <meta
       name="keywords"
-      content="full-stack web developer, React developer, TypeScript developer, Node.js developer, web developer Pakistan, web developer Shahdara, Lahore web developer, freelance web developer Pakistan, React development services, GSAP developer, web application developer"
+      content={pageKeywords ??
+        "full-stack web developer, React developer, TypeScript developer, Node.js developer, web developer Pakistan, web developer Shahdara, Lahore web developer, freelance web developer Pakistan, React development services, GSAP developer, web application developer"}
     />
     <meta name="robots" content="index, follow" />
     <meta name="referrer" content="origin-when-cross-origin" />

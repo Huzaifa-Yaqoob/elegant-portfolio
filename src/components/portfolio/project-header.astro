@@ -1,0 +1,145 @@
+---
+import LucideIcon from "@/components/icons/LucideIcon"
+import HeaderSlider from "@/components/header-slider.astro"
+
+export interface Props {
+  title: string
+  description: string
+  url?: string
+  tools: string[]
+  role?: string
+  timeline?: string
+  company?: string
+  companyUrl?: string
+  images?: string[]
+}
+
+const {
+  title,
+  description,
+  url,
+  tools,
+  role,
+  timeline,
+  company,
+  companyUrl,
+  images,
+} = Astro.props
+---
+
+<header
+  class="relative flex min-h-dvh w-full flex-col overflow-hidden border-b border-surface-variant"
+>
+  <div class="absolute inset-0">
+    <HeaderSlider images={images ?? []} alt={title} />
+    <div
+      class="absolute inset-0 bg-linear-to-t from-background/95 via-background/70 to-background/40"
+    >
+    </div>
+  </div>
+
+  <div
+    class="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 px-8 pt-40 md:px-16"
+  >
+    {
+      (role || timeline || company) && (
+        <div class="flex flex-wrap gap-x-10 gap-y-3">
+          {company && (
+            <div>
+              <span class="font-heading text-xs font-semibold tracking-widest text-outline uppercase">
+                Company
+              </span>
+              {companyUrl ? (
+                <a
+                  href={companyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-1 flex items-center gap-1.5 text-base font-semibold text-on-surface transition-colors duration-300 hover:text-primary"
+                >
+                  {company}
+                  <LucideIcon name="ArrowUpRight" size={14} />
+                </a>
+              ) : (
+                <p class="mt-1 text-base font-semibold text-on-surface">
+                  {company}
+                </p>
+              )}
+            </div>
+          )}
+          {role && (
+            <div>
+              <span class="font-heading text-xs font-semibold tracking-widest text-outline uppercase">
+                Role
+              </span>
+              <p class="mt-1 text-base font-semibold text-on-surface">{role}</p>
+            </div>
+          )}
+          {timeline && (
+            <div>
+              <span class="font-heading text-xs font-semibold tracking-widest text-outline uppercase">
+                Timeline
+              </span>
+              <p class="mt-1 text-base font-semibold text-on-surface">
+                {timeline}
+              </p>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    <nav class="flex w-full flex-wrap gap-2">
+      {
+        tools
+          .slice(0, 6)
+          .map((tool) => (
+            <span class="border border-on-surface/30 px-3 py-1.5 font-heading text-xs font-semibold tracking-widest text-on-surface/80 uppercase backdrop-blur-sm">
+              {tool}
+            </span>
+          ))
+      }
+      {
+        tools.length > 6 && (
+          <span class="border border-on-surface/30 px-3 py-1.5 font-heading text-xs font-semibold tracking-widest text-on-surface/80 uppercase backdrop-blur-sm">
+            +{tools.length - 6} more
+          </span>
+        )
+      }
+    </nav>
+  </div>
+
+  <div
+    class="relative z-10 mx-auto mt-auto flex w-full max-w-7xl flex-col px-8 pb-20 md:px-16 lg:pb-28"
+  >
+    <div class="flex items-start justify-between gap-8">
+      <div class="max-w-3xl">
+        <h1 class="h1-style text-on-background uppercase">
+          {title}
+        </h1>
+        <p
+          class="mt-6 max-w-2xl text-lg leading-relaxed font-medium tracking-wide text-on-surface-variant"
+        >
+          {description}
+        </p>
+      </div>
+
+      {
+        url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group/action mt-2 inline-flex shrink-0 items-center gap-2 border border-on-surface px-6 py-3 font-heading text-sm font-semibold tracking-widest text-on-surface uppercase transition-colors duration-300 hover:bg-on-surface hover:text-background"
+          >
+            Visit Site
+            <LucideIcon
+              name="ArrowUpRight"
+              size={16}
+              class="transition-transform duration-300 group-hover/action:translate-x-0.5 group-hover/action:-translate-y-0.5"
+            />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</header>

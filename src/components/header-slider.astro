@@ -1,0 +1,200 @@
+---
+import LucideIcon from "@/components/icons/LucideIcon"
+
+interface Props {
+  images: string[]
+  alt?: string
+}
+
+const { images, alt = "Project image" } = Astro.props
+---
+
+<div
+  data-header-slider
+  class="relative h-full w-full overflow-hidden bg-surface-container-low"
+>
+  <div class="relative h-full w-full">
+    {
+      images.length === 0 && (
+        <div class="flex h-full w-full items-center justify-center bg-surface-dim">
+          <span class="font-heading text-sm tracking-widest text-outline uppercase">
+            No images
+          </span>
+        </div>
+      )
+    }
+
+    {
+      images.map((src, index) => (
+        <div
+          data-slide
+          data-index={index}
+          class={`absolute inset-0 ${index === 0 ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        >
+          <img
+            src={src}
+            alt={`${alt} ${index + 1}`}
+            class="h-full w-full object-cover"
+            loading={index === 0 ? "eager" : "lazy"}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    images.length > 1 && (
+      <div class="absolute right-4 bottom-4 z-20 flex items-center gap-2">
+        {images.map((_, index) => (
+          <button
+            type="button"
+            data-dot={index}
+            aria-label={`Go to slide ${index + 1}`}
+            class={`h-1.5 w-6 border border-on-surface transition-colors ${
+              index === 0 ? "bg-on-surface" : "bg-transparent"
+            }`}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  {
+    images.length > 1 && (
+      <>
+        <button
+          type="button"
+          data-prev
+          aria-label="Previous image"
+          class="absolute top-1/2 left-4 z-20 hidden -translate-y-1/2 items-center justify-center border border-on-surface/30 bg-background/60 p-2 text-on-surface backdrop-blur-sm transition-colors hover:bg-on-surface hover:text-background md:inline-flex"
+        >
+          <LucideIcon name="ArrowLeft" size={16} />
+        </button>
+        <button
+          type="button"
+          data-next
+          aria-label="Next image"
+          class="absolute top-1/2 right-4 z-20 hidden -translate-y-1/2 items-center justify-center border border-on-surface/30 bg-background/60 p-2 text-on-surface backdrop-blur-sm transition-colors hover:bg-on-surface hover:text-background md:inline-flex"
+        >
+          <LucideIcon name="ArrowRight" size={16} />
+        </button>
+      </>
+    )
+  }
+</div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const slider = document.querySelector<HTMLElement>("[data-header-slider]")
+  if (slider) {
+    const slides = Array.from(
+      slider.querySelectorAll<HTMLElement>("[data-slide]")
+    )
+    const dots = Array.from(slider.querySelectorAll<HTMLElement>("[data-dot]"))
+    const prevBtn = slider.querySelector<HTMLButtonElement>("[data-prev]")
+    const nextBtn = slider.querySelector<HTMLButtonElement>("[data-next]")
+
+    if (slides.length > 0) {
+      let current = 0
+      let isAnimating = false
+      let autoPlayTween: gsap.core.Tween | null = null
+
+      const updateDots = (activeIndex: number) => {
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("bg-on-surface", index === activeIndex)
+          dot.classList.toggle("bg-transparent", index !== activeIndex)
+        })
+      }
+
+      const goTo = (nextIndex: number, direction = 1) => {
+        if (
+          isAnimating ||
+          nextIndex === current ||
+          nextIndex < 0 ||
+          nextIndex >= slides.length
+        )
+          return
+
+        isAnimating = true
+        const currentSlide = slides[current]
+        const nextSlide = slides[nextIndex]
+
+        gsap.set(nextSlide, {
+          xPercent: direction > 0 ? 100 : -100,
+          scale: 0.96,
+          autoAlpha: 0,
+          pointerEvents: "none",
+          force3D: true,
+        })
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.inOut", duration: 0.8 },
+          onComplete: () => {
+            currentSlide.classList.add("pointer-events-none")
+            nextSlide.classList.remove("pointer-events-none")
+            current = nextIndex
+            updateDots(current)
+            isAnimating = false
+          },
+        })
+
+        tl.to(currentSlide, {
+          xPercent: direction > 0 ? -28 : 28,
+          scale: 0.96,
+          autoAlpha: 0,
+          pointerEvents: "none",
+          force3D: true,
+        }).to(
+          nextSlide,
+          {
+            xPercent: 0,
+            scale: 1,
+            autoAlpha: 1,
+            pointerEvents: "auto",
+            force3D: true,
+          },
+          0
+        )
+      }
+
+      const next = () => goTo((current + 1) % slides.length, 1)
+      const prev = () => goTo((current - 1 + slides.length) % slides.length, -1)
+
+      const startAutoPlay = () => {
+        autoPlayTween?.kill()
+        autoPlayTween = gsap.delayedCall(4.5, function tick() {
+          next()
+          autoPlayTween = gsap.delayedCall(4.5, tick)
+        })
+      }
+
+      const stopAutoPlay = () => {
+        autoPlayTween?.kill()
+        autoPlayTween = null
+      }
+
+      nextBtn?.addEventListener("click", () => {
+        next()
+        startAutoPlay()
+      })
+      prevBtn?.addEventListener("click", () => {
+        prev()
+        startAutoPlay()
+      })
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          const direction = index > current ? 1 : -1
+          goTo(index, direction)
+          startAutoPlay()
+        })
+      })
+
+      slider.addEventListener("mouseenter", stopAutoPlay)
+      slider.addEventListener("mouseleave", startAutoPlay)
+
+      startAutoPlay()
+    }
+  }
+</script>

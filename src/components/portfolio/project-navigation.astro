@@ -1,0 +1,57 @@
+---
+import LucideIcon from "@/components/icons/LucideIcon"
+
+export interface ProjectNavItem {
+  slug: string
+  title: string
+}
+
+interface Props {
+  prevProject?: ProjectNavItem
+  nextProject?: ProjectNavItem
+}
+
+const { prevProject, nextProject } = Astro.props
+---
+
+<nav class="border-t border-surface-variant px-8 py-16 md:px-16">
+  <div class="mx-auto flex max-w-5xl items-center justify-between">
+    <div>
+      {
+        prevProject && (
+          <a
+            href={`/my-work/${prevProject.slug}`}
+            class="group flex flex-col items-start gap-2 transition-colors duration-300 hover:text-primary"
+          >
+            <span class="font-heading text-xs font-semibold tracking-widest text-outline uppercase">
+              Previous Project
+            </span>
+            <span class="flex items-center gap-2 font-heading text-lg font-bold tracking-tight text-on-surface uppercase transition-colors duration-300 group-hover:text-primary">
+              <LucideIcon name="ArrowLeft" size={16} />
+              {prevProject.title}
+            </span>
+          </a>
+        )
+      }
+    </div>
+
+    <div>
+      {
+        nextProject && (
+          <a
+            href={`/my-work/${nextProject.slug}`}
+            class="group flex flex-col items-end gap-2 transition-colors duration-300 hover:text-primary"
+          >
+            <span class="font-heading text-xs font-semibold tracking-widest text-outline uppercase">
+              Next Project
+            </span>
+            <span class="flex items-center gap-2 font-heading text-lg font-bold tracking-tight text-on-surface uppercase transition-colors duration-300 group-hover:text-primary">
+              {nextProject.title}
+              <LucideIcon name="ArrowRight" size={16} />
+            </span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</nav>

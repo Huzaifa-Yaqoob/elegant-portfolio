@@ -1,0 +1,34 @@
+---
+interface Props {
+  title: string
+  number?: string
+}
+
+const { title, number } = Astro.props
+---
+
+<section
+  class="project-section border-b border-surface-variant px-8 py-24 md:px-16 lg:py-32"
+>
+  <div class="mx-auto max-w-4xl">
+    <div class="section-heading mb-12 flex items-center gap-4">
+      {
+        number && (
+          <span class="section-number font-heading text-5xl font-black tracking-tighter text-surface-variant">
+            {number}
+          </span>
+        )
+      }
+      <h2
+        class="font-heading text-3xl font-bold tracking-tight text-on-background uppercase md:text-4xl"
+      >
+        {title}
+      </h2>
+    </div>
+    <div
+      class="section-content space-y-6 text-lg leading-relaxed text-on-surface-variant"
+    >
+      <slot />
+    </div>
+  </div>
+</section>
