@@ -1,6 +1,7 @@
 ---
+import LucideIcon from "@/components/icons/LucideIcon"
+
 interface Props {
-  name: string
   email: string
   phone: string
   address: string
@@ -8,7 +9,7 @@ interface Props {
   responseTime: string
 }
 
-const { name, email, phone, address, addressLink, responseTime } = Astro.props
+const { email, phone, address, addressLink, responseTime } = Astro.props
 ---
 
 <div class="space-y-6">
@@ -18,24 +19,50 @@ const { name, email, phone, address, addressLink, responseTime } = Astro.props
     <h3 class="mb-4 h3-style text-on-surface uppercase">Contact Details</h3>
     <div class="space-y-4">
       <div>
-        <p class="label-caps-style mb-1 text-on-surface-variant">Name</p>
-        <p class="body-lg-style text-on-surface">{name}</p>
-      </div>
-      <div>
         <p class="label-caps-style mb-1 text-on-surface-variant">Email</p>
         <a
           href={`mailto:${email}`}
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
-          >{email}</a
+          class="group/action flex items-center gap-3 border border-transparent p-2 transition-colors hover:border-on-surface"
         >
+          <LucideIcon
+            name="Mail"
+            size={18}
+            class="shrink-0 text-on-surface-variant"
+          />
+          <span class="flex-1 body-lg-style text-on-surface">{email}</span>
+          <span
+            class="inline-flex size-10 shrink-0 items-center justify-center border border-on-surface text-on-surface transition-colors duration-300 group-hover/action:bg-on-surface group-hover/action:text-background"
+          >
+            <LucideIcon
+              name="ArrowUpRight"
+              size={18}
+              class="transition-transform duration-300 group-hover/action:translate-x-0.5 group-hover/action:-translate-y-0.5"
+            />
+          </span>
+        </a>
       </div>
       <div>
         <p class="label-caps-style mb-1 text-on-surface-variant">Phone</p>
         <a
           href={`tel:${phone}`}
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
-          >{phone}</a
+          class="group/action flex items-center gap-3 border border-transparent p-2 transition-colors hover:border-on-surface"
         >
+          <LucideIcon
+            name="Phone"
+            size={18}
+            class="shrink-0 text-on-surface-variant"
+          />
+          <span class="flex-1 body-lg-style text-on-surface">{phone}</span>
+          <span
+            class="inline-flex size-10 shrink-0 items-center justify-center border border-on-surface text-on-surface transition-colors duration-300 group-hover/action:bg-on-surface group-hover/action:text-background"
+          >
+            <LucideIcon
+              name="ArrowUpRight"
+              size={18}
+              class="transition-transform duration-300 group-hover/action:translate-x-0.5 group-hover/action:-translate-y-0.5"
+            />
+          </span>
+        </a>
       </div>
       <div>
         <p class="label-caps-style mb-1 text-on-surface-variant">Address</p>
@@ -43,9 +70,24 @@ const { name, email, phone, address, addressLink, responseTime } = Astro.props
           href={addressLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="body-lg-style text-on-surface transition-colors hover:text-primary"
-          >{address}</a
+          class="group/action flex items-center gap-3 border border-transparent p-2 transition-colors hover:border-on-surface"
         >
+          <LucideIcon
+            name="MapPin"
+            size={18}
+            class="shrink-0 text-on-surface-variant"
+          />
+          <span class="flex-1 body-lg-style text-on-surface">{address}</span>
+          <span
+            class="inline-flex size-10 shrink-0 items-center justify-center border border-on-surface text-on-surface transition-colors duration-300 group-hover/action:bg-on-surface group-hover/action:text-background"
+          >
+            <LucideIcon
+              name="ArrowUpRight"
+              size={18}
+              class="transition-transform duration-300 group-hover/action:translate-x-0.5 group-hover/action:-translate-y-0.5"
+            />
+          </span>
+        </a>
       </div>
     </div>
   </div>
