@@ -42,3 +42,7 @@ Single-page Astro site (`src/pages/index.astro`) that composes section component
 - Do not import GSAP directly from `"gsap"` — use `@/lib/gsap` to ensure ScrollTrigger/ScrollToPlugin are registered.
 - Content collections require schema changes in `src/config/` AND a matching update in `src/content.config.ts`.
 - No `.env` files are committed. If env vars are needed, create `.env` locally (gitignored).
+
+## References
+
+- [`PRODUCT.md`](./PRODUCT.md) — Brand identity, content voice, SEO/AEO guidelines, and content templates for AI-assisted content generation.

@@ -26,6 +26,7 @@ export const NavSchema = z.object({
 export const SiteSchema = z.object({
   site_name: z.string(),
   description: z.string(),
+  site_url: z.string().optional(),
   personal: z.object({
     name: z.string(),
     email: z.string(),

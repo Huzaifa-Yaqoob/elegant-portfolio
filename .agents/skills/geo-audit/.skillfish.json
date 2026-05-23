@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "geo-audit",
+  "owner": "lev-os",
+  "repo": "agents",
+  "path": "skills-db/geo/geo-audit",
+  "branch": "main",
+  "sha": "d402591c4643e02fa7ac9913b7f13e9644d63858",
+  "source": "manual"
+}

@@ -4,6 +4,7 @@
   "formatter": true,
   "permission": {
     "*": "ask",
+    "todowrite": "allow",
     "bash": {
       "*": "ask",
       "git *": "ask",

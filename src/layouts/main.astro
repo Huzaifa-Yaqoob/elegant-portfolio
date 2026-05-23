@@ -17,15 +17,16 @@ interface Props {
 
 const {
   pageTitle = "Expert Full-Stack Web Developer | React, TypeScript, Node.js | Huzaifa.Dev",
-  pageDescription = "Expert full-stack web developer specializing in React, TypeScript, and Node.js. Based in Shahdara, Pakistan — building scalable, high-performance web applications for global clients since 2019.",
+  pageDescription = "Expert full-stack web developer specializing in React, TypeScript, and Node.js. Building scalable, high-performance web applications for global clients since 2019.",
   pageImage = "/og-default.png",
-  canonicalUrl = "https://huzaifa.dev",
+  canonicalUrl,
   ogType = "website",
 } = Astro.props
 
 const siteData = await getCollection("site")
 const site = siteData[0]?.data
-const siteUrl = "https://huzaifa.dev"
+const siteUrl = site?.site_url ?? "https://huzaifa.dev"
+const resolvedCanonical = canonicalUrl ?? siteUrl
 const socialLinks = site?.social
 ---
 
@@ -34,18 +35,24 @@ const socialLinks = site?.social
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonicalUrl} />
+    <link rel="canonical" href={resolvedCanonical} />
 
     <!-- Primary Meta Tags -->
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    <meta
+      name="keywords"
+      content="full-stack web developer, React developer, TypeScript developer, Node.js developer, web developer Pakistan, web developer Shahdara, Lahore web developer, freelance web developer Pakistan, React development services, GSAP developer, web application developer"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="referrer" content="origin-when-cross-origin" />
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={`${siteUrl}${pageImage}`} />
-    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:url" content={resolvedCanonical} />
     <meta property="og:site_name" content="Huzaifa.Dev" />
     <meta property="og:locale" content="en_US" />
 
@@ -69,6 +76,7 @@ const socialLinks = site?.social
           {
             "@type": "Person",
             name: "Huzaifa",
+            givenName: "Huzaifa",
             jobTitle: "Full-Stack Web Developer & Technical Architect",
             url: siteUrl,
             sameAs: [
@@ -91,8 +99,13 @@ const socialLinks = site?.social
               "GraphQL",
               "REST API",
               "GSAP",
+              "Framer Motion",
               "Astro",
               "System Design",
+              "Microservices",
+              "CI/CD",
+              "WebAssembly",
+              "Rust",
             ],
             address: {
               "@type": "PostalAddress",
@@ -100,6 +113,7 @@ const socialLinks = site?.social
               addressRegion: "Lahore",
               addressCountry: "PK",
             },
+            email: "hi@huzaifa.dev",
           },
           {
             "@type": "WebSite",
@@ -116,6 +130,16 @@ const socialLinks = site?.social
             },
           },
           {
+            "@type": "WebPage",
+            url: resolvedCanonical,
+            name: pageTitle,
+            description: pageDescription,
+            isPartOf: {
+              "@type": "WebSite",
+              url: siteUrl,
+            },
+          },
+          {
             "@type": "LocalBusiness",
             name: "Huzaifa.Dev",
             url: siteUrl,
@@ -126,8 +150,10 @@ const socialLinks = site?.social
               addressRegion: "Lahore",
               addressCountry: "PK",
             },
-            areaServed: "PK",
+            areaServed: ["PK", "GB", "US", "AE", "SA"],
             priceRange: "$$",
+            email: "hi@huzaifa.dev",
+            telephone: "+92 300 1234567",
           },
         ],
       })}

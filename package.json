@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.2",
     "@base-ui/react": "^1.4.1",
     "@fontsource-variable/outfit": "^5.2.8",
     "@fontsource-variable/oxanium": "^5.2.8",

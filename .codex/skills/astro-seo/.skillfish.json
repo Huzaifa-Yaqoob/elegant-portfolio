@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "astro-seo",
+  "owner": "fusengine",
+  "repo": "agents",
+  "path": "plugins/astro-expert/skills/astro-seo",
+  "branch": "main",
+  "sha": "6fa01da83a4927321e293bf7067c413550a1a6e7",
+  "source": "manual"
+}

@@ -1,6 +1,7 @@
 ---
 title: "Go Visualize"
-description: "A canvas-based design automation SaaS that turns plain language prompts into production-ready marketing graphics and editable SVGs. Multi-agent AI (Gemini 3 Flash Preview and Claude) handles parallelized asset generation. At the core is a custom WebAssembly vector layout engine written in Rust. It handles real-time canvas interactions and collaborative editing on Fabric.js. Includes a credit-based subscription flow through Stripe."
+description: "A canvas-based design automation SaaS that turns plain language prompts into production-ready marketing graphics and editable SVGs. Multi-agent AI with Gemini and Claude handles parallelized asset generation, powered by a custom WebAssembly vector layout engine written in Rust."
+
 slug: "go-visualize"
 order: 5
 url: "Musketeers"

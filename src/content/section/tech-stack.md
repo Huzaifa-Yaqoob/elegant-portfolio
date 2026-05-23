@@ -1,7 +1,7 @@
 ---
 title: "Tech Stack"
 tag: "// CORE_ARCHITECTURE"
-description: "Battle-tested technologies chosen for production. React, Next.js, TypeScript, Node.js, Docker, AWS, and more. Every tool in this stack has shipped real products and handled real traffic."
+description: "Battle-tested technologies chosen for production. React, Next.js, TypeScript, Node.js, Docker, AWS, and more. Every tool here has shipped real products and handled real traffic."
 core_strengths:
   - "Microservices"
   - "REST API Architecture"

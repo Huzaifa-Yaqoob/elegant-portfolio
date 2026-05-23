@@ -11,6 +11,10 @@ const indexData = contactIndex[0]?.data
 if (!indexData) {
   throw new Error("Contact index content not found")
 }
+
+const siteData = await getCollection("site")
+const site = siteData[0]?.data
+const siteUrl = site?.site_url ?? "https://huzaifa.dev"
 ---
 
 <PageLayout
@@ -20,8 +24,8 @@ if (!indexData) {
   mainImage={indexData.mainImage}
   showCTA={false}
   pageTitle="Hire a Full-Stack Web Developer | React, TypeScript, Node.js | Huzaifa.Dev"
-  pageDescription="Ready to build? Contact Huzaifa — a full-stack web developer in Shahdara, Pakistan. Specializing in React, TypeScript, Node.js, and scalable web applications. Get a free consultation."
-  canonicalUrl="https://huzaifa.dev/contact"
+  pageDescription="Ready to build your next project? Contact a full-stack web developer specializing in React, TypeScript, and Node.js. Get a free consultation and timeline estimate within 24 hours."
+  canonicalUrl={`${siteUrl}/contact`}
 >
   <ContactPageContent />
   <FaqSection showDivider={false} />

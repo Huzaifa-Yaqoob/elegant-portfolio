@@ -1,6 +1,7 @@
 ---
 title: "Musketeers Portfolio"
-description: "A corporate agency portfolio built with Astro 5 that scores near-perfect Lighthouse numbers. Content lives in Astro Content Collections and MDX files, so updating case studies never requires touching markup. Micro-interactions and fluid responsive layouts showcase the agency's full development capabilities."
+description: "A corporate agency portfolio built with Astro 5 that scores near-perfect Lighthouse numbers. Content-driven architecture using Astro Content Collections and MDX keeps case studies easy to update without touching markup."
+
 slug: "musketeers-portfolio"
 order: 6
 url: "Musketeers"

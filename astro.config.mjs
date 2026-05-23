@@ -3,9 +3,11 @@
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import react from "@astrojs/react"
+import sitemap from "@astrojs/sitemap"
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://huzaifa.dev",
   vite: {
     // Astro and @tailwindcss/vite can resolve different Vite type instances.
     // Runtime is fine; this cast avoids the cross-package type identity error.
@@ -18,5 +20,5 @@ export default defineConfig({
       include: ["react", "react-dom", "react-dom/client"],
     },
   },
-  integrations: [react()],
+  integrations: [react(), sitemap()],
 })

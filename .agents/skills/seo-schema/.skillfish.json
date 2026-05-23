@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "seo-schema",
+  "owner": "sickn33",
+  "repo": "antigravity-awesome-skills",
+  "path": "plugins/antigravity-awesome-skills-claude/skills/seo-schema",
+  "branch": "main",
+  "sha": "31960ce1d69a0eb72acfb38ba028310c1208d635",
+  "source": "manual"
+}

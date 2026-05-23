@@ -9,6 +9,10 @@ const indexData = portfolioIndex[0]?.data
 if (!indexData) {
   throw new Error("Portfolio index content not found")
 }
+
+const siteData = await getCollection("site")
+const site = siteData[0]?.data
+const siteUrl = site?.site_url ?? "https://huzaifa.dev"
 ---
 
 <PageLayout
@@ -17,8 +21,8 @@ if (!indexData) {
   videoLink={indexData.videoLink}
   mainImage={indexData.mainImage}
   pageTitle="Web Development Portfolio | React & TypeScript Projects | Huzaifa.Dev"
-  pageDescription="Explore a portfolio of React, TypeScript, and full-stack web development projects. From SaaS platforms to compliance systems — built by a full-stack web developer in Pakistan."
-  canonicalUrl="https://huzaifa.dev/my-work"
+  pageDescription="Explore a portfolio of React, TypeScript, and full-stack web development projects. SaaS platforms, compliance systems, design tools, and more engineered for startups and enterprises worldwide."
+  canonicalUrl={`${siteUrl}/my-work`}
 >
   <PortfolioShowcase />
 </PageLayout>

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "seo-snippet-hunter",
+  "owner": "sickn33",
+  "repo": "antigravity-awesome-skills",
+  "path": "plugins/antigravity-awesome-skills-claude/skills/seo-snippet-hunter",
+  "branch": "main",
+  "sha": "91125b5a3d29de0b64c6bb9b59942032dc6f8a46",
+  "source": "manual"
+}

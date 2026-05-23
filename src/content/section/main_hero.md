@@ -1,5 +1,5 @@
 ---
-title: "Full-stack web developer architecting modern experiences with brutal precision."
-description: "I build high-performance web applications, SaaS platforms, and scalable digital products for startups, agencies, and enterprise teams. Specializing in modern JavaScript, full-stack development, and systems architecture."
+title: "Precision engineered for the modern web."
+description: "I build high-performance web applications, SaaS platforms, and scalable digital products. Specializing in React, TypeScript, Node.js, and AI-augmented engineering for zero-defect delivery."
 main_image: "/main_hero.png"
 ---
