@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { gsap, useGSAP } from "@/lib/gsap"
 import {
@@ -72,6 +72,17 @@ const SHAPES: Record<Exclude<CursorState, "hidden" | "grabbing">, string> = {
 const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_SIZE / 2 - 4} 0 1 1 4 ${CURSOR_SIZE / 2}`
 const CLICKABLE_SELECTOR =
   'a, button, [role="button"], [data-cursor="pointer"], summary, select, [data-slot="radio-group-item"], .cursor-pointer'
+const HIDDEN_SELECTOR =
+  '[data-cursor="hidden"], #magnetic-work-btn, #magnetic-portfolio-cta, #magnetic-cta-btn, #magnetic-cta, #magnetic-cta-zone'
+const GRAB_SELECTOR =
+  '[data-cursor="grab"], #custom-scrollbar, #scrollbar-thumb'
+const HOVER_SYNC_INTERVAL_MS = 66
+const TRANSIENT_CURSOR_STATES: CursorState[] = [
+  "hidden",
+  "grab",
+  "pointer",
+  "type",
+]
 
 export function Cursor() {
   const log = (...args: unknown[]) => console.log("[cursor.tsx]", ...args)
@@ -102,9 +113,9 @@ export function Cursor() {
   }, [state])
 
   const [label, setLabel] = useState("")
-  const [hoverKind, setHoverKind] = useState<"none" | "text" | "pointer">(
-    "none"
-  )
+  const [autoState, setAutoState] = useState<
+    "default" | "pointer" | "type" | "hidden" | "grab"
+  >("default")
   const [revealPending, setRevealPending] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
 
@@ -138,12 +149,6 @@ export function Cursor() {
     return () => mq.removeEventListener("change", handler)
   }, [initCycle])
 
-  const autoState = useMemo<CursorState>(() => {
-    if (hoverKind === "text") return "type"
-    if (hoverKind === "pointer") return "pointer"
-    return "default"
-  }, [hoverKind])
-
   useEffect(() => {
     revealPendingRef.current = revealPending
   }, [revealPending])
@@ -167,16 +172,27 @@ export function Cursor() {
 
     if (svgRef.current) gsap.set(svgRef.current, { rotation: -45 })
 
-    const onMove = (e: MouseEvent) => {
-      const target = e.target as Element | null
+    const resolveAutoStateAtPoint = (
+      x: number,
+      y: number
+    ): "default" | "pointer" | "type" | "hidden" | "grab" => {
+      const target = document.elementFromPoint(x, y)
+      if (target?.closest(HIDDEN_SELECTOR)) return "hidden"
+      if (target?.closest(GRAB_SELECTOR)) return "grab"
       const isText = Boolean(
         target?.closest(
           'input, textarea, [contenteditable=""], [contenteditable="true"]'
         )
       )
       const isPointer = !isText && Boolean(target?.closest(CLICKABLE_SELECTOR))
-      const nextHoverKind = isText ? "text" : isPointer ? "pointer" : "none"
-      setHoverKind((prev) => (prev === nextHoverKind ? prev : nextHoverKind))
+      if (isText) return "type"
+      if (isPointer) return "pointer"
+      return "default"
+    }
+
+    const onMove = (e: MouseEvent) => {
+      const nextAutoState = resolveAutoStateAtPoint(e.clientX, e.clientY)
+      setAutoState((prev) => (prev === nextAutoState ? prev : nextAutoState))
 
       posRef.current.x = e.clientX - CURSOR_SIZE / 2
       posRef.current.y = e.clientY - CURSOR_SIZE / 2
@@ -185,12 +201,6 @@ export function Cursor() {
       const prev = pointerRef.current
       pointerRef.current = { x: e.clientX, y: e.clientY }
 
-      const nextAutoState =
-        nextHoverKind === "text"
-          ? "type"
-          : nextHoverKind === "pointer"
-            ? "pointer"
-            : "default"
       const nextEffectiveState =
         stateRef.current === "default" ? nextAutoState : stateRef.current
 
@@ -212,7 +222,50 @@ export function Cursor() {
       )
     }
 
+    let scrollRafId = 0
+    let hoverSyncRafId = 0
+    let lastHoverSyncTime = 0
+    const syncHoverFromPointer = () => {
+      const pointer = pointerRef.current
+      if (!pointer) return
+      const nextAutoState = resolveAutoStateAtPoint(pointer.x, pointer.y)
+      setAutoState((prev) => (prev === nextAutoState ? prev : nextAutoState))
+
+      if (
+        TRANSIENT_CURSOR_STATES.includes(stateRef.current) &&
+        stateRef.current !== nextAutoState
+      ) {
+        setState("default")
+      }
+    }
+
+    const scheduleHoverSync = () => {
+      if (hoverSyncRafId !== 0) return
+      hoverSyncRafId = requestAnimationFrame(() => {
+        hoverSyncRafId = 0
+        syncHoverFromPointer()
+      })
+    }
+
+    const onScrollLikeInput = () => {
+      scheduleHoverSync()
+    }
+
+    const onScroll = () => {
+      if (scrollRafId !== 0) return
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = 0
+        scheduleHoverSync()
+      })
+    }
+
     const tick = () => {
+      const now = performance.now()
+      if (now - lastHoverSyncTime >= HOVER_SYNC_INTERVAL_MS) {
+        lastHoverSyncTime = now
+        syncHoverFromPointer()
+      }
+
       const el = containerRef.current
       if (el) {
         const { x, y } = posRef.current
@@ -229,12 +282,25 @@ export function Cursor() {
     }
 
     window.addEventListener("mousemove", onMove)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    document.addEventListener("scroll", onScrollLikeInput, {
+      passive: true,
+      capture: true,
+    })
+    window.addEventListener("wheel", onScrollLikeInput, { passive: true })
+    window.addEventListener("touchmove", onScrollLikeInput, { passive: true })
     rafRef.current = requestAnimationFrame(tick)
-    log("mousemove + raf attached")
+    log("mousemove + scroll-like + raf attached")
 
     return () => {
       log("pointer/shape setup cleanup")
       window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("scroll", onScroll)
+      document.removeEventListener("scroll", onScrollLikeInput, true)
+      window.removeEventListener("wheel", onScrollLikeInput)
+      window.removeEventListener("touchmove", onScrollLikeInput)
+      cancelAnimationFrame(scrollRafId)
+      cancelAnimationFrame(hoverSyncRafId)
       cancelAnimationFrame(rafRef.current)
       document.getElementById(styleId)?.remove()
     }
