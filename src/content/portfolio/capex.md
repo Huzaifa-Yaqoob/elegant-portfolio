@@ -18,4 +18,4 @@ tools:
   - "Context API / State Management"
 ---
 
-A frontend dashboard for corporate capital expenditure management. Tracks budgets, asset lifecycles, and multi-level reporting flows with financial data visualizations and interactive analytics built in React and TypeScript.
+
