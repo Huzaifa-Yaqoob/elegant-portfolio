@@ -88,38 +88,6 @@ phases.sort((a, b) => a.data.order - b.data.order)
           stroke="currentColor"
           stroke-width="0.15"
           stroke-linejoin="round"></path>
-        <rect
-          class="circuit-node-mobile"
-          data-node="1"
-          fill="currentColor"
-          height="1.5"
-          width="1.5"
-          x="11.25"
-          y="17.25"></rect>
-        <rect
-          class="circuit-node-mobile"
-          data-node="2"
-          fill="currentColor"
-          height="1.5"
-          width="1.5"
-          x="11.25"
-          y="39.25"></rect>
-        <rect
-          class="circuit-node-mobile"
-          data-node="3"
-          fill="currentColor"
-          height="1.5"
-          width="1.5"
-          x="11.25"
-          y="61.25"></rect>
-        <rect
-          class="circuit-node-mobile"
-          data-node="4"
-          fill="currentColor"
-          height="1.5"
-          width="1.5"
-          x="11.25"
-          y="83.25"></rect>
       </svg>
     </div>
 
@@ -258,13 +226,11 @@ phases.sort((a, b) => a.data.order - b.data.order)
 </section>
 
 <style>
-  .circuit-node,
-  .circuit-node-mobile {
+  .circuit-node {
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  .circuit-node.visible,
-  .circuit-node-mobile.visible {
+  .circuit-node.visible {
     opacity: 1;
   }
 </style>
