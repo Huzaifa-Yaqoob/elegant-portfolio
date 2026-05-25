@@ -32,13 +32,15 @@ const iconMap: Record<string, any> = {
         id="hero-ai-area"
         class="relative flex h-full w-full items-center justify-start overflow-hidden bg-primary-container/5 opacity-0 lg:pl-16"
       >
-        {main_image && (
-          <img
-            alt="about-hero-image"
-            src={main_image}
-            class="absolute inset-0 h-full w-full object-cover grayscale"
-          />
-        )}
+        {
+          main_image && (
+            <img
+              alt="about-hero-image"
+              src={main_image}
+              class="absolute inset-0 h-full w-full object-cover grayscale"
+            />
+          )
+        }
         <div
           id="ai-buttons"
           class="relative z-10 flex flex-col border border-primary-container/20"
@@ -52,9 +54,7 @@ const iconMap: Record<string, any> = {
                 const IconComponent = iconMap[btn.icon]
                 return (
                   <>
-                    {idx > 0 && (
-                      <div class="h-px bg-primary-container/20" />
-                    )}
+                    {idx > 0 && <div class="h-px bg-primary-container/20" />}
                     <a
                       href={btn.url}
                       target="_blank"
@@ -63,9 +63,7 @@ const iconMap: Record<string, any> = {
                       aria-label={btn.name}
                     >
                       <div class="icon-mono pointer-events-none">
-                        {IconComponent && (
-                          <IconComponent class="h-5 w-5" />
-                        )}
+                        {IconComponent && <IconComponent class="h-5 w-5" />}
                       </div>
                     </a>
                   </>
@@ -105,23 +103,69 @@ const iconMap: Record<string, any> = {
   <!-- Stats Section -->
   <div class="border-t border-primary-container/10 px-6 py-16 lg:px-16">
     <div
-      class="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-16 gap-y-8"
+      id="stats-wrapper"
+      class="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-16 gap-y-8 opacity-0"
     >
       <div class="text-center">
         <p class="h1-style text-primary-container">
-          {stats.total_clients}+
+          <span class="stat-roll">
+            {
+              String(stats.total_clients)
+                .split("")
+                .map((digit) => (
+                  <span class="digit-strip" data-digit={digit}>
+                    <span class="digit-roll">
+                      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <span>{n}</span>
+                      ))}
+                    </span>
+                  </span>
+                ))
+            }
+          </span>
+          <span class="stat-plus">+</span>
         </p>
         <p class="label-caps-style text-primary-container">Clients</p>
       </div>
       <div class="text-center">
         <p class="h1-style text-primary-container">
-          {stats.projects_completed}+
+          <span class="stat-roll">
+            {
+              String(stats.projects_completed)
+                .split("")
+                .map((digit) => (
+                  <span class="digit-strip" data-digit={digit}>
+                    <span class="digit-roll">
+                      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <span>{n}</span>
+                      ))}
+                    </span>
+                  </span>
+                ))
+            }
+          </span>
+          <span class="stat-plus">+</span>
         </p>
         <p class="label-caps-style text-primary-container">Projects</p>
       </div>
       <div class="text-center">
         <p class="h1-style text-primary-container">
-          {stats.years_experience}+
+          <span class="stat-roll">
+            {
+              String(stats.years_experience)
+                .split("")
+                .map((digit) => (
+                  <span class="digit-strip" data-digit={digit}>
+                    <span class="digit-roll">
+                      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <span>{n}</span>
+                      ))}
+                    </span>
+                  </span>
+                ))
+            }
+          </span>
+          <span class="stat-plus">+</span>
         </p>
         <p class="label-caps-style text-primary-container">Years Exp.</p>
       </div>
@@ -138,6 +182,33 @@ const iconMap: Record<string, any> = {
   .icon-mono {
     filter: grayscale(100%) brightness(3);
     will-change: filter;
+  }
+
+  .stat-roll {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .digit-strip {
+    display: inline-block;
+    overflow: hidden;
+    height: 1em;
+    vertical-align: middle;
+    line-height: 1;
+  }
+
+  .digit-roll {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+
+  .digit-roll span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1em;
+    width: 0.55em;
   }
 </style>
 
@@ -286,5 +357,43 @@ const iconMap: Record<string, any> = {
         )
       }
     })
+
+    // Stats rolling number animation
+    const statsWrapper = document.getElementById("stats-wrapper")
+    if (statsWrapper) {
+      const allDigitRolls = gsap.utils.toArray<HTMLElement>(
+        ".digit-strip .digit-roll"
+      )
+
+      if (allDigitRolls.length) {
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: statsWrapper,
+              start: "top 85%",
+              once: true,
+            },
+            defaults: { ease: "expo.out", duration: 1.8 },
+          })
+          .fromTo(
+            statsWrapper,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.4 },
+            0
+          )
+          .to(
+            allDigitRolls,
+            {
+              yPercent: (_i, el) => {
+                const strip = el.closest(".digit-strip") as HTMLElement | null
+                if (!strip) return 0
+                return -parseInt(strip.dataset.digit ?? "0") * 10
+              },
+              stagger: 0.1,
+            },
+            "-=0.1"
+          )
+      }
+    }
   })
 </script>
