@@ -98,7 +98,7 @@ const SPINNER_PATH = `M ${CURSOR_SIZE / 2} 4 A ${CURSOR_SIZE / 2 - 4} ${CURSOR_S
 const CLICKABLE_SELECTOR =
   'a, button, [role="button"], [data-cursor="pointer"], summary, select, [data-slot="radio-group-item"], .cursor-pointer'
 const HIDDEN_SELECTOR =
-  '[data-cursor="hidden"], #magnetic-work-btn, #magnetic-portfolio-cta, #magnetic-cta-btn, #magnetic-cta, #magnetic-cta-zone'
+  '[data-cursor="hidden"], #magnetic-work-btn, #magnetic-portfolio-cta, #magnetic-cta-btn, #magnetic-cta, #magnetic-cta-zone, #architect-magnetic-btn'
 const GRAB_SELECTOR =
   '[data-cursor="grab"], #custom-scrollbar, #scrollbar-thumb'
 const HOVER_SYNC_INTERVAL_MS = 66
