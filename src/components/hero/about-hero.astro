@@ -1,0 +1,290 @@
+---
+import { getEntry } from "astro:content"
+import ClaudeIcon from "@/components/icons/ai/claude.astro"
+import GeminiIcon from "@/components/icons/ai/gemini.astro"
+import OpenAIIcon from "@/components/icons/ai/open-ai.astro"
+import PerplexityIcon from "@/components/icons/ai/preplexity.astro"
+
+const aboutHeroEntry = await getEntry("section", "about-hero")
+if (!aboutHeroEntry) throw new Error("About Hero section content not found")
+
+const siteEntry = await getEntry("site", "site")
+if (!siteEntry) throw new Error("Site configuration not found")
+
+const { title, description, main_image, ai_buttons } = aboutHeroEntry.data
+const { personal, stats } = siteEntry.data
+
+const iconMap: Record<string, any> = {
+  claude: ClaudeIcon,
+  gemini: GeminiIcon,
+  "open-ai": OpenAIIcon,
+  preplexity: PerplexityIcon,
+}
+---
+
+<section class="relative min-h-screen overflow-hidden bg-secondary">
+  <div
+    class="grid min-h-screen grid-rows-[48svh_1fr] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-1"
+  >
+    <!-- Left Side (AI Icons): Top on mobile, Left on desktop -->
+    <div class="z-0 order-1 h-full lg:order-1">
+      <div
+        id="hero-ai-area"
+        class="relative flex h-full w-full items-center justify-start overflow-hidden bg-primary-container/5 opacity-0 lg:pl-16"
+      >
+        {main_image && (
+          <img
+            alt="about-hero-image"
+            src={main_image}
+            class="absolute inset-0 h-full w-full object-cover grayscale"
+          />
+        )}
+        <div
+          id="ai-buttons"
+          class="relative z-10 flex flex-col border border-primary-container/20"
+        >
+          {
+            ai_buttons?.map(
+              (
+                btn: { name: string; url: string; icon: string },
+                idx: number
+              ) => {
+                const IconComponent = iconMap[btn.icon]
+                return (
+                  <>
+                    {idx > 0 && (
+                      <div class="h-px bg-primary-container/20" />
+                    )}
+                    <a
+                      href={btn.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="ai-btn group flex items-center justify-center px-5 py-4"
+                      aria-label={btn.name}
+                    >
+                      <div class="icon-mono pointer-events-none">
+                        {IconComponent && (
+                          <IconComponent class="h-5 w-5" />
+                        )}
+                      </div>
+                    </a>
+                  </>
+                )
+              }
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side (Content): Bottom on mobile, Right on desktop -->
+    <div
+      class="z-10 order-2 flex items-center px-6 py-10 lg:order-2 lg:px-16"
+      data-lag="0.5"
+    >
+      <div
+        id="hero-content"
+        class="flex max-w-2xl flex-col items-start gap-4 text-left lg:gap-6"
+      >
+        <h2 class="h1-style text-primary-container uppercase">
+          {personal.name}.Dev
+        </h2>
+
+        <div class="my-2 h-0.5 w-24 bg-primary-container"></div>
+
+        <h1 class="h2-style text-primary-container uppercase">
+          {title}
+        </h1>
+        <p class="max-w-md body-lg-style text-primary-container">
+          {description}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="border-t border-primary-container/10 px-6 py-16 lg:px-16">
+    <div
+      class="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-16 gap-y-8"
+    >
+      <div class="text-center">
+        <p class="h1-style text-primary-container">
+          {stats.total_clients}+
+        </p>
+        <p class="label-caps-style text-primary-container">Clients</p>
+      </div>
+      <div class="text-center">
+        <p class="h1-style text-primary-container">
+          {stats.projects_completed}+
+        </p>
+        <p class="label-caps-style text-primary-container">Projects</p>
+      </div>
+      <div class="text-center">
+        <p class="h1-style text-primary-container">
+          {stats.years_experience}+
+        </p>
+        <p class="label-caps-style text-primary-container">Years Exp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai-btn {
+    will-change: transform, background-color;
+    background-color: transparent;
+  }
+
+  .icon-mono {
+    filter: grayscale(100%) brightness(3);
+    will-change: filter;
+  }
+</style>
+
+<script>
+  import { gsap } from "../../lib/gsap"
+
+  window.addEventListener("load", () => {
+    const mm = gsap.matchMedia()
+
+    const aiBtns = document.querySelectorAll<HTMLElement>(".ai-btn")
+    aiBtns.forEach((btn) => {
+      const icon = btn.querySelector<HTMLElement>(".icon-mono")
+
+      const handleEnter = () => {
+        gsap.to(btn, {
+          backgroundColor: "#ffffff",
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        })
+        if (icon) {
+          gsap.to(icon, {
+            scale: 1.25,
+            filter: "grayscale(100%) brightness(0)",
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: "auto",
+            force3D: true,
+          })
+        }
+      }
+
+      const handleLeave = () => {
+        gsap.to(btn, {
+          backgroundColor: "transparent",
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        })
+        if (icon) {
+          gsap.to(icon, {
+            scale: 1,
+            filter: "grayscale(100%) brightness(3)",
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: "auto",
+            force3D: true,
+          })
+        }
+      }
+
+      btn.addEventListener("mouseenter", handleEnter)
+      btn.addEventListener("mouseleave", handleLeave)
+    })
+
+    mm.add("(min-width: 1024px)", () => {
+      const DURATION = 1.8
+
+      gsap.fromTo(
+        "#hero-ai-area",
+        { clipPath: "polygon(0% 0%, 75% 0%, 90% 100%, 0% 100%)" },
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 75% 100%, 0% 100%)",
+          duration: DURATION,
+          ease: "expo.out",
+          force3D: true,
+          opacity: 1,
+        }
+      )
+
+      const aiBtnsGap = document.querySelector("#ai-buttons")?.children
+      if (aiBtnsGap?.length) {
+        gsap.fromTo(
+          aiBtnsGap,
+          { x: -60, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.15,
+          }
+        )
+      }
+
+      const contentChildren = document.querySelector("#hero-content")?.children
+      if (contentChildren?.length) {
+        const each = DURATION / contentChildren.length
+        gsap.fromTo(
+          contentChildren,
+          { x: 80, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: each,
+            ease: "power2.out",
+            stagger: each,
+          }
+        )
+      }
+    })
+
+    mm.add("(max-width: 1023px)", () => {
+      const DURATION = 1.8
+
+      gsap.fromTo(
+        "#hero-ai-area",
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 40%, 0% 100%)" },
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)",
+          duration: DURATION,
+          ease: "expo.out",
+          force3D: true,
+          opacity: 1,
+        }
+      )
+
+      const aiBtnsGap = document.querySelector("#ai-buttons")?.children
+      if (aiBtnsGap?.length) {
+        gsap.fromTo(
+          aiBtnsGap,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.12,
+          }
+        )
+      }
+
+      const contentChildren = document.querySelector("#hero-content")?.children
+      if (contentChildren?.length) {
+        const each = DURATION / contentChildren.length
+        gsap.fromTo(
+          contentChildren,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: each,
+            ease: "power2.out",
+            stagger: each,
+          }
+        )
+      }
+    })
+  })
+</script>

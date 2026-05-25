@@ -18,6 +18,15 @@ export const sectionSchema = z
         })
       )
       .optional(),
+    ai_buttons: z
+      .array(
+        z.object({
+          name: z.string(),
+          url: z.string(),
+          icon: z.string(),
+        })
+      )
+      .optional(),
     // Add any other common properties that all sections might share
   })
   .passthrough() // Allows for additional, specific properties in individual section front matters

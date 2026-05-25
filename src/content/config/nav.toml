@@ -3,7 +3,8 @@ logo = { label = "HUZAIFA.DEV", href = "/" }
 
 links = [
   { label = "Home", href = "/" },
-  { label = "Work", href = "/my-work" }
+  { label = "Work", href = "/my-work" },
+  { label = "About", href = "/about" }
 ]
 
 cta = { label = "Get in Touch", href = "/contact" }
