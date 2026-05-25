@@ -45,7 +45,7 @@ phases.sort((a, b) => a.data.order - b.data.order)
           height="1.5"
           width="1.5"
           x="49.25"
-          y="18"></rect>
+          y="17.25"></rect>
         <rect
           class="circuit-node"
           data-node="2"
@@ -53,7 +53,7 @@ phases.sort((a, b) => a.data.order - b.data.order)
           height="1.5"
           width="1.5"
           x="49.25"
-          y="40"></rect>
+          y="39.25"></rect>
         <rect
           class="circuit-node"
           data-node="3"
@@ -61,7 +61,7 @@ phases.sort((a, b) => a.data.order - b.data.order)
           height="1.5"
           width="1.5"
           x="49.25"
-          y="62"></rect>
+          y="61.25"></rect>
         <rect
           class="circuit-node"
           data-node="4"
@@ -69,24 +69,47 @@ phases.sort((a, b) => a.data.order - b.data.order)
           height="1.5"
           width="1.5"
           x="49.25"
-          y="84"></rect>
+          y="83.25"></rect>
       </svg>
     </div>
 
+    {
+      phases.map((phase, i) => {
+        const nodeTop = 18 + i * 22
+        const isEven = i % 2 === 0
+        return (
+          <div
+            class="absolute left-1/2 z-20 hidden -translate-x-1/2 -translate-y-1/2 md:block"
+            style={`top: ${nodeTop}%`}
+          >
+            <div
+              class={`flex h-12 w-12 items-center justify-center border-2 border-foreground ${
+                isEven
+                  ? "bg-deep-obsidian text-foreground"
+                  : "bg-foreground text-deep-obsidian"
+              }`}
+            >
+              <LucideIcon name={phase.data.icon} size={20} />
+            </div>
+          </div>
+        )
+      })
+    }
+
     <div
-      class="relative z-10 mx-auto max-w-7xl space-y-24 px-6 md:space-y-56 lg:px-16"
+      class="relative z-10 mx-auto max-w-7xl space-y-24 px-6 md:space-y-[30vh] lg:px-16"
     >
       {
         phases.map((phase, i) => {
           const isEven = i % 2 === 0
           return (
-            <div class="phase-row flex w-full flex-col items-center justify-between md:flex-row">
+            <div class="phase-row flex w-full flex-col items-center md:flex-row md:justify-between">
               <div
                 class={`phase-content md:w-[40%] ${
                   isEven
                     ? "md:order-1 md:text-right"
                     : "md:order-3 md:text-left"
-                } order-2 mt-8 md:mt-0`}
+                }`}
               >
                 <h3 class="text-4xl font-black tracking-tighter text-foreground uppercase md:text-5xl">
                   {phase.data.title}
@@ -107,7 +130,7 @@ phases.sort((a, b) => a.data.order - b.data.order)
                 </div>
               </div>
 
-              <div class="z-20 order-1 flex-shrink-0 md:order-2">
+              <div class="z-20 flex-shrink-0 md:hidden">
                 <div
                   class={`flex h-12 w-12 items-center justify-center border-2 border-foreground ${
                     isEven
@@ -120,8 +143,8 @@ phases.sort((a, b) => a.data.order - b.data.order)
               </div>
 
               <div
-                class={`order-3 hidden md:flex md:w-[40%] ${
-                  isEven ? "justify-start" : "justify-end"
+                class={`hidden md:flex md:w-[40%] ${
+                  isEven ? "order-3 justify-start" : "order-1 justify-end"
                 }`}
               >
                 <div
