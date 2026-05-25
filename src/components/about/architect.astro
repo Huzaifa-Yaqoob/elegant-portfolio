@@ -1,0 +1,242 @@
+---
+import { getCollection, getEntry } from "astro:content"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+const sectionEntry = await getEntry("section", "architect")
+if (!sectionEntry) throw new Error("Architect section entry not found")
+const { title, description, badge } = sectionEntry.data
+
+const phases = await getCollection("architectPhase")
+phases.sort((a, b) => a.data.order - b.data.order)
+---
+
+<section class="relative overflow-hidden bg-surface-container-lowest">
+  <div class="px-6 pt-32 pb-16 md:pb-24 lg:px-16">
+    <span class="label-caps-style block tracking-[0.3em] text-outline"
+      >{badge}</span
+    >
+    <h2 class="h1-style mt-4 tracking-tighter text-foreground uppercase">
+      {title}
+    </h2>
+    <p class="mt-6 max-w-2xl body-lg-style text-on-surface-variant">
+      {description}
+    </p>
+  </div>
+
+  <div class="architect-process relative py-16 md:py-40">
+    <div
+      class="absolute inset-0 z-0 hidden text-foreground opacity-20 md:block"
+    >
+      <svg
+        class="h-full w-full"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <path
+          class="circuit-path"
+          d="M 50 0 V 12 H 54 V 18 H 46 V 24 H 50 V 34 H 54 V 40 H 46 V 46 H 50 V 56 H 54 V 62 H 46 V 68 H 50 V 78 H 54 V 84 H 46 V 90 H 50 V 100"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="0.2"></path>
+        <rect
+          class="circuit-node"
+          data-node="1"
+          fill="currentColor"
+          height="1.5"
+          width="1.5"
+          x="49.25"
+          y="18"></rect>
+        <rect
+          class="circuit-node"
+          data-node="2"
+          fill="currentColor"
+          height="1.5"
+          width="1.5"
+          x="49.25"
+          y="40"></rect>
+        <rect
+          class="circuit-node"
+          data-node="3"
+          fill="currentColor"
+          height="1.5"
+          width="1.5"
+          x="49.25"
+          y="62"></rect>
+        <rect
+          class="circuit-node"
+          data-node="4"
+          fill="currentColor"
+          height="1.5"
+          width="1.5"
+          x="49.25"
+          y="84"></rect>
+      </svg>
+    </div>
+
+    <div
+      class="relative z-10 mx-auto max-w-7xl space-y-24 px-6 md:space-y-56 lg:px-16"
+    >
+      {
+        phases.map((phase, i) => {
+          const isEven = i % 2 === 0
+          return (
+            <div class="phase-row flex w-full flex-col items-center justify-between md:flex-row">
+              <div
+                class={`phase-content md:w-[40%] ${
+                  isEven
+                    ? "md:order-1 md:text-right"
+                    : "md:order-3 md:text-left"
+                } order-2 mt-8 md:mt-0`}
+              >
+                <h3 class="text-4xl font-black tracking-tighter text-foreground uppercase md:text-5xl">
+                  {phase.data.title}
+                </h3>
+                <p class="mt-4 mb-6 text-base leading-relaxed text-on-surface-variant md:text-lg">
+                  {phase.data.description}
+                </p>
+                <div
+                  class={`flex flex-wrap gap-3 ${
+                    isEven ? "md:justify-end" : "md:justify-start"
+                  }`}
+                >
+                  {phase.data.tags.map((tag) => (
+                    <span class="border border-outline px-3 py-1 text-[11px] font-bold tracking-widest text-outline uppercase">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="z-20 order-1 flex-shrink-0 md:order-2">
+                <div
+                  class={`flex h-12 w-12 items-center justify-center border-2 border-foreground ${
+                    isEven
+                      ? "bg-deep-obsidian text-foreground"
+                      : "bg-foreground text-deep-obsidian"
+                  }`}
+                >
+                  <LucideIcon name={phase.data.icon} size={20} />
+                </div>
+              </div>
+
+              <div
+                class={`order-3 hidden md:flex md:w-[40%] ${
+                  isEven ? "justify-start" : "justify-end"
+                }`}
+              >
+                <div
+                  class={`relative aspect-video w-full overflow-hidden border border-border-structural bg-surface ${
+                    isEven ? "ml-12" : "mr-12"
+                  }`}
+                >
+                  <div class="absolute inset-0 bg-deep-obsidian opacity-40" />
+                  <div
+                    class={`absolute bottom-4 ${
+                      isEven ? "left-4" : "right-4"
+                    } font-mono text-[10px] tracking-wider text-outline`}
+                  >
+                    {String(i + 1).padStart(2, "0")} / ARCH_{phase.data.title}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })
+      }
+    </div>
+  </div>
+
+  <div class="px-6 py-24 md:py-40 lg:px-16">
+    <div
+      class="relative mx-auto max-w-4xl border-2 border-border-structural bg-surface p-8 text-center md:p-16"
+    >
+      <div
+        class="absolute -top-4 -left-4 h-8 w-8 border-t-2 border-l-2 border-foreground"
+      >
+      </div>
+      <div
+        class="absolute -right-4 -bottom-4 h-8 w-8 border-r-2 border-b-2 border-foreground"
+      >
+      </div>
+      <h2
+        class="mb-8 text-4xl font-black tracking-tighter text-foreground uppercase md:text-5xl"
+      >
+        Ready to execute?
+      </h2>
+      <p
+        class="mx-auto mb-12 max-w-lg text-base text-on-surface-variant md:text-lg"
+      >
+        Let's discuss how our process can be tailored to your specific technical
+        requirements.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block border-2 border-transparent bg-foreground px-10 py-4 text-lg font-black tracking-tighter text-deep-obsidian uppercase transition-all duration-300 hover:border-foreground hover:bg-transparent hover:text-foreground md:px-12 md:text-xl"
+      >
+        START CONSULTATION
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .circuit-node {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .circuit-node.visible {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  window.addEventListener("load", () => {
+    const path = document.querySelector<SVGPathElement>(".circuit-path")
+    if (!path) return
+
+    const length = path.getTotalLength()
+    path.style.strokeDasharray = String(length)
+    path.style.strokeDashoffset = String(length)
+
+    const nodes = gsap.utils.toArray<SVGRectElement>(".circuit-node")
+    const nodeThresholds = [0.18, 0.4, 0.62, 0.84]
+
+    gsap.to(path, {
+      strokeDashoffset: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".architect-process",
+        start: "top center",
+        end: "bottom center",
+        scrub: true,
+        onUpdate: (self) => {
+          const progress = self.progress
+          nodes.forEach((node, i) => {
+            const threshold = nodeThresholds[i] ?? 1
+            node.classList.toggle("visible", progress >= threshold)
+          })
+        },
+      },
+    })
+
+    const phases = gsap.utils.toArray<HTMLElement>(".phase-row")
+    phases.forEach((phase) => {
+      const content = phase.querySelector<HTMLElement>(".phase-content")
+      if (!content) return
+
+      gsap.from(content, {
+        opacity: 0,
+        y: 60,
+        ease: "none",
+        scrollTrigger: {
+          trigger: phase,
+          start: "top bottom",
+          end: "top center",
+          scrub: true,
+        },
+      })
+    })
+  })
+</script>

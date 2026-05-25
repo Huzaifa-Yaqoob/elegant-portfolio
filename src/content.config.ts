@@ -10,6 +10,7 @@ import {
 } from "@/config/portfolio.config.ts"
 import { testimonialsSchema } from "@/config/testimonials.config.ts"
 import { journeySchema } from "@/config/journey.config.ts"
+import { architectPhaseSchema } from "@/config/architect.config.ts"
 import { contactFormSchema } from "@/config/contact-form.config.ts"
 import { contactIndexSchema } from "@/config/contact.config.ts"
 import { faqSchema } from "@/config/faq.config.ts"
@@ -70,6 +71,14 @@ const journey = defineCollection({
   schema: journeySchema,
 })
 
+const architectPhase = defineCollection({
+  loader: glob({
+    pattern: ["*.md", "*.mdx"],
+    base: "./src/content/architect",
+  }),
+  schema: architectPhaseSchema,
+})
+
 const contactForm = defineCollection({
   loader: glob({ pattern: "contact-form.toml", base: "./src/content/config" }),
   schema: contactFormSchema,
@@ -98,6 +107,7 @@ export const collections = {
   portfolio,
   testimonial,
   journey,
+  architectPhase,
   contactForm,
   contactIndex,
   faq,

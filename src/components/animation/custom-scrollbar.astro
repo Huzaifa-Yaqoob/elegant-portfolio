@@ -19,7 +19,6 @@
 <script>
   import { gsap } from "@/lib/gsap"
   import { setCursorState } from "@/components/cursor"
-  import { ScrollTrigger } from "gsap/ScrollTrigger"
   import { ScrollSmoother } from "gsap/ScrollSmoother"
 
   gsap.registerPlugin(ScrollSmoother)
@@ -36,9 +35,13 @@
 
     let isDragging = false
 
+    function getMaxScroll() {
+      return Math.max(0, content.scrollHeight - window.innerHeight)
+    }
+
     function updateThumb(progress: number) {
       const trackH = bar.offsetHeight
-      const totalH = content.offsetHeight
+      const totalH = content.scrollHeight
       const viewportH = window.innerHeight
       const thumbH = Math.max(24, trackH * (viewportH / totalH))
       const thumbT = progress * (trackH - thumbH)
@@ -57,9 +60,8 @@
       thumbTop = Math.max(0, Math.min(available, thumbTop))
 
       const progress = available > 0 ? thumbTop / available : 0
-      const totalScroll = content.offsetHeight - window.innerHeight
 
-      smoother!.scrollTop(progress * totalScroll)
+      smoother!.scrollTop(progress * getMaxScroll())
       updateThumb(progress)
     }
 
@@ -107,18 +109,17 @@
     document.addEventListener("pointermove", onPointerMove)
     document.addEventListener("pointerup", onPointerUp)
 
-    ScrollTrigger.create({
-      trigger: "#smooth-content",
-      start: "top top",
-      end: "bottom bottom",
-      onUpdate: (self) => {
-        if (!isDragging) updateThumb(self.progress)
-      },
-    })
+    function tick() {
+      if (!isDragging) {
+        const maxScroll = getMaxScroll()
+        const currentScroll = smoother!.scrollTop()
+        const progress = maxScroll > 0 ? currentScroll / maxScroll : 0
+        updateThumb(progress)
+      }
+      requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
 
-    const currentScroll = smoother.scrollTop()
-    const maxScroll = content.offsetHeight - window.innerHeight
-    const initialProgress = maxScroll > 0 ? currentScroll / maxScroll : 0
-    updateThumb(initialProgress)
+    updateThumb(getMaxScroll() > 0 ? smoother.scrollTop() / getMaxScroll() : 0)
   })()
 </script>
