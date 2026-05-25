@@ -13,19 +13,19 @@ milestones.sort((a, b) => a.data.order - b.data.order)
   id="journey-section"
   class="relative min-h-screen overflow-hidden bg-deep-obsidian"
 >
+  <div class="absolute top-0 left-0 z-20 px-6 pt-20 lg:px-16 lg:pt-24">
+    <h2 class="h1-style tracking-tighter text-foreground uppercase">
+      {title}
+    </h2>
+    <p class="label-caps-style mt-6 flex items-center gap-4 text-outline">
+      <span class="inline-block h-px w-12 bg-foreground"></span>
+      {description}
+    </p>
+  </div>
+
   <div
     class="sticky top-0 flex h-screen flex-col justify-center overflow-hidden"
   >
-    <div class="absolute top-0 left-0 z-20 px-6 pt-20 lg:px-16 lg:pt-24">
-      <h2 class="h1-style tracking-tighter text-foreground uppercase">
-        {title}
-      </h2>
-      <p class="label-caps-style mt-6 flex items-center gap-4 text-outline">
-        <span class="inline-block h-px w-12 bg-foreground"></span>
-        {description}
-      </p>
-    </div>
-
     <div id="journey-track" class="flex items-center">
       <div class="w-1/2 flex-none"></div>
 
