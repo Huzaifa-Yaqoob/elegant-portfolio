@@ -1,0 +1,163 @@
+---
+import { getCollection, getEntry } from "astro:content"
+
+const sectionEntry = await getEntry("section", "journey")
+if (!sectionEntry) throw new Error("Journey section entry not found")
+const { title, description } = sectionEntry.data
+
+const milestones = await getCollection("journey")
+milestones.sort((a, b) => a.data.order - b.data.order)
+---
+
+<section
+  id="journey-section"
+  class="relative min-h-screen overflow-hidden bg-deep-obsidian"
+>
+  <div
+    class="sticky top-0 flex h-screen flex-col justify-center overflow-hidden"
+  >
+    <div class="absolute top-0 left-0 z-20 px-6 pt-20 lg:px-16 lg:pt-24">
+      <h2 class="h1-style tracking-tighter text-foreground uppercase">
+        {title}
+      </h2>
+      <p class="label-caps-style mt-6 flex items-center gap-4 text-outline">
+        <span class="inline-block h-px w-12 bg-foreground"></span>
+        {description}
+      </p>
+    </div>
+
+    <div class="pointer-events-none absolute inset-0 flex items-center">
+      <div class="w-1/2 flex-none"></div>
+      <div class="relative w-full">
+        <div
+          class="absolute top-0 left-0 h-px bg-border-structural"
+          style="width: 5000px"
+        >
+        </div>
+      </div>
+    </div>
+
+    <div id="journey-track" class="flex items-center">
+      <div class="w-1/2 flex-none"></div>
+
+      <div
+        class="flex flex-none items-start gap-[20vw] pr-[20vw] lg:gap-[30vw]"
+      >
+        {
+          milestones.map((m) => (
+            <div class="journey-milestone group relative flex max-w-xs flex-none flex-col pt-16">
+              <div class="absolute top-0 left-0 h-3 w-3 bg-foreground transition-transform duration-300 group-hover:scale-150" />
+
+              <span class="pb-2 text-xs font-bold tracking-[0.3em] text-outline">
+                {m.data.code}
+              </span>
+
+              <h3 class="text-2xl leading-none font-black tracking-tighter text-foreground uppercase lg:text-3xl">
+                {m.data.title}
+              </h3>
+
+              <div class="journey-content mt-6 space-y-4 border-l-2 border-border-structural pl-6 transition-all duration-500 group-hover:border-foreground">
+                <p class="text-sm font-bold tracking-wider text-foreground uppercase">
+                  {m.data.date}
+                </p>
+                <p class="text-sm leading-relaxed text-on-surface-variant">
+                  {m.data.description}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+
+        <div class="relative flex max-w-xs flex-none flex-col pt-16 opacity-40">
+          <div
+            class="absolute top-0 left-0 h-3 w-3 animate-pulse border-2 border-border-structural"
+          >
+          </div>
+          <span class="pb-2 text-xs font-bold tracking-[0.3em] text-outline">
+            TBD:XX:XX
+          </span>
+          <h3
+            class="text-2xl leading-none font-black tracking-tighter text-border-structural uppercase lg:text-3xl"
+          >
+            COMING_SOON<br />// NEXT_CHAPTER
+          </h3>
+          <div
+            class="mt-6 space-y-4 border-l-2 border-dashed border-border-structural pl-6"
+          >
+            <p
+              class="text-sm font-bold tracking-wider text-border-structural uppercase"
+            >
+              FUTURE_ITERATION
+            </p>
+            <p class="text-sm leading-relaxed text-border-structural italic">
+              New directives pending. Expanding horizons beyond current
+              constraints.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #journey-section {
+    will-change: transform;
+  }
+
+  #journey-track {
+    will-change: transform;
+  }
+
+  .journey-milestone {
+    will-change: transform, opacity;
+  }
+</style>
+
+<script>
+  import { gsap } from "../../lib/gsap"
+
+  window.addEventListener("load", () => {
+    const track = document.getElementById("journey-track")
+    const section = document.getElementById("journey-section")
+
+    if (!track || !section) return
+
+    const getScroll = () => Math.max(0, track.scrollWidth - window.innerWidth)
+
+    const scrollTween = gsap.to(track, {
+      x: () => -getScroll(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        pin: true,
+        start: "top top",
+        end: () => "+=" + getScroll(),
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    })
+
+    gsap.utils.toArray<HTMLElement>(".journey-milestone").forEach((el) => {
+      const content = el.querySelector<HTMLElement>(".journey-content")
+      if (!content) return
+
+      gsap.fromTo(
+        content,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            containerAnimation: scrollTween,
+            trigger: el,
+            start: "left 85%",
+            toggleActions: "play none none reset",
+          },
+        }
+      )
+    })
+  })
+</script>
