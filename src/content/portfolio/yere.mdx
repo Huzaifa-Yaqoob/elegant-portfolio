@@ -1,0 +1,68 @@
+---
+title: "Yere"
+description: "A full-stack LMS and talent marketplace bridging French secondary education with universities and recruiters. AI-generated quizzes from textbook PDFs, institutional analytics dashboards, and a recruitment data marketplace — built with React, Node.js, and OpenAI APIs."
+slug: "yere"
+order: 4
+url: "https://www.axtrastudios.com/"
+company: "Axtra Studios"
+companyUrl: "https://www.axtrastudios.com/"
+role: "Technical Lead Engineer"
+timeline: "December 2024 – February 2025"
+mainImage: "/main_hero.png"
+images:
+  - "/main_hero.png"
+tools:
+  - "React"
+  - "Vite"
+  - "Node.js"
+  - "Express.js"
+  - "React Query"
+  - "shadcn/ui"
+  - "OpenAI API"
+  - "Gemini API"
+tags:
+  - "edtech"
+  - "LMS"
+  - "talent marketplace"
+  - "AI assessment"
+  - "French education"
+  - "OpenAI"
+  - "React"
+  - "RBAC"
+  - "recruitment"
+  - "full-stack"
+---
+
+import ProjectSection from "@/components/portfolio/project-section.astro"
+
+<ProjectSection title="The Mission" number="01">
+
+The French secondary system is rigid. Students in _Seconde_, _Première_, and _Terminale_ grind through the same curriculum, take the same exams — and the only way to stand out to universities or recruiters is through opaque, manual pipelines. High-potential kids get lost in the noise.
+
+**Yere fixes the signal.** An LMS that doesn't just deliver curriculum — it automatically identifies top performers via AI-generated assessments and surfaces them directly to universities and recruiters through a structured data marketplace.
+
+</ProjectSection>
+
+<ProjectSection title="AI Curriculum & Assessment Engine" number="02">
+
+Upload a textbook PDF. The OpenAI API parses the content and **dynamically generates multi-page, context-aware MCQ assessments** — no manual question writing, no stale question banks. The entire system is mapped to the French _collège_ and _lycée_ levels, from 9th grade through _Terminale_.
+
+</ProjectSection>
+
+<ProjectSection title="Recruitment Data Marketplace" number="03">
+
+The other side of the platform is a **talent discovery engine**. Institutional dashboards surface macro-level performance trends across student cohorts. Recruiters and universities use sorting and filtering algorithms to find anonymised, high-performing students — the kind of signal that admissions offices and corporate graduate programs pay for.
+
+</ProjectSection>
+
+<ProjectSection title="RBAC & Subscription Management" number="04">
+
+Three distinct roles — **Student, Recruiter, Administrator** — each with gated access to assessments, performance data, and marketplace features. The subscription workflow transitions users between tiers and unsubscribed states seamlessly, toggling premium features and data access programmatically without service interruption.
+
+</ProjectSection>
+
+<ProjectSection title="Scalable Infrastructure" number="05">
+
+React Query + Vite on the frontend keeps assessment-heavy UIs snappy with local caching and no layout shifts. The Express.js/Node.js backend handles heavy PDF parsing payloads and concurrent quiz submissions. As **Technical Lead**, I set the architecture for horizontal scalability — the platform handles large volumes of concurrent AI quiz requests and marketplace queries without breaking a sweat.
+
+</ProjectSection>
