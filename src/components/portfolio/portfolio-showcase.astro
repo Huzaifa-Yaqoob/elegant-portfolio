@@ -3,7 +3,7 @@ import { getCollection } from "astro:content"
 import LucideIcon from "@/components/icons/LucideIcon"
 
 const entries = await getCollection("portfolio")
-const projects = entries.sort((a, b) => a.data.order - b.data.order)
+const projects = entries.sort((a, b) => b.data.order - a.data.order)
 ---
 
 <script

@@ -10,7 +10,7 @@ const maxPortfolio =
 
 const entries = await getCollection("portfolio")
 const projects = entries
-  .sort((a, b) => a.data.order - b.data.order)
+  .sort((a, b) => b.data.order - a.data.order)
   .slice(0, maxPortfolio)
 
 const cardClasses = [
