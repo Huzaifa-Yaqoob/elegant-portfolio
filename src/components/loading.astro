@@ -22,25 +22,23 @@
 
   <!-- Center content -->
   <div class="relative flex flex-col items-center gap-10">
-    <!-- Monogram (initial CSS matches GSAP from state so no flash) -->
+    <!-- Monogram -->
     <div id="loading-mono-wrap" class="overflow-hidden">
       <span
         id="loading-mono"
-        class="h1-style block text-secondary will-change-transform"
-        style="opacity: 0; transform: translateY(120px)">H.</span
+        class="h1-style block text-secondary">H.</span
       >
     </div>
 
     <!-- Divider -->
-    <div id="loading-divider" class="h-[1px] w-24 scale-x-0 bg-secondary/60">
+    <div id="loading-divider" class="h-[1px] w-24 bg-secondary/60">
     </div>
 
-    <!-- Name (initial CSS matches GSAP from state so no flash) -->
+    <!-- Name -->
     <div id="loading-name-wrap" class="overflow-hidden">
       <p
         id="loading-name"
-        class="label-caps-style tracking-[0.3em] text-secondary/40 will-change-transform"
-        style="opacity: 0; transform: translateY(40px)"
+        class="label-caps-style tracking-[0.3em] text-secondary/40"
       >
         Huzaifa
       </p>
@@ -70,34 +68,14 @@
   if (!screen) throw new Error("Loading screen element not found")
 
   const monoWrap = document.getElementById("loading-mono-wrap")
-  const mono = document.getElementById("loading-mono")
   const divider = document.getElementById("loading-divider")
   const nameWrap = document.getElementById("loading-name-wrap")
-  const nameEl = document.getElementById("loading-name")
   const dots = document.querySelectorAll<HTMLElement>(".loading-dot")
 
-  if (!monoWrap || !mono || !divider || !nameWrap || !nameEl)
+  if (!monoWrap || !divider || !nameWrap)
     throw new Error("Loading elements not found")
 
-  // --- Entrance timeline (only played when page needs loading) ---
-  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true })
-
-  tl.fromTo(mono, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
-
-  tl.to(
-    divider,
-    { scaleX: 1, duration: 0.6, ease: "power2.out", transformOrigin: "center" },
-    "-=0.3"
-  )
-
-  tl.fromTo(
-    nameEl,
-    { y: 40, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.6 },
-    "-=0.3"
-  )
-
-  tl.call(() => {
+  const startDotsAnimation = () => {
     gsap.to(dots, {
       scale: 2,
       opacity: 1,
@@ -108,7 +86,7 @@
       yoyo: true,
       ease: "power1.inOut",
     })
-  })
+  }
 
   // --- Exit Logic (no artificial minimum — exits immediately when page is ready) ---
   const hide = (instant: boolean) => {
@@ -140,8 +118,8 @@
   if (document.readyState === "complete") {
     exit(true)
   } else {
-    // Page still loading — play entrance animation, exit on window.load
-    tl.play()
+    // Page still loading — keep text static, animate only dots
+    startDotsAnimation()
     window.addEventListener("load", () => exit(false))
   }
 
