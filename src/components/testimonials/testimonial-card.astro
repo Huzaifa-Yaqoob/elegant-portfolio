@@ -1,9 +1,11 @@
 ---
+import LucideIcon from "@/components/icons/LucideIcon"
+
 interface Props {
   quote: string
   name: string
   role: string
-  image: string
+  image?: string
   imageAlt?: string
   tag?: string
 }
@@ -38,12 +40,20 @@ const {
   </div>
 
   <div class="mt-auto flex items-center gap-4">
-    <img
-      src={image}
-      alt={imageAlt}
-      class="h-14 w-14 border border-surface object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
-      loading="lazy"
-    />
+    {
+      image ? (
+        <img
+          src={image}
+          alt={imageAlt}
+          class="h-14 w-14 border border-surface object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+          loading="lazy"
+        />
+      ) : (
+        <div class="flex h-14 w-14 items-center justify-center border border-surface bg-surface text-on-surface">
+          <LucideIcon name="User" size={24} />
+        </div>
+      )
+    }
     <div class="flex flex-col">
       <span
         class="font-body-lg text-body-sm font-bold text-on-tertiary-fixed uppercase md:text-body-lg"

@@ -5,7 +5,7 @@ export const testimonialsSchema = z.object({
   author: z.string(),
   role: z.string(),
   order: z.number().optional(),
-  avatar_url: z.string(),
+  avatar_url: z.string().optional(),
 })
 
 export type testimonialConfig = z.infer<typeof testimonialsSchema>
