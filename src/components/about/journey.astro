@@ -79,10 +79,9 @@ milestones.sort((a, b) => a.data.order - b.data.order)
 </style>
 
 <script>
-  import { gsap } from "../../lib/gsap"
+  import { gsap, ScrollTrigger } from "../../lib/gsap"
 
   window.addEventListener("load", () => {
-    const ScrollTrigger = gsap.core.globals().ScrollTrigger
     const track = document.getElementById("journey-track")
     const section = document.getElementById("journey-section")
     const pinWrap = document.getElementById("journey-pin-wrap")

@@ -9,4 +9,4 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, useGSAP)
 
 // Export everything so you can use it in components
 export * from "gsap"
-export { gsap, SplitText, useGSAP }
+export { gsap, ScrollTrigger, SplitText, useGSAP }
