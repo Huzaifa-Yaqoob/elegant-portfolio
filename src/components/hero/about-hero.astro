@@ -215,9 +215,8 @@ const iconMap: Record<string, any> = {
 <script>
   import { gsap } from "../../lib/gsap"
 
+  // --- Immediate setup (hover effects — no entrance animation) ---
   window.addEventListener("load", () => {
-    const mm = gsap.matchMedia()
-
     const aiBtns = document.querySelectorAll<HTMLElement>(".ai-btn")
     aiBtns.forEach((btn) => {
       const icon = btn.querySelector<HTMLElement>(".icon-mono")
@@ -263,6 +262,11 @@ const iconMap: Record<string, any> = {
       btn.addEventListener("mouseenter", handleEnter)
       btn.addEventListener("mouseleave", handleLeave)
     })
+  })
+
+  // --- Entrance animations (fire after loading screen starts exiting) ---
+  window.addEventListener("loading:exiting", () => {
+    const mm = gsap.matchMedia()
 
     mm.add("(min-width: 1024px)", () => {
       const DURATION = 1.8

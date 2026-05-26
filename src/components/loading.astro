@@ -1,0 +1,153 @@
+---
+
+---
+
+<div
+  id="loading-screen"
+  class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-deep-obsidian"
+>
+  <!-- Decorative diagonal lines (brand motif) -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      class="absolute top-1/3 left-0 h-[1px] w-full origin-left bg-border-structural"
+      style="transform: rotate(-3deg)"
+    >
+    </div>
+    <div
+      class="absolute top-2/3 left-0 h-[1px] w-full origin-left bg-border-structural/60"
+      style="transform: rotate(-3deg)"
+    >
+    </div>
+  </div>
+
+  <!-- Center content -->
+  <div class="relative flex flex-col items-center gap-10">
+    <!-- Monogram -->
+    <div id="loading-mono-wrap" class="overflow-hidden">
+      <span
+        id="loading-mono"
+        class="h1-style block text-secondary will-change-transform">H.</span
+      >
+    </div>
+
+    <!-- Divider -->
+    <div id="loading-divider" class="h-[1px] w-24 scale-x-0 bg-secondary/60">
+    </div>
+
+    <!-- Name -->
+    <div id="loading-name-wrap" class="overflow-hidden">
+      <p
+        id="loading-name"
+        class="label-caps-style tracking-[0.3em] text-secondary/40 will-change-transform"
+      >
+        Huzaifa
+      </p>
+    </div>
+
+    <!-- Loading squares (zero radius per design system) -->
+    <div id="loading-indicator" class="mt-2 flex gap-3">
+      <span class="loading-dot block size-[6px] bg-secondary/20"></span>
+      <span class="loading-dot block size-[6px] bg-secondary/20"></span>
+      <span class="loading-dot block size-[6px] bg-secondary/20"></span>
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <style>
+    #loading-screen {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const screen = document.getElementById("loading-screen")
+  if (!screen) throw new Error("Loading screen element not found")
+
+  const monoWrap = document.getElementById("loading-mono-wrap")
+  const mono = document.getElementById("loading-mono")
+  const divider = document.getElementById("loading-divider")
+  const nameWrap = document.getElementById("loading-name-wrap")
+  const nameEl = document.getElementById("loading-name")
+  const dots = document.querySelectorAll<HTMLElement>(".loading-dot")
+
+  if (!monoWrap || !mono || !divider || !nameWrap || !nameEl)
+    throw new Error("Loading elements not found")
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+  // 1. Monogram drops in
+  tl.fromTo(mono, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
+
+  // 2. Divider expands from center
+  tl.to(
+    divider,
+    { scaleX: 1, duration: 0.6, ease: "power2.out", transformOrigin: "center" },
+    "-=0.3"
+  )
+
+  // 3. Name slides up
+  tl.fromTo(
+    nameEl,
+    { y: 40, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6 },
+    "-=0.3"
+  )
+
+  // 4. Start dots pulsing (loops until exit)
+  tl.call(() => {
+    gsap.to(dots, {
+      scale: 2,
+      opacity: 1,
+      backgroundColor: "var(--color-secondary)",
+      duration: 0.5,
+      stagger: 0.15,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    })
+  })
+
+  // --- Exit Logic ---
+  const startTime = performance.now()
+  const MIN_DURATION = 2200
+
+  const exit = () => {
+    window.dispatchEvent(new CustomEvent("loading:exiting"))
+
+    gsap.killTweensOf(dots)
+    gsap.set(dots, { clearProps: "all" })
+
+    gsap.to(screen, {
+      autoAlpha: 0,
+      scale: 0.96,
+      duration: 0.6,
+      ease: "power2.inOut",
+      onComplete: () => {
+        screen.style.display = "none"
+      },
+    })
+  }
+
+  const onReady = () => {
+    const elapsed = performance.now() - startTime
+    const remaining = Math.max(0, MIN_DURATION - elapsed)
+    gsap.delayedCall(remaining / 1000, exit)
+  }
+
+  // Fallback: force-dismiss after 8s even if load never fires
+  gsap.delayedCall(8, () => {
+    if (screen.style.display !== "none") {
+      exit()
+    }
+  })
+
+  if (document.readyState === "complete") {
+    onReady()
+  } else {
+    window.addEventListener("load", onReady)
+  }
+</script>

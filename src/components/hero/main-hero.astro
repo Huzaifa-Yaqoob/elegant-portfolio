@@ -110,10 +110,8 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
 <script>
   import { gsap } from "../../lib/gsap"
 
+  // --- Immediate setup (hover, magnetic — no entrance animation) ---
   window.addEventListener("load", () => {
-    const mm = gsap.matchMedia()
-
-    // Magnetic effect for "My Projects" button
     const magneticBtn = document.getElementById("magnetic-work-btn")
     if (magneticBtn) {
       const STRENGTH = 0.8
@@ -158,6 +156,11 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
       document.addEventListener("mousemove", handleMouseMove)
       magneticBtn.addEventListener("mouseleave", handleMouseLeave)
     }
+  })
+
+  // --- Entrance animations (fire after loading screen starts exiting) ---
+  window.addEventListener("loading:exiting", () => {
+    const mm = gsap.matchMedia()
 
     mm.add("(min-width: 1024px)", () => {
       const DURATION = 1.8
