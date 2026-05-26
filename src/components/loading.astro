@@ -79,19 +79,17 @@
   if (!monoWrap || !mono || !divider || !nameWrap || !nameEl)
     throw new Error("Loading elements not found")
 
-  const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+  // --- Entrance timeline (only played when page needs loading) ---
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true })
 
-  // 1. Monogram drops in
   tl.fromTo(mono, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
 
-  // 2. Divider expands from center
   tl.to(
     divider,
     { scaleX: 1, duration: 0.6, ease: "power2.out", transformOrigin: "center" },
     "-=0.3"
   )
 
-  // 3. Name slides up
   tl.fromTo(
     nameEl,
     { y: 40, opacity: 0 },
@@ -99,7 +97,6 @@
     "-=0.3"
   )
 
-  // 4. Start dots pulsing (loops until exit)
   tl.call(() => {
     gsap.to(dots, {
       scale: 2,
@@ -113,43 +110,41 @@
     })
   })
 
-  // --- Exit Logic ---
-  const startTime = performance.now()
-  const MIN_DURATION = 2200
-
-  const exit = () => {
-    window.dispatchEvent(new CustomEvent("loading:exiting"))
-
+  // --- Exit Logic (no artificial minimum — exits immediately when page is ready) ---
+  const hide = (instant: boolean) => {
     gsap.killTweensOf(dots)
     gsap.set(dots, { clearProps: "all" })
 
-    gsap.to(screen, {
-      autoAlpha: 0,
-      scale: 0.96,
-      duration: 0.6,
-      ease: "power2.inOut",
-      onComplete: () => {
-        screen.style.display = "none"
-      },
-    })
-  }
-
-  const onReady = () => {
-    const elapsed = performance.now() - startTime
-    const remaining = Math.max(0, MIN_DURATION - elapsed)
-    gsap.delayedCall(remaining / 1000, exit)
-  }
-
-  // Fallback: force-dismiss after 8s even if load never fires
-  gsap.delayedCall(8, () => {
-    if (screen.style.display !== "none") {
-      exit()
+    if (instant) {
+      screen.style.display = "none"
+    } else {
+      gsap.to(screen, {
+        autoAlpha: 0,
+        scale: 0.96,
+        duration: 0.3,
+        ease: "power2.inOut",
+        onComplete: () => {
+          screen.style.display = "none"
+        },
+      })
     }
-  })
-
-  if (document.readyState === "complete") {
-    onReady()
-  } else {
-    window.addEventListener("load", onReady)
   }
+
+  const exit = (instant: boolean) => {
+    ;(window as any).__loadingComplete = true
+    window.dispatchEvent(new CustomEvent("loading:exiting"))
+    hide(instant)
+  }
+
+  // If page is already loaded, exit instantly — no loading screen
+  if (document.readyState === "complete") {
+    exit(true)
+  } else {
+    // Page still loading — play entrance animation, exit on window.load
+    tl.play()
+    window.addEventListener("load", () => exit(false))
+  }
+
+  // Fallback: force-dismiss after 8s
+  gsap.delayedCall(8, () => exit(true))
 </script>

@@ -264,8 +264,8 @@ const iconMap: Record<string, any> = {
     })
   })
 
-  // --- Entrance animations (fire after loading screen starts exiting) ---
-  window.addEventListener("loading:exiting", () => {
+  // --- Entrance animations ---
+  const runEntrance = () => {
     const mm = gsap.matchMedia()
 
     mm.add("(min-width: 1024px)", () => {
@@ -399,5 +399,11 @@ const iconMap: Record<string, any> = {
           )
       }
     }
-  })
+  }
+
+  if ((window as any).__loadingComplete) {
+    runEntrance()
+  } else {
+    window.addEventListener("loading:exiting", runEntrance)
+  }
 </script>
