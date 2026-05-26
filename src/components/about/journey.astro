@@ -23,7 +23,10 @@ milestones.sort((a, b) => a.data.order - b.data.order)
     </p>
   </div>
 
-  <div class="flex h-screen flex-col justify-center overflow-hidden">
+  <div
+    id="journey-pin-wrap"
+    class="flex h-screen flex-col justify-center overflow-hidden"
+  >
     <div id="journey-track" class="flex items-center">
       <div class="w-1/2 flex-none"></div>
 
@@ -82,7 +85,8 @@ milestones.sort((a, b) => a.data.order - b.data.order)
     const ScrollTrigger = gsap.core.globals().ScrollTrigger
     const track = document.getElementById("journey-track")
     const section = document.getElementById("journey-section")
-    if (!track || !section || !ScrollTrigger) return
+    const pinWrap = document.getElementById("journey-pin-wrap")
+    if (!track || !section || !pinWrap || !ScrollTrigger) return
 
     // Prevent mobile address-bar resize jumps from forcing refresh mid-scroll.
     ScrollTrigger.config({ ignoreMobileResize: true })
@@ -107,13 +111,64 @@ milestones.sort((a, b) => a.data.order - b.data.order)
 
     calcOffsets()
 
+    const isSmallTouch = window.matchMedia(
+      "(max-width: 1023px) and (pointer: coarse)"
+    ).matches
+
+    if (isSmallTouch) {
+      if (typeof ScrollTrigger.normalizeScroll === "function") {
+        ScrollTrigger.normalizeScroll(true)
+      }
+
+      gsap.to(track, {
+        x: () => -getScroll(),
+        ease: "none",
+        scrollTrigger: {
+          id: "journey-track-pin",
+          trigger: section,
+          pin: pinWrap,
+          pinType: "fixed",
+          anticipatePin: 1,
+          start: "top top",
+          end: () => "+=" + getScroll(),
+          scrub: 0.4,
+          fastScrollEnd: true,
+          invalidateOnRefresh: true,
+          onRefresh: calcOffsets,
+          onUpdate: (self) => {
+            const progress = Math.min(self.progress, 1)
+            const totalScroll = getScroll()
+            const currentX = -progress * totalScroll
+            const vw = window.innerWidth
+            const revealStart = vw * 1.1
+            const revealEnd = vw * 0.75
+
+            milestonesData.forEach(({ content, offsetLeft }) => {
+              if (!content) return
+              const mx = offsetLeft + currentX
+
+              if (mx >= revealStart) {
+                gsap.set(content, { opacity: 0, y: 40 })
+              } else if (mx <= revealEnd) {
+                gsap.set(content, { opacity: 1, y: 0 })
+              } else {
+                const p = (revealStart - mx) / (revealStart - revealEnd)
+                gsap.set(content, { opacity: p, y: 40 * (1 - p) })
+              }
+            })
+          },
+        },
+      })
+      return
+    }
+
     gsap.to(track, {
       x: () => -getScroll(),
       ease: "none",
       scrollTrigger: {
         id: "journey-track-pin",
         trigger: section,
-        pin: true,
+        pin: pinWrap,
         pinType: "transform",
         anticipatePin: 1,
         start: "top top",
