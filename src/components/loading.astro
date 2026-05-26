@@ -22,11 +22,12 @@
 
   <!-- Center content -->
   <div class="relative flex flex-col items-center gap-10">
-    <!-- Monogram -->
+    <!-- Monogram (initial CSS matches GSAP from state so no flash) -->
     <div id="loading-mono-wrap" class="overflow-hidden">
       <span
         id="loading-mono"
-        class="h1-style block text-secondary will-change-transform">H.</span
+        class="h1-style block text-secondary will-change-transform"
+        style="opacity: 0; transform: translateY(120px)">H.</span
       >
     </div>
 
@@ -34,11 +35,12 @@
     <div id="loading-divider" class="h-[1px] w-24 scale-x-0 bg-secondary/60">
     </div>
 
-    <!-- Name -->
+    <!-- Name (initial CSS matches GSAP from state so no flash) -->
     <div id="loading-name-wrap" class="overflow-hidden">
       <p
         id="loading-name"
         class="label-caps-style tracking-[0.3em] text-secondary/40 will-change-transform"
+        style="opacity: 0; transform: translateY(40px)"
       >
         Huzaifa
       </p>
