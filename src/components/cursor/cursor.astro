@@ -2,25 +2,32 @@
 import { Cursor as CursorComponent } from "./cursor"
 ---
 
-<CursorComponent client:load />
+<div class="hidden lg:block">
+  <CursorComponent client:load />
+</div>
 
 <script is:inline data-astro-rerun>
   const log = (...args) => console.log("[cursor.astro]", ...args)
+  const canUseCursor = window.matchMedia("(min-width: 1024px)").matches
 
-  const emitCursorLifecycleReinit = () => {
-    log("dispatch cursor-reinit")
-    window.dispatchEvent(new CustomEvent("cursor-reinit"))
-  }
-
-  if (document.readyState === "loading") {
-    log("document still loading; waiting for DOMContentLoaded")
-    document.addEventListener("DOMContentLoaded", emitCursorLifecycleReinit, {
-      once: true,
-    })
+  if (!canUseCursor) {
+    log("skip cursor init on non-fine pointer device")
   } else {
-    log("document already ready:", document.readyState)
-  }
+    const emitCursorLifecycleReinit = () => {
+      log("dispatch cursor-reinit")
+      window.dispatchEvent(new CustomEvent("cursor-reinit"))
+    }
 
-  log("bind astro:page-load listener")
-  document.addEventListener("astro:page-load", emitCursorLifecycleReinit)
+    if (document.readyState === "loading") {
+      log("document still loading; waiting for DOMContentLoaded")
+      document.addEventListener("DOMContentLoaded", emitCursorLifecycleReinit, {
+        once: true,
+      })
+    } else {
+      log("document already ready:", document.readyState)
+    }
+
+    log("bind astro:page-load listener")
+    document.addEventListener("astro:page-load", emitCursorLifecycleReinit)
+  }
 </script>
