@@ -13,7 +13,7 @@ const testimonials = (await getCollection("testimonial")).sort(
     data-testimonial-slider
     class="relative border border-surface-variant bg-transparent p-3 md:p-4"
   >
-    <div class="relative min-h-107.5 overflow-hidden md:min-h-117.5">
+    <div data-slider-container class="relative overflow-hidden">
       {
         testimonials.map((item, index) => (
           <div
@@ -36,7 +36,7 @@ const testimonials = (await getCollection("testimonial")).sort(
     </div>
 
     <div
-      class="mt-4 flex items-center justify-between border-t border-surface-variant pt-4"
+      class="mt-2 flex items-center justify-between border-t border-surface-variant pt-4 md:mt-4"
     >
       <div class="flex items-center gap-2">
         {
@@ -90,6 +90,46 @@ const testimonials = (await getCollection("testimonial")).sort(
     const nextBtn = slider.querySelector<HTMLButtonElement>("[data-next]")
 
     if (slides.length > 0) {
+      const container = slider.querySelector<HTMLElement>(
+        "[data-slider-container]"
+      )!
+
+      {
+        const originals = slides.map((slide) => ({
+          position: slide.style.position,
+          display: slide.style.display,
+          opacity: slide.style.opacity,
+          visibility: slide.style.visibility,
+          pointerEvents: slide.style.pointerEvents,
+          height: slide.style.height,
+        }))
+
+        slides.forEach((slide) => {
+          slide.style.position = "static"
+          slide.style.display = "block"
+          slide.style.opacity = "1"
+          slide.style.visibility = "hidden"
+          slide.style.pointerEvents = "none"
+          slide.style.height = "auto"
+        })
+
+        let maxHeight = 0
+        slides.forEach((slide) => {
+          maxHeight = Math.max(maxHeight, slide.offsetHeight)
+        })
+
+        slides.forEach((slide, i) => {
+          slide.style.position = originals[i].position
+          slide.style.display = originals[i].display
+          slide.style.opacity = originals[i].opacity
+          slide.style.visibility = originals[i].visibility
+          slide.style.pointerEvents = originals[i].pointerEvents
+          slide.style.height = originals[i].height
+        })
+
+        container.style.minHeight = `${maxHeight}px`
+      }
+
       let current = 0
       let isAnimating = false
       let autoPlayTween: gsap.core.Tween | null = null
