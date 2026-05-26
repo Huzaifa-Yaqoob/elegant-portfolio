@@ -170,10 +170,14 @@ phases.sort((a, b) => a.data.order - b.data.order)
                 }`}
               >
                 <div
-                  class={`relative aspect-video w-full overflow-hidden border border-border-structural bg-surface ${
+                  class={`relative aspect-video w-full overflow-hidden border border-border-structural ${
                     isEven ? "md:ml-12" : "md:mr-12"
                   }`}
                 >
+                  <div
+                    class="absolute inset-0 bg-cover bg-center grayscale"
+                    style={`background-image: url(${phase.data.image})`}
+                  />
                   <div class="absolute inset-0 bg-deep-obsidian opacity-40" />
                   <div
                     class={`absolute bottom-4 ${

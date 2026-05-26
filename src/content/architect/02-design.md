@@ -4,4 +4,5 @@ description: "Crafting high-fidelity UI/UX, rapid prototyping, and scalable desi
 tags: ["UI/UX", "PROTOTYPING", "SYSTEMS"]
 icon: "palette"
 order: 2
+image: "/arch/design.png"
 ---

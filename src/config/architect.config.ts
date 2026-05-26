@@ -6,6 +6,7 @@ export const architectPhaseSchema = z.object({
   tags: z.array(z.string()),
   icon: z.string(),
   order: z.number(),
+  image: z.string(),
 })
 
 export type ArchitectPhase = z.infer<typeof architectPhaseSchema>

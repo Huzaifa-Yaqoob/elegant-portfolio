@@ -4,4 +4,5 @@ description: "Deep dive into strategy, architecture, and requirement gathering. 
 tags: ["STRATEGY", "ARCHITECTURE", "DISCOVERY"]
 icon: "clipboard-list"
 order: 1
+image: "/arch/plan.png"
 ---

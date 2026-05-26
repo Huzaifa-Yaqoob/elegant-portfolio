@@ -4,4 +4,5 @@ description: "Continuous delivery, cloud infrastructure automation, and real-tim
 tags: ["CI/CD", "CLOUD", "MONITORING"]
 icon: "cloud"
 order: 4
+image: "/arch/deploy.png"
 ---

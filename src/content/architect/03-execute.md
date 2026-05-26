@@ -4,4 +4,5 @@ description: "Full-stack engineering with a focus on clean, modular code. Rigoro
 tags: ["DEVELOPMENT", "TESTING", "OPTIMIZATION"]
 icon: "terminal"
 order: 3
+image: "/arch/execute.png"
 ---
