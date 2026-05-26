@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --bun astro dev --host",
-    "build": "bun --bun astro build",
+    "build": "astro build",
     "preview": "bun --bun astro preview",
     "astro": "astro",
     "lint": "eslint .",
