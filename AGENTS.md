@@ -9,6 +9,7 @@ bun preview      # preview production build
 bun run lint     # eslint
 bun run format   # prettier (ts, tsx, astro)
 bun run typecheck  # astro check
+bun run deploy     # build + deploy to Cloudflare Workers
 ```
 
 Run `format` then `lint` then `typecheck` before committing. No test framework is configured.

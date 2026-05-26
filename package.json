@@ -7,6 +7,7 @@
     "dev": "bun --bun astro dev --host",
     "build": "astro build",
     "preview": "bun --bun astro preview",
+    "deploy": "astro build && wrangler deploy",
     "astro": "astro",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,astro}\"",
@@ -46,6 +47,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.57.1"
+    "typescript-eslint": "^8.57.1",
+    "wrangler": "^4.94.0"
   }
 }
