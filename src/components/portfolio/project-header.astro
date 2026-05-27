@@ -25,7 +25,8 @@ const {
   images,
 } = Astro.props
 
-const bgImage = images?.[0] ?? "/main_hero.png"
+const mockupImage = images?.[0] ?? "/projects/background.png"
+const isRestricted = mockupImage === "/projects/background.png"
 ---
 
 <header
@@ -35,8 +36,17 @@ const bgImage = images?.[0] ?? "/main_hero.png"
   <div
     id="project-header-bg"
     class="absolute inset-0 bg-(image:--bg-image) bg-cover bg-center"
-    style={`--bg-image: url('${bgImage}')`}
+    style="--bg-image: url('/projects/background.png')"
   >
+    {
+      !isRestricted && (
+        <img
+          src={mockupImage}
+          alt={title}
+          class="absolute inset-0 h-full w-full object-contain object-top pt-28 md:object-center md:pt-0"
+        />
+      )
+    }
     <div
       class="absolute inset-0 bg-linear-to-t from-background/95 via-background/70 to-background/40"
     >

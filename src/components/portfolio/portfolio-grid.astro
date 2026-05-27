@@ -34,13 +34,26 @@ const cardClasses = [
         <article
           class={`group relative flex flex-col overflow-hidden border border-surface-variant transition-colors duration-300 ${cardClass}`}
         >
-          <div class="relative border-b border-surface-variant bg-surface-container-low p-3">
-            <img
-              src={project.data.mainImage}
-              alt={project.data.title}
-              class="h-auto w-full grayscale transition-all duration-700 group-hover:grayscale-0"
-              loading="lazy"
-            />
+          <div
+            class="relative flex flex-1 flex-col overflow-hidden border-b border-surface-variant bg-surface-container-low"
+            style="background-image: url('/projects/background.png'); background-size: cover; background-position: center;"
+          >
+            {project.data.mainImage === "/projects/background.png" ? (
+              <div class="flex flex-1 items-center justify-center p-3">
+                <span class="label-data-style tracking-widest text-outline/40 uppercase">
+                  Preview Restricted
+                </span>
+              </div>
+            ) : (
+              <div class="flex flex-1 p-3">
+                <img
+                  src={project.data.mainImage}
+                  alt={project.data.title}
+                  class="relative z-10 h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
             <div class="absolute top-6 left-6 border border-outline bg-surface/85 px-3 py-1 backdrop-blur">
               <span class="label-caps-style text-on-surface">
                 {project.data.slug}

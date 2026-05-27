@@ -48,14 +48,23 @@ const projects = entries.sort((a, b) => b.data.order - a.data.order)
               data-speed-sm="0.9"
               data-speed-lg="0.85"
               class="skew-target relative w-full overflow-hidden border border-surface-variant lg:w-3/5"
+              style="background-image: url('/projects/background.png'); background-size: cover; background-position: center;"
             >
               <div class="h-70 w-full md:h-112.5 lg:h-162.5">
-                <img
-                  src={project.data.mainImage}
-                  alt={project.data.title}
-                  class="h-full w-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
-                  loading="lazy"
-                />
+                {project.data.mainImage === "/projects/background.png" ? (
+                  <div class="flex h-full items-center justify-center">
+                    <span class="label-data-style tracking-widest text-outline/40 uppercase">
+                      Preview Restricted
+                    </span>
+                  </div>
+                ) : (
+                  <img
+                    src={project.data.mainImage}
+                    alt={project.data.title}
+                    class="h-full w-full object-contain"
+                    loading="lazy"
+                  />
+                )}
               </div>
             </div>
 
