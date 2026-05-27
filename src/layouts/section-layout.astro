@@ -7,6 +7,7 @@ interface Props {
   divider_text?: string
   badge?: string
   showDivider?: boolean
+  animateId?: string
 }
 
 const {
@@ -15,15 +16,29 @@ const {
   divider_text,
   badge,
   showDivider = true,
+  animateId,
 } = Astro.props
 ---
 
-<section class="px-6 py-10 lg:px-16">
-  <div class="m flex flex-col justify-between md:flex-row lg:items-end">
-    <h2 class="h1-style mb-6 text-on-surface uppercase">
+<section
+  class="px-6 py-10 lg:px-16"
+  id={animateId ? `section-${animateId}` : undefined}
+  data-animate-section={animateId ? "" : undefined}
+>
+  <div
+    id={animateId ? `section-${animateId}-heading` : undefined}
+    class="m flex flex-col justify-between md:flex-row lg:items-end"
+  >
+    <h2
+      id={animateId ? `section-${animateId}-title` : undefined}
+      class="h1-style mb-6 text-on-surface uppercase"
+    >
       {title.split(" ")[0]}<br />{title.split(" ").slice(1).join(" ")}
     </h2>
-    <div class="flex flex-col justify-end text-right md:col-span-4">
+    <div
+      id={animateId ? `section-${animateId}-desc` : undefined}
+      class="flex flex-col justify-end text-right md:col-span-4"
+    >
       <p
         class="mb-4 font-mono-code text-mono-code tracking-widest text-outline uppercase"
       >
@@ -42,3 +57,43 @@ const {
 
   {showDivider && <div class="mx-auto mt-8 h-1 max-w-80 bg-foreground" />}
 </section>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const animate = () => {
+    const section = document.querySelector("[data-animate-section]")
+    if (!section) return
+
+    const titleEl = section.querySelector("h2")
+    const descEl = section.querySelector(
+      ".flex.flex-col.justify-end.text-right"
+    )
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+    if (titleEl) {
+      tl.fromTo(
+        titleEl,
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0
+      )
+    }
+
+    if (descEl) {
+      tl.fromTo(
+        descEl,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.15
+      )
+    }
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+</script>

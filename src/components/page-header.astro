@@ -51,3 +51,41 @@ const { title, description, videoLink, mainImage } = Astro.props
     </p>
   </div>
 </header>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const animate = () => {
+    const header = document.getElementById("portfolio-page-header")
+    if (!header) return
+
+    const bg = header.querySelector("img")
+    const content = header.querySelector(".relative.z-10")
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+    if (bg) {
+      tl.fromTo(
+        bg,
+        { yPercent: -100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1 },
+        0
+      )
+    }
+
+    if (content) {
+      tl.fromTo(
+        content,
+        { y: 120, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.2
+      )
+    }
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+</script>

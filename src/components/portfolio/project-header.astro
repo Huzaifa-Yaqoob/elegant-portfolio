@@ -44,6 +44,7 @@ const bgImage = images?.[0] ?? "/main_hero.png"
   </div>
 
   <div
+    id="project-header-meta"
     class="relative z-10 mx-auto hidden w-full max-w-7xl flex-col gap-6 px-6 pt-24 md:flex md:px-16 md:pt-40"
   >
     {
@@ -114,6 +115,7 @@ const bgImage = images?.[0] ?? "/main_hero.png"
   </div>
 
   <div
+    id="project-header-content"
     class="relative z-10 mx-auto mt-auto flex w-full max-w-7xl flex-col px-6 pb-16 md:px-16 md:pb-20 lg:pb-28"
   >
     <div class="flex flex-col items-start justify-between gap-8 md:flex-row">
@@ -151,6 +153,7 @@ const bgImage = images?.[0] ?? "/main_hero.png"
 
 <!-- Meta & Tools for Mobile -->
 <div
+  id="project-header-mobile-meta"
   class="flex flex-col gap-6 border-b border-surface-variant bg-background px-6 py-8 md:hidden"
 >
   {
@@ -219,3 +222,58 @@ const bgImage = images?.[0] ?? "/main_hero.png"
     }
   </nav>
 </div>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const animate = () => {
+    const bg = document.getElementById("project-header-bg")
+    const meta = document.getElementById("project-header-meta")
+    const content = document.getElementById("project-header-content")
+    const mobileMeta = document.getElementById("project-header-mobile-meta")
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+    if (bg) {
+      tl.fromTo(
+        bg,
+        { yPercent: -100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1 },
+        0
+      )
+    }
+
+    if (meta) {
+      tl.fromTo(
+        meta,
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.15
+      )
+    }
+
+    if (content) {
+      tl.fromTo(
+        content,
+        { y: 120, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.25
+      )
+    }
+
+    if (mobileMeta) {
+      tl.fromTo(
+        mobileMeta,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6 },
+        0.35
+      )
+    }
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+</script>
