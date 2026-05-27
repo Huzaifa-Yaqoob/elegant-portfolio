@@ -1,7 +1,7 @@
 ---
 title: "Know the developer behind every pixel."
 description: "I'm a full-stack web developer and technical architect with over 5 years of experience building scalable, high-performance web applications, SaaS platforms, and custom digital products for global clients."
-main_image: "/main_hero.png"
+main_image: "/hero/main-hero.png"
 ai_buttons:
   - name: "ChatGPT"
     url: "https://chatgpt.com/?q=Tell+me+about+Huzaifa+the+full-stack+web+developer+from+Lahore+Pakistan"
