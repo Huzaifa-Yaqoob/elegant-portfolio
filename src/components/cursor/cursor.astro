@@ -2,9 +2,7 @@
 import { Cursor as CursorComponent } from "./cursor"
 ---
 
-<div class="hidden lg:block">
-  <CursorComponent client:load />
-</div>
+<CursorComponent client:load />
 
 <script is:inline data-astro-rerun>
   const log = (...args) => console.log("[cursor.astro]", ...args)

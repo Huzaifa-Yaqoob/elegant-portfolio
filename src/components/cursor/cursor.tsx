@@ -142,7 +142,11 @@ export function Cursor() {
     "default" | "pointer" | "type" | "hidden" | "grab"
   >("default")
   const [revealPending, setRevealPending] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 768px)").matches
+  )
 
   useEffect(() => {
     const onPageLoad = () => {
@@ -179,6 +183,7 @@ export function Cursor() {
   }, [revealPending])
 
   useGSAP(() => {
+    if (!isVisible) return
     log("pointer/shape setup effect run", { initCycle })
     const styleId = "custom-cursor-hide-native-style"
     const style = document.createElement("style")
@@ -329,7 +334,7 @@ export function Cursor() {
       cancelAnimationFrame(rafRef.current)
       document.getElementById(styleId)?.remove()
     }
-  }, [initCycle])
+  }, [initCycle, isVisible])
 
   useEffect(() => {
     log("trail canvas effect run", { initCycle })
@@ -485,6 +490,7 @@ export function Cursor() {
     window.addEventListener("orientationchange", resizeCanvas)
     document.addEventListener("mousemove", onPointerMove)
     document.addEventListener("touchmove", onPointerMove, { passive: true })
+    document.addEventListener("touchstart", onPointerMove, { passive: true })
     window.addEventListener("focus", onFocus)
     window.addEventListener("blur", onBlur)
 
@@ -496,12 +502,14 @@ export function Cursor() {
       window.removeEventListener("orientationchange", resizeCanvas)
       document.removeEventListener("mousemove", onPointerMove)
       document.removeEventListener("touchmove", onPointerMove)
+      document.removeEventListener("touchstart", onPointerMove)
       window.removeEventListener("focus", onFocus)
       window.removeEventListener("blur", onBlur)
     }
   }, [initCycle])
 
   useGSAP(() => {
+    if (!isVisible) return
     log("cursor state effect", { state, autoState, label, revealPending })
     const effectiveState: CursorState = state === "default" ? autoState : state
     const prevState = effectiveStateRef.current
@@ -585,7 +593,7 @@ export function Cursor() {
       ease: "power2.inOut",
       overwrite: "auto",
     })
-  }, [autoState, label, revealPending, state])
+  }, [autoState, label, revealPending, state, isVisible])
 
   useEffect(() => {
     log("bind cursor-state-change listener")
@@ -602,8 +610,6 @@ export function Cursor() {
     return cleanup
   }, [])
 
-  if (!isVisible) return null
-
   return (
     <>
       <canvas
@@ -611,63 +617,65 @@ export function Cursor() {
         className="pointer-events-none fixed inset-0 z-9998"
         aria-hidden="true"
       />
-      <div
-        ref={containerRef}
-        className="pointer-events-none fixed top-0 left-0 z-9999"
-        style={{
-          width: CURSOR_SIZE,
-          height: CURSOR_SIZE,
-          willChange: "transform",
-        }}
-      >
-        <svg
-          ref={svgRef}
-          width={CURSOR_SIZE}
-          height={CURSOR_SIZE}
-          viewBox={VIEW_BOX}
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            ref={shapeRef}
-            d={SHAPES.default}
-            fill="#F5F5F5"
-            stroke="#141313"
-            strokeWidth="1"
-            style={{
-              opacity: 1,
-              transformOrigin: "center",
-              transformBox: "fill-box",
-              transform: "scale(1)",
-            }}
-          />
-          <path
-            ref={spinnerRef}
-            d={SPINNER_PATH}
-            fill="none"
-            stroke="#F5F5F5"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            style={{
-              opacity: 0,
-              transformOrigin: "center",
-              transformBox: "fill-box",
-            }}
-          />
-        </svg>
-
-        <span
-          ref={labelElRef}
-          className="label-caps-style absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-on-surface"
+      {isVisible && (
+        <div
+          ref={containerRef}
+          className="pointer-events-none fixed top-0 left-0 z-9999"
           style={{
-            opacity: 0,
-            transform: "translate(-50%, -50%) scale(0.6)",
-            transformOrigin: "center",
+            width: CURSOR_SIZE,
+            height: CURSOR_SIZE,
+            willChange: "transform",
           }}
         >
-          {label}
-        </span>
-      </div>
+          <svg
+            ref={svgRef}
+            width={CURSOR_SIZE}
+            height={CURSOR_SIZE}
+            viewBox={VIEW_BOX}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              ref={shapeRef}
+              d={SHAPES.default}
+              fill="#F5F5F5"
+              stroke="#141313"
+              strokeWidth="1"
+              style={{
+                opacity: 1,
+                transformOrigin: "center",
+                transformBox: "fill-box",
+                transform: "scale(1)",
+              }}
+            />
+            <path
+              ref={spinnerRef}
+              d={SPINNER_PATH}
+              fill="none"
+              stroke="#F5F5F5"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              style={{
+                opacity: 0,
+                transformOrigin: "center",
+                transformBox: "fill-box",
+              }}
+            />
+          </svg>
+
+          <span
+            ref={labelElRef}
+            className="label-caps-style absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-on-surface"
+            style={{
+              opacity: 0,
+              transform: "translate(-50%, -50%) scale(0.6)",
+              transformOrigin: "center",
+            }}
+          >
+            {label}
+          </span>
+        </div>
+      )}
     </>
   )
 }
