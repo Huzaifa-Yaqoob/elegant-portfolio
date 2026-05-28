@@ -7,6 +7,7 @@ import InstagramIcon from "../icons/social/instagram.astro"
 import FacebookIcon from "../icons/social/facebook.astro"
 import DiscordIcon from "../icons/social/discord.astro"
 import WhatsAppIcon from "../icons/social/whatsapp.astro"
+import LinkedInIcon from "../icons/social/linkedin.astro"
 
 const siteEntry = await getEntry("site", "site")
 if (!siteEntry) return ""
@@ -17,6 +18,7 @@ interface SocialLink {
   label: string
   url: string
   icon: typeof GithubIcon
+  filter?: boolean
 }
 
 const links: SocialLink[] = [
@@ -26,6 +28,7 @@ const links: SocialLink[] = [
   { label: "Facebook", url: social.facebook, icon: FacebookIcon },
   { label: "Discord", url: social.discord, icon: DiscordIcon },
   { label: "WhatsApp", url: social.whatsapp, icon: WhatsAppIcon },
+  { label: "LinkedIn", url: social.linkedin, icon: LinkedInIcon, filter: true },
 ]
 ---
 
@@ -42,16 +45,16 @@ const links: SocialLink[] = [
     <p class="mb-16 max-w-lg text-lg text-on-surface-variant">
       Beyond the inbox, catch me across the digital landscape.
     </p>
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(160px,1fr))]">
       {
-        links.map(({ label, url, icon: Icon }) => (
+        links.map(({ label, url, icon: Icon, filter }) => (
           <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
             class="group flex flex-col items-center justify-center gap-3 border border-surface-variant bg-background p-8 transition-colors duration-300 hover:bg-on-surface"
           >
-            <Icon class="h-7 w-7 text-on-surface transition-colors duration-300 group-hover:text-background" />
+            <Icon class={`h-7 w-7 text-on-surface transition-all duration-300 ${filter ? "brightness-150 saturate-0 group-hover:brightness-100 group-hover:saturate-100 group-hover:text-background" : "group-hover:text-background"}`} />
             <span class="label-caps-style text-nowrap text-on-surface-variant transition-colors duration-300 group-hover:text-background">
               {label}
             </span>

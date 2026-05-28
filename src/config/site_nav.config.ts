@@ -46,5 +46,6 @@ export const SiteSchema = z.object({
     facebook: z.string(),
     discord: z.string(),
     whatsapp: z.string(),
+    linkedin: z.string(),
   }),
 })

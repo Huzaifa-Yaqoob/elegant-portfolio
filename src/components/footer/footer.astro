@@ -6,6 +6,7 @@ import InstagramIcon from "../icons/social/instagram.astro"
 import FacebookIcon from "../icons/social/facebook.astro"
 import DiscordIcon from "../icons/social/discord.astro"
 import WhatsAppIcon from "../icons/social/whatsapp.astro"
+import LinkedInIcon from "../icons/social/linkedin.astro"
 
 const navEntry = await getEntry("nav", "nav")
 if (!navEntry) throw new Error("Navigation configuration not found")
@@ -26,6 +27,7 @@ const iconMap: Record<string, typeof GithubIcon> = {
   facebook: FacebookIcon,
   discord: DiscordIcon,
   whatsapp: WhatsAppIcon,
+  linkedin: LinkedInIcon,
 }
 
 const labelMap: Record<string, string> = {
@@ -35,6 +37,7 @@ const labelMap: Record<string, string> = {
   facebook: "Facebook",
   discord: "Discord",
   whatsapp: "WhatsApp",
+  linkedin: "LinkedIn",
 }
 ---
 
