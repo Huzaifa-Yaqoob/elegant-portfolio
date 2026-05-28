@@ -9,6 +9,7 @@ import {
   tableOverride,
 } from "@/components/blogs/mdx-components"
 import BlogToc from "@/components/blogs/blog-toc"
+import BlogTocFab from "@/components/blogs/blog-toc-fab"
 
 export async function getStaticPaths() {
   const allEntries = await getCollection("blog")
@@ -169,6 +170,8 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
       id="blog-content-wrapper"
       class="mx-auto max-w-6xl px-6 py-16 lg:py-24"
     >
+      <BlogTocFab client:only="react" headings={headings} />
+
       <div class="flex justify-center gap-12">
         <!-- TOC -->
         <div id="toc-wrapper" class="hidden w-56 shrink-0 xl:block">

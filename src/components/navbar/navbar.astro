@@ -2,6 +2,7 @@
 import { getEntry } from "astro:content"
 import { buttonVariants } from "@/lib/button-variants"
 import { cn } from "@/lib/utils"
+import MobileNav from "@/components/navbar/mobile-nav"
 
 const navEntry = await getEntry("nav", "nav")
 if (!navEntry) throw new Error("Navigation configuration not found")
@@ -78,19 +79,13 @@ const isLinkActive = (href: string) =>
       }
     </nav>
 
-    <!-- Mobile Toggle -->
-    <button
-      id="mobile-toggle"
-      class="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
-      aria-label="Toggle Menu"
-    >
-      <span class="line-1 h-0.5 w-6 bg-foreground transition-all duration-300"
-      ></span>
-      <span class="line-2 h-0.5 w-6 bg-foreground transition-all duration-300"
-      ></span>
-      <span class="line-3 h-0.5 w-6 bg-foreground transition-all duration-300"
-      ></span>
-    </button>
+    <MobileNav
+      links={header.links}
+      cta={header.cta}
+      personal={personal}
+      currentPath={Astro.url.pathname}
+      client:load
+    />
 
     <!-- CTA Button -->
     <div class="hidden lg:block">
@@ -108,65 +103,6 @@ const isLinkActive = (href: string) =>
   </div>
 </header>
 
-<!-- Mobile Menu Overlay -->
-<div
-  id="mobile-menu"
-  class="fixed inset-0 z-40 flex translate-y-full flex-col overflow-y-auto bg-background pt-24 lg:hidden"
->
-  <nav class="flex flex-col gap-6 px-8 py-12">
-    {
-      header.links.map((link: { label: string; href: string }) => (
-        <a
-          href={link.href}
-          data-nav-link
-          data-link-label={link.label}
-          data-active={isLinkActive(link.href) ? "true" : "false"}
-          class="h1-style text-foreground uppercase transition-colors hover:bg-transparent hover:text-primary"
-        >
-          <span data-nav-link-text>
-            {isLinkActive(link.href) ? `[${link.label}]` : link.label}
-          </span>
-        </a>
-      ))
-    }
-  </nav>
-
-  <div class="mt-auto flex flex-col gap-10 px-8 pb-12">
-    <a
-      href={header.cta.href}
-      class={cn(
-        buttonVariants({ variant: "outline", size: "lg" }),
-        "w-full border-2 border-on-surface bg-on-surface py-10 text-xl font-bold tracking-widest text-background hover:bg-secondary hover:text-on-secondary"
-      )}
-    >
-      {header.cta.label}
-    </a>
-
-    <div
-      class="grid grid-cols-1 gap-8 border-t border-white/10 pt-10 sm:grid-cols-2"
-    >
-      <div>
-        <p class="label-caps-style mb-3 text-muted-foreground">Email</p>
-        <a
-          href={`mailto:${personal.email}`}
-          class="h3-style font-medium text-foreground transition-colors hover:text-primary"
-        >
-          {personal.email}
-        </a>
-      </div>
-      <div>
-        <p class="label-caps-style mb-3 text-muted-foreground">Connect</p>
-        <a
-          href={`tel:${personal.phone}`}
-          class="h3-style font-medium text-foreground transition-colors hover:text-primary"
-        >
-          {personal.phone}
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
   import { gsap, SplitText } from "@/lib/gsap"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -177,11 +113,6 @@ const isLinkActive = (href: string) =>
   const nav = document.getElementById("main-nav")
   const navContainer = document.getElementById("nav-container")
   const navGlass = document.getElementById("nav-glass")
-  const mobileToggle = document.getElementById("mobile-toggle")
-  const mobileMenu = document.getElementById("mobile-menu")
-  const line1 = mobileToggle?.querySelector(".line-1")
-  const line2 = mobileToggle?.querySelector(".line-2")
-  const line3 = mobileToggle?.querySelector(".line-3")
   const navLinks = Array.from(
     document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
   )
@@ -189,30 +120,6 @@ const isLinkActive = (href: string) =>
   let lastScrollY = scrollY()
   const scrollThreshold = 50
   let isNavHidden = false
-
-  // GSAP Timeline for Mobile Menu (Skill: gsap-timeline)
-  const menuTl = gsap.timeline({ paused: true, reversed: true })
-
-  if (mobileMenu && line1 && line2 && line3 && nav) {
-    menuTl
-      .to(mobileMenu, { y: 0, duration: 0.6, ease: "power4.out" })
-      .to(line1, { y: 8, rotation: 45, duration: 0.3 }, 0)
-      .to(line2, { scaleX: 0, opacity: 0, duration: 0.3 }, 0)
-      .to(line3, { y: -8, rotation: -45, duration: 0.3 }, 0)
-      // Ensure header stays visible when menu is open
-      .to(nav, { yPercent: 0, duration: 0.4, ease: "power2.out" }, 0)
-  }
-
-  // Mobile Menu Toggle Logic
-  mobileToggle?.addEventListener("click", () => {
-    if (menuTl.reversed()) {
-      menuTl.play()
-      document.body.style.overflow = "hidden"
-    } else {
-      menuTl.reverse()
-      document.body.style.overflow = ""
-    }
-  })
 
   const setupNavLinkHover = (link: HTMLAnchorElement) => {
     const textWrapper = link.querySelector<HTMLElement>("[data-nav-link-text]")
@@ -337,9 +244,6 @@ const isLinkActive = (href: string) =>
   window.addEventListener(
     "scroll",
     () => {
-      // Don't hide/show while menu is open
-      if (!menuTl.reversed()) return
-
       const currentScrollY = scrollY()
 
       // Add/remove glass effect based on scroll position
