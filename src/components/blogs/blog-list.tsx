@@ -292,20 +292,18 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
             className="blog-card group flex flex-col border border-surface-variant bg-background transition-colors duration-500 hover:bg-card-hover"
           >
             <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-surface-variant bg-surface-container-low">
-              {blog.coverImage ? (
-                <img
-                  src={blog.coverImage}
-                  alt={blog.coverAlt ?? blog.title}
-                  className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center">
-                  <span className="label-caps-style text-outline/40">
-                    No Cover
-                  </span>
-                </div>
-              )}
+              <img
+                src={blog.coverImage || "/blogs/placeholder.png"}
+                alt={blog.coverAlt ?? blog.title}
+                className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                loading="lazy"
+                onError={(e) => {
+                  const target = e.currentTarget
+                  if (target.src !== "/blogs/placeholder.png") {
+                    target.src = "/blogs/placeholder.png"
+                  }
+                }}
+              />
               {blog.featured && (
                 <div className="absolute top-4 left-4 border border-outline bg-surface/85 px-3 py-1 backdrop-blur">
                   <span className="label-caps-style text-on-surface">

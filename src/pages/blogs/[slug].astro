@@ -97,16 +97,13 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
       id="blog-post-header"
       class="relative min-h-[60vh] w-full border-b border-surface-variant px-8 pt-40 pb-20 md:px-16"
     >
-      {
-        data.coverImage && (
-          <img
-            src={data.coverImage}
-            alt={data.coverAlt ?? data.title}
-            class="absolute inset-0 h-full w-full object-cover"
-            loading="eager"
-          />
-        )
-      }
+      <img
+        src={data.coverImage || "/blogs/placeholder.png"}
+        alt={data.coverAlt ?? data.title}
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+        onerror="this.src='/blogs/placeholder.png'; this.onerror=null"
+      />
 
       <div
         class="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent"
