@@ -137,7 +137,7 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
 
   return (
     <div className="w-full">
-      <div className="mb-12 space-y-6 border-b border-surface-variant pb-8">
+      <div className="mb-8 space-y-4 border-b border-surface-variant pb-6 sm:mb-12 sm:space-y-6 sm:pb-8">
         <div className="relative">
           <input
             type="text"
@@ -164,8 +164,8 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
           </span>
         </div>
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {allTags.map((tag) => {
               const isActive = activeTags.includes(tag)
               return (
@@ -187,8 +187,10 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="label-caps-style text-outline">Category</span>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="label-caps-style hidden text-outline sm:inline">
+              Category
+            </span>
             <Select
               value={activeCategory}
               onValueChange={(value: string | null) => {
@@ -211,9 +213,11 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="label-caps-style text-outline">Sort by</span>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            <span className="label-caps-style hidden text-outline sm:inline">
+              Sort by
+            </span>
             <button
               onClick={() => setSort("date")}
               className={`label-caps-style border px-3 py-1.5 transition-colors ${
