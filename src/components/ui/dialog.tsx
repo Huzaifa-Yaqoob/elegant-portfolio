@@ -7,13 +7,19 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
-const DialogContext = React.createContext<{ actionsRef: React.RefObject<DialogPrimitive.Root.Actions | null> } | null>(null)
+const DialogContext = React.createContext<{
+  actionsRef: React.RefObject<DialogPrimitive.Root.Actions | null>
+} | null>(null)
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   const actionsRef = useRef<DialogPrimitive.Root.Actions | null>(null)
   return (
     <DialogContext.Provider value={{ actionsRef }}>
-      <DialogPrimitive.Root data-slot="dialog" actionsRef={actionsRef} {...props} />
+      <DialogPrimitive.Root
+        data-slot="dialog"
+        actionsRef={actionsRef}
+        {...props}
+      />
     </DialogContext.Provider>
   )
 }
@@ -93,7 +99,8 @@ function DialogContent({
           const isExitState =
             overlay.hasAttribute("data-ending-style") ||
             overlay.hasAttribute("data-closed") ||
-            (m.attributeName === "data-open" && overlay.dataset.open === undefined)
+            (m.attributeName === "data-open" &&
+              overlay.dataset.open === undefined)
 
           if (isExitState) {
             if (!isExiting) {
@@ -117,7 +124,12 @@ function DialogContent({
 
     observer.observe(overlay, {
       attributes: true,
-      attributeFilter: ["data-ending-style", "data-closed", "data-open", "data-state"],
+      attributeFilter: [
+        "data-ending-style",
+        "data-closed",
+        "data-open",
+        "data-state",
+      ],
     })
 
     return () => {

@@ -45,7 +45,9 @@ const links: SocialLink[] = [
     <p class="mb-16 max-w-lg text-lg text-on-surface-variant">
       Beyond the inbox, catch me across the digital landscape.
     </p>
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(160px,1fr))]">
+    <div
+      class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(160px,1fr))]"
+    >
       {
         links.map(({ label, url, icon: Icon, filter }) => (
           <a
@@ -54,7 +56,9 @@ const links: SocialLink[] = [
             rel="noopener noreferrer"
             class="group flex flex-col items-center justify-center gap-3 border border-surface-variant bg-background p-8 transition-colors duration-300 hover:bg-on-surface"
           >
-            <Icon class={`h-7 w-7 text-on-surface transition-all duration-300 ${filter ? "brightness-150 saturate-0 group-hover:brightness-100 group-hover:saturate-100 group-hover:text-background" : "group-hover:text-background"}`} />
+            <Icon
+              class={`h-7 w-7 text-on-surface transition-all duration-300 ${filter ? "brightness-150 saturate-0 group-hover:text-background group-hover:brightness-100 group-hover:saturate-100" : "group-hover:text-background"}`}
+            />
             <span class="label-caps-style text-nowrap text-on-surface-variant transition-colors duration-300 group-hover:text-background">
               {label}
             </span>
