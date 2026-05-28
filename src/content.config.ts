@@ -14,6 +14,7 @@ import { architectPhaseSchema } from "@/config/architect.config.ts"
 import { contactFormSchema } from "@/config/contact-form.config.ts"
 import { contactIndexSchema } from "@/config/contact.config.ts"
 import { faqSchema } from "@/config/faq.config.ts"
+import { blogSchema, blogIndexSchema } from "@/config/blogs.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -97,6 +98,22 @@ const faq = defineCollection({
   schema: faqSchema,
 })
 
+const blogIndex = defineCollection({
+  loader: glob({
+    pattern: ["**/-index.md", "**/-index.mdx"],
+    base: "./src/content/blogs",
+  }),
+  schema: blogIndexSchema,
+})
+
+const blog = defineCollection({
+  loader: glob({
+    pattern: ["*.md", "*.mdx", "!-index.md", "!-index.mdx"],
+    base: "./src/content/blogs",
+  }),
+  schema: blogSchema,
+})
+
 // 3. Export the collections object
 export const collections = {
   nav,
@@ -111,4 +128,6 @@ export const collections = {
   contactForm,
   contactIndex,
   faq,
+  blogIndex,
+  blog,
 }

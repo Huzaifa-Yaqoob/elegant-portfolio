@@ -1,0 +1,86 @@
+---
+import { getEntry, getCollection } from "astro:content"
+import SectionLayout from "@/layouts/section-layout.astro"
+import BlogCard from "@/components/blogs/blog-card.astro"
+
+const sectionEntry = await getEntry("section", "blogs")
+if (!sectionEntry) return ""
+
+const { title, description, divider_text, badge } = sectionEntry.data
+const maxBlogs =
+  typeof sectionEntry.data?.max_blogs === "number"
+    ? sectionEntry.data.max_blogs
+    : 3
+
+const entries = await getCollection("blog")
+const blogs = entries
+  .filter((b) => !b.data.draft)
+  .sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  )
+  .slice(0, maxBlogs)
+---
+
+<SectionLayout
+  title={title}
+  description={description}
+  badge={badge}
+  divider_text={divider_text}
+  animateId="blogs"
+>
+  <div
+    id="blog-home-grid"
+    class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      blogs.map((blog, i) => (
+        <a href={`/blogs/${blog.data.slug}`} class="block">
+          <BlogCard blog={blog.data} index={i} />
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="mt-12 flex justify-center">
+    <a
+      href="/blogs"
+      class="label-caps-style border-2 border-on-surface px-8 py-3 text-on-surface transition-all hover:bg-on-surface hover:text-background"
+    >
+      View All Articles
+    </a>
+  </div>
+</SectionLayout>
+
+<script>
+  import { gsap, ScrollTrigger } from "@/lib/gsap"
+
+  const animate = () => {
+    const cards = document.querySelectorAll("#blog-home-grid .blog-card")
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.out" },
+      scrollTrigger: {
+        trigger: "#blog-home-grid",
+        start: "top 85%",
+        toggleActions: "play none none reverse",
+      },
+    })
+
+    tl.fromTo(
+      cards,
+      { y: 80, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+      }
+    )
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+</script>

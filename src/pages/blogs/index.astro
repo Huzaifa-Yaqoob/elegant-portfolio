@@ -1,0 +1,133 @@
+---
+import Layout from "@/layouts/main.astro"
+import ContactCTA from "@/components/contact-cta.astro"
+import { getCollection } from "astro:content"
+import BlogList from "@/components/blogs/blog-list"
+
+const blogIndex = await getCollection("blogIndex")
+const indexData = blogIndex[0]?.data
+
+if (!indexData) {
+  throw new Error("Blog index content not found")
+}
+
+const entries = await getCollection("blog")
+const allBlogs = entries
+  .filter((b) => !b.data.draft)
+  .sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  )
+
+const sectionEntry = (await getCollection("section")).find(
+  (s) => s.id === "blogs.md"
+)
+const perPage =
+  typeof sectionEntry?.data?.max_blogs === "number"
+    ? sectionEntry.data.max_blogs
+    : 6
+
+const blogListItems = allBlogs.map((b) => ({
+  title: b.data.title,
+  description: b.data.description,
+  slug: b.data.slug,
+  date: b.data.date.toISOString(),
+  tags: b.data.tags,
+  category: b.data.category,
+  readingTime: b.data.readingTime,
+  coverImage: b.data.coverImage,
+  coverAlt: b.data.coverAlt,
+  featured: b.data.featured,
+}))
+
+const siteData = await getCollection("site")
+const site = siteData[0]?.data
+const siteUrl = site?.site_url ?? "https://huzaifa.dev"
+---
+
+<Layout
+  pageTitle="Blog — Engineering Insights & Tutorials | Huzaifa.Dev"
+  pageDescription={indexData.description}
+  pageImage={indexData.mainImage}
+  canonicalUrl={`${siteUrl}/blogs`}
+  ogType="blog"
+>
+  <!-- Hero Header -->
+  <header
+    id="blog-index-header"
+    class="relative w-full border-b border-surface-variant px-8 pt-40 pb-20 md:px-16"
+  >
+    <div
+      class="absolute top-20 right-16 hidden font-heading text-[200px] font-black tracking-tighter opacity-20 select-none lg:block"
+      style="color: transparent; -webkit-text-stroke: 1px var(--outline-variant);"
+    >
+      {indexData.badge ?? "BLOG"}
+    </div>
+
+    {
+      indexData.mainImage && (
+        <img
+          src={indexData.mainImage}
+          alt={indexData.title}
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+        />
+      )
+    }
+
+    <div class="relative z-10 flex min-h-153.5 flex-col justify-end">
+      <h1 class="h1-style max-w-5xl text-on-surface uppercase">
+        {indexData.title}
+      </h1>
+      <p
+        class="mt-8 max-w-xl text-lg font-medium tracking-wide text-on-surface-variant"
+      >
+        {indexData.description}
+      </p>
+    </div>
+  </header>
+
+  <!-- Blog Listing -->
+  <div class="px-6 py-20 lg:px-16">
+    <BlogList client:only="react" blogs={blogListItems} perPage={perPage} />
+  </div>
+
+  <ContactCTA />
+</Layout>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const animate = () => {
+    const header = document.getElementById("blog-index-header")
+    if (!header) return
+
+    const bg = header.querySelector("img")
+    const content = header.querySelector(".relative.z-10")
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+    if (bg) {
+      tl.fromTo(
+        bg,
+        { yPercent: -100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1 },
+        0
+      )
+    }
+
+    if (content) {
+      tl.fromTo(
+        content,
+        { y: 120, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.2
+      )
+    }
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+</script>

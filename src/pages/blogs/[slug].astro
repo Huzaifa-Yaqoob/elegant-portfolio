@@ -1,0 +1,458 @@
+---
+import { getCollection, render } from "astro:content"
+import Layout from "@/layouts/main.astro"
+import ContactCTA from "@/components/contact-cta.astro"
+import LucideIcon from "@/components/icons/LucideIcon"
+import {
+  preOverride,
+  imgOverride,
+  tableOverride,
+} from "@/components/blogs/mdx-components"
+
+export async function getStaticPaths() {
+  const allEntries = await getCollection("blog")
+  return allEntries
+    .filter((b) => !b.data.draft)
+    .map((entry) => ({
+      params: { slug: entry.data.slug },
+    }))
+}
+
+const { slug } = Astro.params
+const entries = await getCollection("blog")
+const entry = entries.find((e) => e.data.slug === slug)
+if (!entry) {
+  return Astro.redirect("/404")
+}
+
+const { data } = entry
+const { Content } = await render(entry)
+
+const siteData = await getCollection("site")
+const site = siteData[0]?.data
+const siteUrl = site?.site_url ?? "https://huzaifa.dev"
+const canonical = `${siteUrl}/blogs/${data.slug}`
+
+const sorted = entries
+  .filter((b) => !b.data.draft)
+  .sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  )
+const currentIndex = sorted.findIndex((e) => e.data.slug === data.slug)
+const prevPost =
+  currentIndex > 0
+    ? {
+        slug: sorted[currentIndex - 1].data.slug,
+        title: sorted[currentIndex - 1].data.title,
+      }
+    : undefined
+const nextPost =
+  currentIndex < sorted.length - 1
+    ? {
+        slug: sorted[currentIndex + 1].data.slug,
+        title: sorted[currentIndex + 1].data.title,
+      }
+    : undefined
+
+const pageTitle = `${data.title} — Blog | Huzaifa.Dev`
+const pageKeywords = data.keywords ?? data.tags?.join(", ")
+---
+
+<Layout
+  pageTitle={pageTitle}
+  pageDescription={data.description}
+  pageImage={data.ogImage ?? data.coverImage}
+  canonicalUrl={canonical}
+  ogType="article"
+  pageKeywords={pageKeywords}
+>
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: data.title,
+      description: data.description,
+      image: data.ogImage ?? data.coverImage,
+      datePublished: data.date,
+      dateModified: data.date,
+      author: {
+        "@type": "Person",
+        name: data.author,
+        url: data.authorUrl ?? siteUrl,
+      },
+      keywords: data.keywords ?? data.tags?.join(", "),
+      url: canonical,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonical,
+      },
+    })}
+  />
+
+  <article>
+    <!-- Blog Header -->
+    <header
+      id="blog-post-header"
+      class="relative min-h-[60vh] w-full border-b border-surface-variant px-8 pt-40 pb-20 md:px-16"
+    >
+      {
+        data.coverImage && (
+          <img
+            src={data.coverImage}
+            alt={data.coverAlt ?? data.title}
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+          />
+        )
+      }
+
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent"
+      >
+      </div>
+
+      <div class="relative z-10 flex min-h-153.5 flex-col justify-end">
+        <!-- Category + Tags -->
+        <div class="mb-6 flex flex-wrap items-center gap-3">
+          {
+            data.category && (
+              <span class="label-caps-style border border-outline px-3 py-1 text-on-surface">
+                {data.category}
+              </span>
+            )
+          }
+          {
+            data.tags
+              .slice(0, 3)
+              .map((tag) => (
+                <span class="label-caps-style border border-surface-variant px-3 py-1 text-outline">
+                  {tag}
+                </span>
+              ))
+          }
+        </div>
+
+        <h1 class="h1-style max-w-5xl text-on-surface uppercase">
+          {data.title}
+        </h1>
+
+        <div class="mt-6 flex flex-wrap items-center gap-4 text-outline">
+          <span class="label-data-style">
+            {
+              data.date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </span>
+          {
+            data.readingTime && (
+              <>
+                <span class="text-outline-variant">/</span>
+                <span class="label-data-style">{data.readingTime}</span>
+              </>
+            )
+          }
+          <span class="text-outline-variant">/</span>
+          <span class="label-data-style">By {data.author}</span>
+        </div>
+
+        <p class="mt-6 max-w-3xl body-lg-style text-on-surface-variant">
+          {data.description}
+        </p>
+      </div>
+    </header>
+
+    <!-- Blog Content -->
+    <div
+      id="blog-content-wrapper"
+      class="relative mx-auto max-w-3xl px-6 py-16 md:px-8 lg:py-24"
+    >
+      <!-- Decorative side text -->
+      <div class="absolute inset-y-0 -left-48 hidden items-center xl:flex">
+        <span
+          id="side-title-left"
+          class="font-heading text-[clamp(4rem,6vw,8rem)] leading-none font-black tracking-tighter text-surface-variant/30 select-none"
+          style="writing-mode: vertical-lr"
+        >
+          {data.title}
+        </span>
+      </div>
+
+      <div class="prose-custom">
+        <Content
+          components={{
+            pre: preOverride,
+            img: imgOverride,
+            table: tableOverride,
+          }}
+        />
+      </div>
+
+      <!-- Tags footer -->
+      {
+        data.tags.length > 0 && (
+          <div class="mt-16 flex flex-wrap items-center gap-3 border-t border-surface-variant pt-8">
+            <span class="label-caps-style text-outline">Tags:</span>
+            {data.tags.map((tag) => (
+              <span class="label-caps-style border border-surface-variant px-3 py-1.5 text-on-surface-variant transition-colors hover:border-outline hover:text-on-surface">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <!-- Post navigation -->
+    <div class="border-y border-surface-variant px-6 md:px-16">
+      <nav
+        class="mx-auto flex max-w-3xl items-stretch divide-x divide-surface-variant"
+      >
+        {
+          prevPost ? (
+            <a
+              href={`/blogs/${prevPost.slug}`}
+              class="group flex flex-1 items-center gap-4 px-6 py-8 transition-colors hover:bg-card-hover"
+            >
+              <LucideIcon
+                name="ArrowLeft"
+                size={20}
+                class="shrink-0 text-outline transition-transform group-hover:-translate-x-1"
+              />
+              <div class="min-w-0">
+                <span class="label-caps-style text-outline">Previous</span>
+                <p class="mt-1 truncate label-data-style text-on-surface">
+                  {prevPost.title}
+                </p>
+              </div>
+            </a>
+          ) : (
+            <div class="flex-1" />
+          )
+        }
+
+        {
+          nextPost ? (
+            <a
+              href={`/blogs/${nextPost.slug}`}
+              class="group flex flex-1 items-center justify-end gap-4 px-6 py-8 text-right transition-colors hover:bg-card-hover"
+            >
+              <div class="min-w-0">
+                <span class="label-caps-style text-outline">Next</span>
+                <p class="mt-1 truncate label-data-style text-on-surface">
+                  {nextPost.title}
+                </p>
+              </div>
+              <LucideIcon
+                name="ArrowRight"
+                size={20}
+                class="shrink-0 text-outline transition-transform group-hover:translate-x-1"
+              />
+            </a>
+          ) : (
+            <div class="flex-1" />
+          )
+        }
+      </nav>
+    </div>
+
+    <div class="px-6 md:px-16">
+      <a
+        href="/blogs"
+        class="label-caps-style mx-auto flex max-w-3xl items-center gap-2 py-8 text-outline transition-colors hover:text-on-surface"
+      >
+        <LucideIcon name="ArrowLeft" size={16} />
+        Back to all articles
+      </a>
+    </div>
+  </article>
+
+  <ContactCTA />
+</Layout>
+
+<style is:global>
+  /* Prose styling for blog content */
+  .prose-custom h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--on-surface);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .prose-custom h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--on-surface);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-custom p {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+    color: var(--on-surface-variant);
+    margin-bottom: 1.5rem;
+  }
+
+  .prose-custom strong {
+    color: var(--on-surface);
+    font-weight: 600;
+  }
+
+  .prose-custom a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s;
+  }
+
+  .prose-custom a:hover {
+    color: var(--on-surface);
+  }
+
+  .prose-custom ul,
+  .prose-custom ol {
+    color: var(--on-surface-variant);
+    font-size: 1.125rem;
+    line-height: 1.8;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose-custom li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-custom blockquote {
+    border-left: 3px solid var(--outline);
+    padding-left: 1.25rem;
+    margin: 2rem 0;
+    color: var(--on-surface);
+    font-style: italic;
+    font-size: 1.125rem;
+  }
+
+  .prose-custom hr {
+    border: none;
+    border-top: 1px solid var(--surface-variant);
+    margin: 3rem 0;
+  }
+
+  .prose-custom :not(pre) > code {
+    font-family: "Outfit Variable", monospace;
+    font-size: 0.875rem;
+    background: var(--surface-container-low);
+    padding: 0.15em 0.4em;
+    border: 1px solid var(--surface-variant);
+    color: var(--on-surface);
+  }
+
+  .prose-custom pre {
+    margin: 2rem 0;
+  }
+</style>
+
+<script>
+  import { gsap, SplitText } from "@/lib/gsap"
+
+  const animate = () => {
+    const header = document.getElementById("blog-post-header")
+    if (!header) return
+
+    const bg = header.querySelector("img")
+    const content = header.querySelector(".relative.z-10")
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+
+    if (bg) {
+      tl.fromTo(
+        bg,
+        { yPercent: -100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1 },
+        0
+      )
+    }
+
+    if (content) {
+      tl.fromTo(
+        content,
+        { y: 120, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        0.2
+      )
+    }
+  }
+
+  if ((window as any).__loadingComplete) {
+    animate()
+  } else {
+    window.addEventListener("loading:exiting", animate, { once: true })
+  }
+
+  /* Section scroll animations for content */
+  window.addEventListener("load", () => {
+    const wrapper = document.querySelector("#blog-content-wrapper")
+    const sideTitle = document.querySelector("#side-title-left")
+
+    /* Scroll-triggered entrance for content sections */
+    const contentSections = wrapper?.querySelectorAll("h2, h3, p, .not-prose")
+    contentSections?.forEach((el) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      )
+    })
+
+    /* Side title character animation */
+    if (sideTitle && wrapper) {
+      const sideSplit = SplitText.create(sideTitle, {
+        type: "chars",
+        tag: "span",
+      })
+
+      gsap.set(sideSplit.chars, { opacity: 0, y: 30 })
+
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapper,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      })
+
+      scrollTl.to(sideSplit.chars, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: { each: 0.04, from: "start" },
+        ease: "power2.out",
+      })
+    }
+  })
+</script>

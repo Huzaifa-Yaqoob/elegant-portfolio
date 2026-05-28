@@ -1,0 +1,220 @@
+---
+title: "Git Worktree + AI Agents: A Match Made in Developer Heaven"
+description: "How combining Git worktrees with AI coding assistants unlocks parallel development workflows, faster context switching, and zero-conflict experimentation."
+slug: "git-worktree-and-ai-agents"
+date: 2026-05-15
+order: 1
+tags:
+  - Git
+  - AI
+  - Workflow
+  - Productivity
+category: "Engineering"
+readingTime: "8 min read"
+coverImage: "/blog/git-worktree-ai.png"
+coverAlt: "Terminal showing git worktree branches in parallel"
+featured: true
+keywords: "git worktree, AI agents, parallel development, git workflow, Cursor, Claude, development productivity"
+---
+
+import {
+  CodeBlock,
+  FileTree,
+  BlogTable,
+  BlogImage,
+} from "@/components/blogs/mdx-components"
+
+## The Problem: Context Switching Is Killing Your Flow
+
+Every developer knows the drill. You're deep in a feature branch, the architecture is crystal clear, and then — ping. A critical bug fix needs to go out **now**.
+
+You `git stash` your changes, `git checkout main`, create a hotfix branch, fix the bug, push, and then try to remember where you left off. By the time you `git checkout feature/amazing-thing` and `git stash pop`, you've lost 20 minutes of cognitive momentum.
+
+<BlogImage
+  src="/blog/context-switching.png"
+  alt="Context switching cost visualization"
+  caption="The cognitive cost of switching branches mounts with every context switch"
+/>
+
+This is the problem I faced daily until I discovered **Git worktrees** combined with **AI coding agents**.
+
+## What Are Git Worktrees?
+
+Git worktrees allow you to check out multiple branches simultaneously in separate working directories, all sharing the same Git history.
+
+<FileTree
+  structure={[
+    {
+      name: "my-project",
+      type: "directory",
+      children: [
+        {
+          name: ".git",
+          type: "directory",
+          children: [
+            { name: "HEAD", type: "file" },
+            { name: "refs", type: "directory" },
+            { name: "worktrees", type: "directory" },
+          ],
+        },
+        {
+          name: "main",
+          type: "directory",
+          children: [
+            { name: "src", type: "directory" },
+            { name: "package.json", type: "file" },
+          ],
+        },
+        {
+          name: "feature-ai-agent",
+          type: "directory",
+          children: [
+            { name: "src", type: "directory" },
+            { name: "package.json", type: "file" },
+          ],
+        },
+        {
+          name: "hotfix-critical",
+          type: "directory",
+          children: [
+            { name: "src", type: "directory" },
+            { name: "package.json", type: "file" },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+Each worktree is a fully functional working directory with its own:
+
+- Working tree (files)
+- Index (staging area)
+- Node modules / dependencies (if you install separately)
+
+### Creating a Worktree
+
+```bash
+# Add a new worktree for a feature branch
+git worktree add ../my-project-feature feature/new-thing
+
+# Add a worktree for a hotfix
+git worktree add ../my-project-hotfix hotfix/critical-bug
+
+# List all worktrees
+git worktree list
+
+# Remove a worktree when done
+git worktree remove ../my-project-feature
+```
+
+## Why This Matters for AI Agents
+
+AI coding assistants — whether Claude, Cursor, or GitHub Copilot — operate best when they have **clear context** and **isolated environments**.
+
+<BlogTable
+  headers={["Approach", "Context Quality", "Safety", "Speed", "Resource Usage"]}
+  rows={[
+    [
+      "Single branch (stash)",
+      "Low — mixed changes",
+      "Risky — merge conflicts",
+      "Slow — context rebuild",
+      "Low — one node_modules",
+    ],
+    [
+      "Multiple clones",
+      "High — clean state",
+      "Safe — total isolation",
+      "Fast — already set up",
+      "High — duplicate deps",
+    ],
+    [
+      "Git Worktrees",
+      "High — per-branch state",
+      "Safe — shared objects",
+      "Fast — instant checkout",
+      "Medium — shared .git",
+    ],
+  ]}
+  caption="Comparison of parallel development approaches"
+/>
+
+Here's the real insight: AI agents produce **unpredictable** changes. A single agent session might:
+
+1. Install new dependencies
+2. Modify configuration files
+3. Generate thousands of lines of code
+4. Refactor existing code in unexpected ways
+
+Running an AI agent in a worktree gives you:
+
+- **Zero risk** to your main working directory
+- **Easy review** — just diff the worktree against the branch base
+- **Parallel experiments** — run 3 AI agents in 3 worktrees simultaneously
+- **Fast discard** — delete the worktree and the branch if the experiment fails
+
+### My Workflow
+
+```typescript
+// scripts/agent-worktree.ts
+import { execSync } from "child_process"
+import { existsSync, mkdirSync } from "fs"
+
+interface WorktreeConfig {
+  branch: string
+  worktreePath: string
+  baseBranch?: string
+}
+
+function createAgentWorktree(config: WorktreeConfig) {
+  const { branch, worktreePath, baseBranch = "main" } = config
+
+  // Ensure latest base branch
+  execSync(`git checkout ${baseBranch} && git pull`, { stdio: "inherit" })
+
+  // Create branch
+  execSync(`git branch ${branch} ${baseBranch}`, { stdio: "ignore" })
+
+  // Create worktree
+  if (!existsSync(worktreePath)) {
+    mkdirSync(worktreePath, { recursive: true })
+  }
+  execSync(`git worktree add ${worktreePath} ${branch}`, {
+    stdio: "inherit",
+  })
+
+  // Install dependencies in the worktree
+  execSync("npm install", { cwd: worktreePath, stdio: "inherit" })
+
+  console.log(`Agent worktree ready at: ${worktreePath}`)
+  console.log(`Open your AI agent in: ${worktreePath}`)
+}
+```
+
+## Real Results
+
+Since adopting this workflow:
+
+- **3x more experiments** — I can try AI-generated solutions without commitment
+- **Zero accidental merges** — worktrees make it obvious when you're in the wrong branch
+- **Parallel AI sessions** — Claude refactors one feature, Cursor builds another
+- **Cleaner reviews** — each worktree produces a focused, reviewable diff
+
+## Give It a Try
+
+The next time you fire up an AI coding assistant, create a worktree first. It takes 10 seconds and saves hours of cleanup.
+
+```bash
+# One-liner to create and open a worktree for AI work
+git worktree add ../experiment-ai feature/ai-experiment && \
+  code ../experiment-ai
+```
+
+<BlogImage
+  src="/blog/worktree-terminal.png"
+  alt="Git worktree terminal output"
+  caption="Three active worktrees running different AI agent experiments in parallel"
+/>
+
+Your future self — the one not dealing with merge conflicts — will thank you.

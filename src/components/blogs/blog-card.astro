@@ -1,0 +1,122 @@
+---
+import type { BlogConfig } from "@/config/blogs.config"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+interface Props {
+  blog: BlogConfig
+  index?: number
+}
+
+const { blog, index = 0 } = Astro.props
+const isFeatured = blog.featured
+const tagPreview = blog.tags.slice(0, 3)
+---
+
+<article
+  class="blog-card group relative flex flex-col border border-surface-variant bg-background transition-colors duration-500 hover:bg-card-hover"
+  data-blog-index={index}
+>
+  <!-- Cover Image -->
+  <div
+    class="relative aspect-[16/9] w-full overflow-hidden border-b border-surface-variant bg-surface-container-low"
+  >
+    {
+      blog.coverImage ? (
+        <img
+          src={blog.coverImage}
+          alt={blog.coverAlt ?? blog.title}
+          class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+          loading="lazy"
+        />
+      ) : (
+        <div class="flex h-full items-center justify-center">
+          <span class="label-caps-style text-outline/40">No Cover</span>
+        </div>
+      )
+    }
+
+    {
+      isFeatured && (
+        <div class="absolute top-4 left-4 border border-outline bg-surface/85 px-3 py-1 backdrop-blur">
+          <span class="label-caps-style text-on-surface">Featured</span>
+        </div>
+      )
+    }
+
+    {
+      blog.category && (
+        <div class="absolute top-4 right-4 border border-outline bg-surface-container-low px-3 py-1">
+          <span class="label-caps-style text-outline">{blog.category}</span>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Content -->
+  <div class="flex flex-1 flex-col p-5 md:p-6">
+    <!-- Meta row -->
+    <div class="mb-3 flex items-center gap-3 text-outline">
+      <span class="label-data-style"
+        >{
+          blog.date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
+        }</span
+      >
+      {
+        blog.readingTime && (
+          <>
+            <span class="text-outline-variant">/</span>
+            <span class="label-data-style">{blog.readingTime}</span>
+          </>
+        )
+      }
+    </div>
+
+    <!-- Title -->
+    <h3
+      class="mb-3 h3-style text-on-surface uppercase transition-colors group-hover:text-primary"
+    >
+      {blog.title}
+    </h3>
+
+    <!-- Description -->
+    <p class="mb-6 line-clamp-3 body-sm-style text-on-surface-variant">
+      {blog.description}
+    </p>
+
+    <!-- Tag preview -->
+    {
+      tagPreview.length > 0 && (
+        <div class="mb-4 flex flex-wrap gap-2">
+          {tagPreview.map((tag) => (
+            <span class="label-caps-style border border-surface-variant px-2 py-1 text-outline">
+              {tag}
+            </span>
+          ))}
+          {blog.tags.length > 3 && (
+            <span class="label-caps-style border border-surface-variant px-2 py-1 text-outline">
+              +{blog.tags.length - 3}
+            </span>
+          )}
+        </div>
+      )
+    }
+
+    <!-- Spacer + CTA -->
+    <div
+      class="mt-auto flex items-center justify-between border-t border-surface-variant pt-4"
+    >
+      <span class="label-caps-style text-outline group-hover:text-on-surface">
+        Read Article
+      </span>
+      <span
+        class="inline-flex size-8 items-center justify-center border border-surface-variant text-outline transition-colors group-hover:border-on-surface group-hover:text-on-surface"
+      >
+        <LucideIcon name="ArrowRight" size={16} />
+      </span>
+    </div>
+  </div>
+</article>
