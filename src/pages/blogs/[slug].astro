@@ -8,6 +8,7 @@ import {
   imgOverride,
   tableOverride,
 } from "@/components/blogs/mdx-components"
+import BlogToc from "@/components/blogs/blog-toc"
 
 export async function getStaticPaths() {
   const allEntries = await getCollection("blog")
@@ -26,7 +27,7 @@ if (!entry) {
 }
 
 const { data } = entry
-const { Content } = await render(entry)
+const { Content, headings = [] } = await render(entry)
 
 const siteData = await getCollection("site")
 const site = siteData[0]?.data
@@ -163,45 +164,52 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
       </div>
     </header>
 
-    <!-- Blog Content -->
+    <!-- Blog Content - flex wrapper for TOC + prose -->
     <div
       id="blog-content-wrapper"
-      class="relative mx-auto max-w-3xl px-6 py-16 md:px-8 lg:py-24"
+      class="mx-auto max-w-6xl px-6 py-16 lg:py-24"
     >
-      <!-- Decorative side text -->
-      <div class="absolute inset-y-0 -left-48 hidden items-center xl:flex">
-        <span
-          id="side-title-left"
-          class="font-heading text-[clamp(4rem,6vw,8rem)] leading-none font-black tracking-tighter text-surface-variant/30 select-none"
-          style="writing-mode: vertical-lr"
-        >
-          {data.title}
-        </span>
-      </div>
+      <div class="flex justify-center gap-12">
+        <!-- TOC -->
+        <div id="toc-wrapper" class="hidden w-56 shrink-0 xl:block">
+          <aside
+            id="toc-sidebar"
+            class="max-h-[calc(100vh-8rem)] overflow-y-auto"
+          >
+            <h4 class="label-caps-style mb-5 tracking-wider text-outline">
+              On this page
+            </h4>
+            <BlogToc client:only="react" headings={headings} />
+          </aside>
+        </div>
 
-      <div class="prose-custom">
-        <Content
-          components={{
-            pre: preOverride,
-            img: imgOverride,
-            table: tableOverride,
-          }}
-        />
-      </div>
-
-      <!-- Tags footer -->
-      {
-        data.tags.length > 0 && (
-          <div class="mt-16 flex flex-wrap items-center gap-3 border-t border-surface-variant pt-8">
-            <span class="label-caps-style text-outline">Tags:</span>
-            {data.tags.map((tag) => (
-              <span class="label-caps-style border border-surface-variant px-3 py-1.5 text-on-surface-variant transition-colors hover:border-outline hover:text-on-surface">
-                {tag}
-              </span>
-            ))}
+        <!-- Content prose -->
+        <div class="max-w-3xl min-w-0 flex-1">
+          <div class="prose-custom">
+            <Content
+              components={{
+                pre: preOverride,
+                img: imgOverride,
+                table: tableOverride,
+              }}
+            />
           </div>
-        )
-      }
+
+          <!-- Tags footer -->
+          {
+            data.tags.length > 0 && (
+              <div class="mt-16 flex flex-wrap items-center gap-3 border-t border-surface-variant pt-8">
+                <span class="label-caps-style text-outline">Tags:</span>
+                {data.tags.map((tag) => (
+                  <span class="label-caps-style border border-surface-variant px-3 py-1.5 text-on-surface-variant transition-colors hover:border-outline hover:text-on-surface">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </div>
     </div>
 
     <!-- Post navigation -->
@@ -364,7 +372,7 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
 </style>
 
 <script>
-  import { gsap, SplitText } from "@/lib/gsap"
+  import { gsap, ScrollTrigger } from "@/lib/gsap"
 
   const animate = () => {
     const header = document.getElementById("blog-post-header")
@@ -403,11 +411,10 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
   /* Section scroll animations for content */
   window.addEventListener("load", () => {
     const wrapper = document.querySelector("#blog-content-wrapper")
-    const sideTitle = document.querySelector("#side-title-left")
+    if (!wrapper) return
 
-    /* Scroll-triggered entrance for content sections */
-    const contentSections = wrapper?.querySelectorAll("h2, h3, p, .not-prose")
-    contentSections?.forEach((el) => {
+    const contentSections = wrapper.querySelectorAll("h2, h3, p, .not-prose")
+    contentSections.forEach((el) => {
       gsap.fromTo(
         el,
         { opacity: 0, y: 40 },
@@ -425,30 +432,16 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
       )
     })
 
-    /* Side title character animation */
-    if (sideTitle && wrapper) {
-      const sideSplit = SplitText.create(sideTitle, {
-        type: "chars",
-        tag: "span",
-      })
-
-      gsap.set(sideSplit.chars, { opacity: 0, y: 30 })
-
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: wrapper,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      })
-
-      scrollTl.to(sideSplit.chars, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        stagger: { each: 0.04, from: "start" },
-        ease: "power2.out",
+    /* Pin TOC: flows with content, sticks at top when scrolled past, releases at content end */
+    const tocWrapper = document.getElementById("toc-wrapper")
+    if (tocWrapper) {
+      ScrollTrigger.create({
+        id: "toc-pin",
+        trigger: tocWrapper,
+        start: "top 24px",
+        endTrigger: wrapper,
+        end: "bottom 24px",
+        pin: true,
       })
     }
   })
