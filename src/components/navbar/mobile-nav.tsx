@@ -53,7 +53,7 @@ export default function MobileNav({
         />
       </button>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent className="border-surface-variant bg-background">
+        <DrawerContent className="border-surface-variant bg-background data-[vaul-drawer-direction=bottom]:top-[88px] data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none">
           <div className="flex flex-col overflow-y-auto px-8 py-12">
             <nav className="flex flex-col gap-6">
               {links.map((link: { label: string; href: string }) => (
