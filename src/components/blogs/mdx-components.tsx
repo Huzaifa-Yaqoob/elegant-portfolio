@@ -35,7 +35,7 @@ export function CodeBlock({
           )}
         </div>
       )}
-      <div className="relative overflow-x-auto">
+      <div className="relative">
         <button
           onClick={() => code && navigator.clipboard.writeText(code)}
           className="label-caps-style absolute top-2 right-2 border border-surface-variant bg-surface-container-low px-2 py-1 text-outline opacity-0 transition-opacity group-hover/code:opacity-100 hover:bg-surface-container hover:text-on-surface"
@@ -43,8 +43,8 @@ export function CodeBlock({
         >
           Copy
         </button>
-        <pre className="overflow-x-auto p-4 text-sm leading-relaxed text-on-surface">
-          <code className={className}>{children}</code>
+        <pre className="overflow-x-auto text-sm leading-relaxed text-on-surface">
+          <code className={`block p-4 ${className ?? ""}`}>{children}</code>
         </pre>
       </div>
     </div>
@@ -179,16 +179,14 @@ export function BlogTable({
   className,
 }: BlogTableProps) {
   return (
-    <div
-      className={`not-prose my-8 w-full overflow-x-auto border border-surface-variant ${className ?? ""}`}
-    >
-      <table className="w-full border-collapse">
+    <div className={`not-prose my-8 w-full overflow-x-auto ${className ?? ""}`}>
+      <table className="w-full border-collapse border border-surface-variant">
         <thead>
-          <tr className="border-b border-surface-variant bg-surface-container-low">
+          <tr className="bg-surface-container-low">
             {headers.map((h, i) => (
               <th
                 key={i}
-                className="label-caps-style border-r border-surface-variant px-4 py-3 text-left text-on-surface last:border-r-0"
+                className="label-caps-style border border-surface-variant px-4 py-3 text-left text-on-surface"
               >
                 {h}
               </th>
@@ -197,14 +195,11 @@ export function BlogTable({
         </thead>
         <tbody>
           {rows.map((row, ri) => (
-            <tr
-              key={ri}
-              className="border-b border-surface-variant last:border-b-0 hover:bg-surface-container-low/50"
-            >
+            <tr key={ri} className="hover:bg-surface-container-low/50">
               {row.map((cell, ci) => (
                 <td
                   key={ci}
-                  className="border-r border-surface-variant px-4 py-3 text-sm text-on-surface-variant last:border-r-0"
+                  className="border border-surface-variant px-4 py-3 text-sm text-on-surface-variant"
                 >
                   {cell}
                 </td>
@@ -284,8 +279,10 @@ export function preOverride(props: { children?: ReactNode; title?: string }) {
 /* eslint-disable-next-line react-refresh/only-export-components */
 export function tableOverride(props: { children?: ReactNode }) {
   return (
-    <div className="not-prose my-8 w-full overflow-x-auto border border-surface-variant">
-      <table className="w-full border-collapse">{props.children}</table>
+    <div className="not-prose my-8 w-full overflow-x-auto">
+      <table className="w-full border-collapse border border-surface-variant">
+        {props.children}
+      </table>
     </div>
   )
 }
