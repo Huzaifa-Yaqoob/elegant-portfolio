@@ -46,22 +46,20 @@ export default function BlogToc({
 
     svg.querySelectorAll(".toc-dot, .toc-branch").forEach((el) => el.remove())
 
-    const dots: SVGCircleElement[] = []
+    const dots: SVGRectElement[] = []
     const branches: SVGPathElement[] = []
+    const dotSize = 6
 
     positions.forEach(({ y, depth }) => {
       const bl = depth === 2 ? 14 : 10
 
-      const dot = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "circle"
-      )
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "rect")
       dot.classList.add("toc-dot")
-      dot.setAttribute("cx", `${lx}`)
-      dot.setAttribute("cy", `${y}`)
-      dot.setAttribute("r", "3")
+      dot.setAttribute("x", `${lx - dotSize / 2}`)
+      dot.setAttribute("y", `${y - dotSize / 2}`)
+      dot.setAttribute("width", `${dotSize}`)
+      dot.setAttribute("height", `${dotSize}`)
       dot.setAttribute("fill", "var(--outline-variant)")
-      dot.setAttribute("stroke", "none")
       svg.appendChild(dot)
       dots.push(dot)
 

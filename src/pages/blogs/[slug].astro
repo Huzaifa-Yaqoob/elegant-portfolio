@@ -438,10 +438,11 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
       ScrollTrigger.create({
         id: "toc-pin",
         trigger: tocWrapper,
-        start: "top 24px",
+        start: "top 80px",
         endTrigger: wrapper,
-        end: "bottom 24px",
+        end: "bottom bottom",
         pin: true,
+        pinSpacing: false,
       })
     }
   })
