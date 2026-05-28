@@ -10,6 +10,7 @@ import {
 } from "@/components/blogs/mdx-components"
 import BlogToc from "@/components/blogs/blog-toc"
 import BlogTocFab from "@/components/blogs/blog-toc-fab"
+import BlogShareDialog from "@/components/blogs/blog-share-dialog"
 
 export async function getStaticPaths() {
   const allEntries = await getCollection("blog")
@@ -162,6 +163,10 @@ const pageKeywords = data.keywords ?? data.tags?.join(", ")
         <p class="mt-6 max-w-3xl body-lg-style text-on-surface-variant">
           {data.description}
         </p>
+
+        <div class="mt-8">
+          <BlogShareDialog client:load url={canonical} title={data.title} />
+        </div>
       </div>
     </header>
 

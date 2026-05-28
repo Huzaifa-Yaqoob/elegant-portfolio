@@ -1,11 +1,11 @@
 ---
 import { getEntry } from "astro:content"
 import GithubIcon from "@/components/icons/tech_stack/github.astro"
-import XIcon from "@/components/icons/tech_stack/x.astro"
-import InstagramIcon from "@/components/icons/tech_stack/instagram.astro"
-import FacebookIcon from "@/components/icons/tech_stack/facebook.astro"
-import DiscordIcon from "@/components/icons/tech_stack/discord.astro"
-import WhatsAppIcon from "@/components/icons/tech_stack/whatsapp.astro"
+import XIcon from "../icons/social/x.astro"
+import InstagramIcon from "../icons/social/instagram.astro"
+import FacebookIcon from "../icons/social/facebook.astro"
+import DiscordIcon from "../icons/social/discord.astro"
+import WhatsAppIcon from "../icons/social/whatsapp.astro"
 
 const navEntry = await getEntry("nav", "nav")
 if (!navEntry) throw new Error("Navigation configuration not found")
