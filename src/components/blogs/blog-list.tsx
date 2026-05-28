@@ -1,6 +1,13 @@
 import { useState, useMemo, useRef } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "@/lib/gsap"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
 
 export interface BlogListItem {
   title: string
@@ -182,21 +189,25 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
 
           <div className="flex items-center gap-3">
             <span className="label-caps-style text-outline">Category</span>
-            <select
+            <Select
               value={activeCategory}
-              onChange={(e) => {
-                setActiveCategory(e.target.value)
+              onValueChange={(value: string | null) => {
+                setActiveCategory(value ?? "")
                 setPage(1)
               }}
-              className="label-caps-style border border-surface-variant bg-background px-3 py-1.5 text-on-surface transition-colors outline-none hover:border-outline"
             >
-              <option value="">All</option>
-              {allCategories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="min-w-[120px]">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All</SelectItem>
+                {allCategories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
