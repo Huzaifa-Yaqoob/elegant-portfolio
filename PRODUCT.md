@@ -3,11 +3,25 @@
 ## Brand Identity
 
 **Brand Name:** Obsidian Edge
-**Tagline:** "Not just built to work. Built to win."
-**Logo:** HUZAIFA.DEV
+**Tagline:** "Built fast. Runs premium. Scales infinitely."
+**Logo:** `H.` monogram (favicon) — a sharp Oxanium letterform on deep obsidian surface, embodying brutalist minimalism and zero-radius precision. Full lockup: HUZAIFA.DEV
 **Philosophy:** Dark Mode First — Minimalism + Brutalism with heavy whitespace and diagonal layouts
 **Design Aesthetic:** Zero-radius corners, 1px borders, high-contrast dark palette (surface #141313, on-surface #e5e2e1, primary #c9c6c5), Oxanium (sci-fi headlines) + Outfit (body) typography
 **Vibe:** Technical, architectural, precise, confident. Speaks in system metaphors ("SYS_CORE", "ARCH_BRUT", "COMM_LINK_ESTABLISHED", "VERIFIED EXECUTION PROTOCOLS").
+
+### Core Value Proposition
+
+Huzaifa leverages AI-augmented engineering to build applications that are **fast to ship**, **premium in quality**, and **built to scale** — without the traditional trade-off between speed and robustness.
+
+| Pillar       | What It Means                                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fast**     | AI-accelerated scaffolding, refactoring, debugging, and code review compress timelines 2-3x. MVPs in weeks, not months.                     |
+| **Premium**  | Production-grade code with enterprise patterns, type safety, zero-radius design polish, and near-zero defect rate.                          |
+| **Scalable** | Architectures designed for growth — from serverless functions to distributed systems, with clean abstractions that evolve with the product. |
+
+**The Engine:** Every project is built with an AI-augmented pipeline — structured prompt engineering, automated code review at every commit, and continuous quality enforcement. This isn't "AI replacing the developer"; it's precision engineering amplified by the best available tools.
+
+**The Result:** Clients get startup velocity with enterprise-grade quality. Faster time-to-market, lower defect rate, and architecture that doesn't need to be rewritten when traction hits.
 
 ## Persona
 
@@ -30,6 +44,7 @@ This differentiator must be woven into all content generation. Huzaifa uses AI t
 
 - **Speed** — AI accelerates boilerplate, refactoring, debugging, and scaffolding, letting Huzaifa deliver projects 2-3x faster than traditional development
 - **Zero-Defect Output** — AI is used for code review, edge-case detection, type safety enforcement, and linting at every stage, producing near-bug-free deliverables
+- **Scalable Architecture** — AI assists in designing clean abstractions, decoupled systems, and scalable infrastructure from day one — no rewrites needed when the product grows
 - **Optimal Prompt Engineering** — Every AI interaction follows structured, well-tested prompt patterns to extract maximum accuracy and relevance
 - **Always Learning** — AI tools evolve constantly; Huzaifa stays current with the latest models, techniques, and workflows to pick the right tool for each task
 
