@@ -1,5 +1,5 @@
 # src/config/site.toml
-site_name = "Huzaifa.Dev"
+site_name = "Huzaifa"
 description = "Expert full-stack web developer specializing in React, TypeScript, and Node.js. 5+ years building high-performance web applications, SaaS platforms, and scalable digital products for global clients."
 site_url = "https://huzaifa.dev"
 

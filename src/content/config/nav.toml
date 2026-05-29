@@ -1,5 +1,5 @@
 [header]
-logo = { label = "HUZAIFA.DEV", href = "/" }
+logo = { label = "HUZAIFA", href = "/" }
 
 links = [
   { label = "Home", href = "/" },

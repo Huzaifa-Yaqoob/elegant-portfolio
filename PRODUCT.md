@@ -1,10 +1,10 @@
-# Huzaifa.Dev Portfolio — Product Context for AI Content Generation
+# Huzaifa Portfolio — Product Context for AI Content Generation
 
 ## Brand Identity
 
 **Brand Name:** Obsidian Edge
 **Tagline:** "Built fast. Runs premium. Scales infinitely."
-**Logo:** `H.` monogram (favicon) — a sharp Oxanium letterform on deep obsidian surface, embodying brutalist minimalism and zero-radius precision. Full lockup: HUZAIFA.DEV
+**Logo:** `H.` monogram (favicon) — a sharp Oxanium letterform on deep obsidian surface, embodying brutalist minimalism and zero-radius precision. Full lockup: HUZAIFA
 **Philosophy:** Dark Mode First — Minimalism + Brutalism with heavy whitespace and diagonal layouts
 **Design Aesthetic:** Zero-radius corners, 1px borders, high-contrast dark palette (surface #141313, on-surface #e5e2e1, primary #c9c6c5), Oxanium (sci-fi headlines) + Outfit (body) typography
 **Vibe:** Technical, architectural, precise, confident. Speaks in system metaphors ("SYS_CORE", "ARCH_BRUT", "COMM_LINK_ESTABLISHED", "VERIFIED EXECUTION PROTOCOLS").
@@ -212,10 +212,10 @@ Use engineering/system terminology for non-technical concepts:
 The site currently has **no SEO meta tags whatsoever**. Every page must include:
 
 1. **Title Tag** (50-60 chars)
-   - Pattern: `[Primary Keyword] | Huzaifa.Dev`
-   - Home: `Expert Full-Stack Web Developer | React, TypeScript, Node.js | Huzaifa.Dev`
-   - Work: `Web Development Portfolio | React & TypeScript Projects | Huzaifa.Dev`
-   - Contact: `Hire a Full-Stack Web Developer | Huzaifa.Dev`
+   - Pattern: `[Primary Keyword] | Huzaifa`
+   - Home: `Expert Full-Stack Web Developer | React, TypeScript, Node.js | Huzaifa`
+   - Work: `Web Development Portfolio | React & TypeScript Projects | Huzaifa`
+   - Contact: `Hire a Full-Stack Web Developer | Huzaifa`
 
 2. **Meta Description** (150-160 chars)
    - Pattern: Combines value prop + target audience + CTA
@@ -306,7 +306,7 @@ AI engines heavily rely on structured data to understand entities and relationsh
 **Required schemas:**
 
 - **`Person`** — Huzaifa as the main entity. Properties: `name`, `jobTitle` ("Full-Stack Web Developer & Technical Architect"), `url`, `sameAs[]` (all social links), `knowsAbout` (array of technologies/skills), `address` (PostalAddress), `alumniOf` (if applicable), `award` (if any).
-- **`WebSite`** — `name` "Huzaifa.Dev", `url`, `description`, `potentialAction` with SearchAction.
+- **`WebSite`** — `name` "Huzaifa", `url`, `description`, `potentialAction` with SearchAction.
 - **`WebPage`** — Per page, with `description`, `about`, `keywords`.
 - **`LocalBusiness`** — Since there's a physical service area. `@type: "LocalBusiness"` with `areaServed: "PK"` and `address`.
 - **`ItemList`** — For portfolio items, making each project a `ListItem` with `position` and `item` as a `CreativeWork`.
