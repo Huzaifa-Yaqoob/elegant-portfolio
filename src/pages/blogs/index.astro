@@ -39,9 +39,7 @@ const blogListItems = allBlogs.map((b) => ({
   featured: b.data.featured,
 }))
 
-const siteData = await getCollection("site")
-const site = siteData[0]?.data
-const siteUrl = site?.site_url ?? "https://huzaifa.dev"
+const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 ---
 
 <Layout

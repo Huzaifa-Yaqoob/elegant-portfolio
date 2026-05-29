@@ -1,5 +1,15 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "lighthouse": {
+        "command": "npx",
+        "args": ["lighthouse-mcp"],
+        "disabled": false,
+        "autoApprove": []
+      }
+    }
+  },
   "lsp": true,
   "formatter": true,
   "permission": {

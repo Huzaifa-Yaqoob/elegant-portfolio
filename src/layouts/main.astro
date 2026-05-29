@@ -26,10 +26,10 @@ const {
   pageKeywords,
 } = Astro.props
 
+const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
+const resolvedCanonical = canonicalUrl ?? siteUrl
 const siteData = await getCollection("site")
 const site = siteData[0]?.data
-const siteUrl = site?.site_url ?? "https://huzaifa.dev"
-const resolvedCanonical = canonicalUrl ?? siteUrl
 const socialLinks = site?.social
 
 const pathname = new URL(resolvedCanonical).pathname

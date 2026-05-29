@@ -31,9 +31,7 @@ if (!entry) {
 const { data } = entry
 const { Content, headings = [] } = await render(entry)
 
-const siteData = await getCollection("site")
-const site = siteData[0]?.data
-const siteUrl = site?.site_url ?? "https://huzaifa.dev"
+const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 const canonical = `${siteUrl}/blogs/${data.slug}`
 
 const sorted = entries
