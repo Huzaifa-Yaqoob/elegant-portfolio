@@ -20,10 +20,10 @@ const { title, description, tag, core_strengths, technologies } =
   class="relative my-16 border-y border-border-structural bg-surface-container-lowest py-20"
 >
   <div class="mx-auto px-6 lg:px-16">
-    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-6">
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
       <div
         id="tech-stack-left"
-        class="border-l border-border-structural pl-6 lg:col-span-4 lg:pr-10"
+        class="w-full border-l border-border-structural pl-6 lg:w-1/3 lg:shrink-0 lg:pr-10"
       >
         <p class="mb-4 font-mono-label text-mono-label text-primary uppercase">
           {tag}
@@ -51,7 +51,7 @@ const { title, description, tag, core_strengths, technologies } =
         </div>
       </div>
 
-      <div class="lg:col-span-8">
+      <div class="w-full lg:w-2/3">
         <TectStackGrid technologies={technologies ?? []} />
       </div>
     </div>
@@ -68,7 +68,7 @@ const { title, description, tag, core_strengths, technologies } =
       start: "top top",
       end: "bottom bottom",
       pin: "#tech-stack-left",
-      pinSpacing: false,
     })
   })
 </script>
+

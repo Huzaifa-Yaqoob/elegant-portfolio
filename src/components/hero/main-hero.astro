@@ -95,11 +95,13 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
     <div class="hero-right z-0 order-1 h-full lg:order-2">
       <div
         id="hero-diagonal-image"
-        class="relative h-full w-full overflow-hidden opacity-0"
+        class="relative h-full w-full overflow-hidden"
       >
         <img
           alt="hero-image"
           src={main_image}
+          fetchpriority="high"
+          decoding="async"
           class="absolute inset-0 h-full w-full object-cover grayscale"
         />
       </div>
@@ -172,8 +174,6 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
           clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)",
           duration: DURATION,
           ease: "expo.out",
-          force3D: true,
-          opacity: 1,
         }
       )
 
@@ -195,32 +195,17 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
     })
 
     mm.add("(max-width: 1023px)", () => {
-      const DURATION = 1.8
-
-      gsap.fromTo(
-        "#hero-diagonal-image",
-        { clipPath: "polygon(0% 0%, 100% 0%, 100% 40%, 0% 100%)" },
-        {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)",
-          duration: DURATION,
-          ease: "expo.out",
-          force3D: true,
-          opacity: 1,
-        }
-      )
-
       const contentChildren = document.querySelector("#hero-content")?.children
       if (contentChildren?.length) {
-        const each = DURATION / contentChildren.length
         gsap.fromTo(
           contentChildren,
-          { y: 80, opacity: 0 },
+          { y: 40, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: each,
+            duration: 0.5,
+            stagger: 0.08,
             ease: "power2.out",
-            stagger: each,
           }
         )
       }

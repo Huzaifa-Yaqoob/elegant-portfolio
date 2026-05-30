@@ -49,6 +49,12 @@ if (pathname !== "/") {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={resolvedCanonical} />
+    <link
+      rel="preload"
+      as="image"
+      href="/hero/main-hero.png"
+      fetchpriority="high"
+    />
 
     <!-- Primary Meta Tags -->
     <title>{pageTitle}</title>

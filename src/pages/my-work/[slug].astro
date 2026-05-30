@@ -120,7 +120,10 @@ const pageKeywords = data.tags?.length
 </Layout>
 
 <script>
-  import { gsap, SplitText } from "@/lib/gsap"
+  import { gsap } from "@/lib/gsap"
+  import { SplitText } from "gsap/SplitText"
+
+  gsap.registerPlugin(SplitText)
 
   window.addEventListener("load", () => {
     gsap.matchMedia()

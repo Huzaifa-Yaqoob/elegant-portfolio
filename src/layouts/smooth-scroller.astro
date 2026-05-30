@@ -7,17 +7,37 @@
 <script>
   import { gsap } from "@/lib/gsap"
   import { ScrollSmoother } from "gsap/ScrollSmoother"
+  import type { ScrollSmoother as ScrollSmootherInstance } from "gsap/ScrollSmoother"
 
   gsap.registerPlugin(ScrollSmoother)
 
-  const smoother = ScrollSmoother.create({
-    wrapper: "#smooth-wrapper",
-    content: "#smooth-content",
-    smooth: 1.2,
-    effects: true,
+  let smoother: ScrollSmootherInstance | null = null
+
+  const initSmoother = () => {
+    if (window.innerWidth < 1024) return
+
+    smoother = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 1.2,
+      effects: true,
+    })
+  }
+
+  initSmoother()
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 1024) {
+      if (smoother) {
+        smoother.kill()
+        smoother = null
+      }
+    } else if (!smoother) {
+      initSmoother()
+    }
   })
 
   document.addEventListener("astro:before-swap", () => {
-    smoother.kill()
+    if (smoother) smoother.kill()
   })
 </script>

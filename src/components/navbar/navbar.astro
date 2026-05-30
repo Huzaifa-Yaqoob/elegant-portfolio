@@ -104,8 +104,11 @@ const isLinkActive = (href: string) =>
 </header>
 
 <script>
-  import { gsap, SplitText } from "@/lib/gsap"
+  import { gsap } from "@/lib/gsap"
+  import { SplitText } from "gsap/SplitText"
   import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  gsap.registerPlugin(SplitText)
 
   const scrollY = ScrollTrigger.getScrollFunc(window) as (() => number) &
     ((pos: number) => void)

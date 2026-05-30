@@ -57,68 +57,63 @@
   </style>
 </noscript>
 
-<script>
-  import { gsap } from "@/lib/gsap"
-
-  const screen = document.getElementById("loading-screen")
-  if (!screen) throw new Error("Loading screen element not found")
-
-  const monoWrap = document.getElementById("loading-mono-wrap")
-  const divider = document.getElementById("loading-divider")
-  const nameWrap = document.getElementById("loading-name-wrap")
-  const dots = document.querySelectorAll<HTMLElement>(".loading-dot")
-
-  if (!monoWrap || !divider || !nameWrap)
-    throw new Error("Loading elements not found")
-
-  const startDotsAnimation = () => {
-    gsap.to(dots, {
-      scale: 2,
-      opacity: 1,
-      backgroundColor: "var(--color-secondary)",
-      duration: 0.5,
-      stagger: 0.15,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    })
+<style is:global>
+  .loading-dot {
+    animation: dot-pulse 1.5s ease-in-out infinite;
+  }
+  .loading-dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .loading-dot:nth-child(3) {
+    animation-delay: 0.3s;
   }
 
-  // --- Exit Logic (no artificial minimum — exits immediately when page is ready) ---
-  const hide = (instant: boolean) => {
-    gsap.killTweensOf(dots)
-    gsap.set(dots, { clearProps: "all" })
-
-    if (instant) {
-      screen.style.display = "none"
-    } else {
-      gsap.to(screen, {
-        autoAlpha: 0,
-        scale: 0.96,
-        duration: 0.3,
-        ease: "power2.inOut",
-        onComplete: () => {
-          screen.style.display = "none"
-        },
-      })
+  @keyframes dot-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(2);
+      opacity: 1;
+      background-color: var(--color-secondary);
     }
   }
+
+  #loading-screen.exit {
+    opacity: 0 !important;
+    transform: scale(0.96) !important;
+    transition:
+      opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const screen = document.getElementById("loading-screen")
+  if (!screen) throw new Error("Loading screen element not found")
 
   const exit = (instant: boolean) => {
     ;(window as any).__loadingComplete = true
     window.dispatchEvent(new CustomEvent("loading:exiting"))
-    hide(instant)
+
+    if (instant) {
+      screen.style.display = "none"
+    } else {
+      screen.classList.add("exit")
+      setTimeout(() => {
+        screen.style.display = "none"
+      }, 350)
+    }
   }
 
-  // If page is already loaded, exit instantly — no loading screen
-  if (document.readyState === "complete") {
+  if (document.readyState !== "loading") {
     exit(true)
   } else {
-    // Page still loading — keep text static, animate only dots
-    startDotsAnimation()
-    window.addEventListener("load", () => exit(false))
+    document.addEventListener("DOMContentLoaded", () => exit(false))
   }
 
-  // Fallback: force-dismiss after 8s
-  gsap.delayedCall(8, () => exit(true))
+  setTimeout(() => exit(true), 4000)
 </script>
