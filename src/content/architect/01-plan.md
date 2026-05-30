@@ -1,6 +1,6 @@
 ---
 title: "PLAN"
-description: "Deep dive into strategy, architecture, and requirement gathering. We define the blueprint before a single line of code is written."
+description: "Strategy, architecture, and requirement gathering. We define the blueprint before writing a single line of code."
 tags: ["STRATEGY", "ARCHITECTURE", "DISCOVERY"]
 icon: "clipboard-list"
 order: 1

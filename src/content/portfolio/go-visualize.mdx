@@ -1,6 +1,6 @@
 ---
 title: "Go Visualize"
-description: "An AI-powered design automation SaaS that converts plain-language prompts into production-ready marketing graphics and editable SVGs. Multi-agent system with Gemini 3 Flash and Claude orchestrates parallelized vector asset generation, brand guideline extraction from URLs, and a Figma-style multi-artboard canvas."
+description: "An AI-powered design automation tool that turns plain text prompts into production-ready marketing graphics and editable SVGs. Uses Gemini 3 Flash and Claude in parallel for vector generation, brand extraction from URLs, and a multi-artboard canvas editor."
 slug: "go-visualize"
 order: 1
 url: "https://app.govisualize.ai/"
@@ -38,40 +38,40 @@ import ProjectSection from "@/components/portfolio/project-section.astro"
 
 <ProjectSection title="The Mission" number="01">
 
-Marketing teams waste hours dragging pixels around Canva. Every social post, every ad, every flyer — same templating grind, different day. And the moment you need something that matches your actual brand guidelines, you're back to hunting down the right hex codes and font files.
+Marketing teams spend way too much time dragging pixels around design tools. Every social post, every ad, every flyer. Same grind, different day. And the moment you need something on brand, you are digging through hex codes and font files again.
 
-**Go Visualize kills that workflow.** Type what you want in plain English. The AI generates production-ready, fully editable vector designs — brand colors, typography, layouts, everything. You tweak if you want. You ship. That's it.
+**Go Visualize kills that workflow.** Type what you want. The AI generates production-ready, editable vector designs with your brand colors, typography, and layouts. Tweak if you want. Ship when ready. Done.
 
 </ProjectSection>
 
 <ProjectSection title="Multi-Artboard Canvas Engine" number="02">
 
-I built a **Figma-like vector editor** on top of Fabric.js — multiple artboards in a single workspace, real-time manipulation of text layers, high-res graphics, shapes, and grouped elements. The canvas state architecture handles simultaneous rendering across artboards without performance degradation, even with complex layered compositions.
+I built a **vector editor** on top of Fabric.js. Multiple artboards in one workspace. Real-time manipulation of text layers, high-res graphics, shapes, and grouped elements. The canvas state handles simultaneous rendering across artboards without dropping frames, even with complex layered designs.
 
 </ProjectSection>
 
 <ProjectSection title="Multi-Agent AI Design Orchestration" number="03">
 
-This is where it gets interesting. I integrated a **dual-agent AI system** — Gemini 3 Flash Preview and Claude — that takes natural language prompts and converts them directly into structured, editable vector canvas designs.
+This is where it gets interesting. I wired up a **dual-agent AI system** with Gemini 3 Flash Preview and Claude. You type a prompt. Both agents fire in parallel on different aspects of the generation. One handles layout, the other handles visual styling. The results merge into a single design.
 
-The key insight? **Parallelization.** Both agents fire simultaneously on different aspects of the generation — one handles layout structure, the other handles visual styling. The results merge into a single coherent design. Parallelized execution inside Next.js backend means generation completes in seconds, not minutes.
+**Parallelization is the key.** Running both agents simultaneously inside the Next.js backend means generation takes seconds, not minutes.
 
 </ProjectSection>
 
 <ProjectSection title="Brand Guideline Extraction Engine" number="04">
 
-Hands down the most technically fun subsystem. Drop in a company URL, and the platform **extracts the entire brand identity** — exact colour swatches, typographic hierarchy, logo positioning, visual design language — from scraping and analysing the public website. All of it gets loaded directly into the canvas editor configuration. No manual setup, no brand kit uploads. Just a URL.
+The most technically fun part of the project. Drop in a company URL. The platform scrapes the public website and **extracts the entire brand identity**. Exact colour swatches, typography hierarchy, logo positioning, the whole visual language. All of it loads directly into the canvas editor. No manual setup, no brand kit uploads. Just a URL.
 
 </ProjectSection>
 
 <ProjectSection title="Auth, Billing & Credit Ledger" number="05">
 
-Authentication through **Better Auth** with secure session persistence. Billing is a three-tier architecture — Usage-Based, Monthly, and Annual — all wired through Stripe's modern Clover API. The twist? A **credit ledger system** that lets users purchase ad-hoc token packs to run heavy AI generation steps, separate from their subscription. Granular, elastic, self-serve.
+Authentication runs on **Better Auth** with session persistence. Billing has three tiers: usage-based, monthly, and annual. All wired through Stripe's Clover API. The twist is a **credit ledger system** that lets users buy ad-hoc token packs for heavy AI generation, separate from their subscription. Granular, self-serve, no support tickets needed.
 
 </ProjectSection>
 
 <ProjectSection title="Engineering Impact" number="06">
 
-As **Technical Lead**, I set the architectural patterns — Prisma schema definitions, component paradigms, repository structure — and built the entire core system from February through early April 2026. When the platform was stable and optimised, I handed off a production-ready codebase to the internal team. Shipped a complex multi-agent AI product in under two months.
+As **Technical Lead**, I defined the architecture. Prisma schema, component patterns, repo structure. Built the entire core system from February to early April 2026. Once the platform was stable and optimised, I handed off a production-ready codebase to the internal team. Shipped a complex multi-agent AI product in under two months.
 
 </ProjectSection>

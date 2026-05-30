@@ -1,5 +1,5 @@
 ---
 title: "HOW WE ARCHITECT"
-description: "A clinical approach to digital construction. We dismantle complexity to build resilient, high-performance systems through a rigid four-stage pipeline."
+description: "A structured approach to building software. We break down complex problems and ship resilient systems through a four-stage pipeline."
 badge: "METHODOLOGY"
 ---

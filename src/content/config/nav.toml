@@ -1,5 +1,5 @@
 [header]
-logo = { label = "HUZAIFA", href = "/" }
+logo = { label = "HUZAIFA.", href = "/" }
 
 links = [
   { label = "Home", href = "/" },
@@ -15,4 +15,4 @@ cta = { label = "Get in Touch", href = "/contact" }
 copyright = "© {year} Huzaifa. All rights reserved."
 
 # Extra text if needed
-tagline = "Not just built to work. Built to win."
+tagline = "Built to ship. Built to scale. Built to last."

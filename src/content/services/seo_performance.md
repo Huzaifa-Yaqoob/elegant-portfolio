@@ -2,7 +2,7 @@
 number: "03"
 icon: "zap"
 title: "SEO & Performance"
-description: "Optimized page speed and search-engine-ready architecture. Better Lighthouse scores, stronger Core Web Vitals, and improved organic visibility through technical SEO, structured data, and semantic HTML."
+description: "Faster page loads and search-friendly architecture. Better Lighthouse scores, stronger Core Web Vitals, and improved organic visibility through technical SEO and clean markup."
 tags: ["CORE WEB VITALS", "TECHNICAL SEO", "LIGHTHOUSE"]
 order: 3
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Git Worktree + AI Agents: A Match Made in Developer Heaven"
-description: "How combining Git worktrees with AI coding assistants unlocks parallel development workflows, faster context switching, and zero-conflict experimentation."
+description: "Using Git worktrees with AI coding assistants for parallel development, faster context switching, and conflict-free experimentation."
 slug: "git-worktree-and-ai-agents"
 date: 2026-05-15
 order: 1
@@ -26,9 +26,9 @@ import {
 
 ## The Problem: Context Switching Is Killing Your Flow
 
-Every developer knows the drill. You're deep in a feature branch, the architecture is crystal clear, and then — ping. A critical bug fix needs to go out **now**.
+Every developer knows the drill. You are deep in a feature branch, the architecture is crystal clear, and then ping. A critical bug fix needs to go out **now**.
 
-You `git stash` your changes, `git checkout main`, create a hotfix branch, fix the bug, push, and then try to remember where you left off. By the time you `git checkout feature/amazing-thing` and `git stash pop`, you've lost 20 minutes of cognitive momentum.
+You `git stash` your changes, `git checkout main`, create a hotfix branch, fix the bug, push, and then try to remember where you left off. By the time you `git checkout feature/amazing-thing` and `git stash pop`, you have lost 20 minutes of cognitive momentum.
 
 <BlogImage
   src="/blog/context-switching.png"
@@ -36,7 +36,7 @@ You `git stash` your changes, `git checkout main`, create a hotfix branch, fix t
   caption="The cognitive cost of switching branches mounts with every context switch"
 />
 
-This is the problem I faced daily until I discovered **Git worktrees** combined with **AI coding agents**.
+I ran into this every day until I tried **Git worktrees** combined with **AI coding assistants**.
 
 ## What Are Git Worktrees?
 
@@ -110,37 +110,37 @@ git worktree remove ../my-project-feature
 
 ## Why This Matters for AI Agents
 
-AI coding assistants — whether Claude, Cursor, or GitHub Copilot — operate best when they have **clear context** and **isolated environments**.
+AI coding assistants like Claude, Cursor, or GitHub Copilot work best when they have **clear context** and **isolated environments**.
 
 <BlogTable
   headers={["Approach", "Context Quality", "Safety", "Speed", "Resource Usage"]}
   rows={[
     [
       "Single branch (stash)",
-      "Low — mixed changes",
-      "Risky — merge conflicts",
-      "Slow — context rebuild",
-      "Low — one node_modules",
+      "Low: mixed changes",
+      "Risky: merge conflicts",
+      "Slow: context rebuild",
+      "Low: one node_modules",
     ],
     [
       "Multiple clones",
-      "High — clean state",
-      "Safe — total isolation",
-      "Fast — already set up",
-      "High — duplicate deps",
+      "High: clean state",
+      "Safe: total isolation",
+      "Fast: already set up",
+      "High: duplicate deps",
     ],
     [
       "Git Worktrees",
-      "High — per-branch state",
-      "Safe — shared objects",
-      "Fast — instant checkout",
-      "Medium — shared .git",
+      "High: per-branch state",
+      "Safe: shared objects",
+      "Fast: instant checkout",
+      "Medium: shared .git",
     ],
   ]}
   caption="Comparison of parallel development approaches"
 />
 
-Here's the real insight: AI agents produce **unpredictable** changes. A single agent session might:
+Here is the real insight: AI agents produce **unpredictable** changes. A single session might:
 
 1. Install new dependencies
 2. Modify configuration files
@@ -150,9 +150,9 @@ Here's the real insight: AI agents produce **unpredictable** changes. A single a
 Running an AI agent in a worktree gives you:
 
 - **Zero risk** to your main working directory
-- **Easy review** — just diff the worktree against the branch base
-- **Parallel experiments** — run 3 AI agents in 3 worktrees simultaneously
-- **Fast discard** — delete the worktree and the branch if the experiment fails
+- **Easy review** (just diff the worktree against the branch base)
+- **Parallel experiments** (run 3 agents in 3 worktrees at the same time)
+- **Fast discard** (delete the worktree and branch if the experiment fails)
 
 ### My Workflow
 
@@ -194,12 +194,12 @@ function createAgentWorktree(config: WorktreeConfig) {
 
 ## Real Results
 
-Since adopting this workflow:
+Since I started using this workflow:
 
-- **3x more experiments** — I can try AI-generated solutions without commitment
-- **Zero accidental merges** — worktrees make it obvious when you're in the wrong branch
-- **Parallel AI sessions** — Claude refactors one feature, Cursor builds another
-- **Cleaner reviews** — each worktree produces a focused, reviewable diff
+- **3x more experiments.** I can try AI-generated solutions without commitment.
+- **Zero accidental merges.** Worktrees make it obvious when you are in the wrong branch.
+- **Parallel AI sessions.** Claude refactors one feature, Cursor builds another.
+- **Cleaner reviews.** Each worktree produces a focused, reviewable diff.
 
 ## Give It a Try
 
@@ -217,4 +217,4 @@ git worktree add ../experiment-ai feature/ai-experiment && \
   caption="Three active worktrees running different AI agent experiments in parallel"
 />
 
-Your future self — the one not dealing with merge conflicts — will thank you.
+Your future self, the one not dealing with merge conflicts, will thank you.
