@@ -18,6 +18,8 @@ export const GET: APIRoute = async ({ site }) => {
 - [Services](${siteUrl}/service): Full-stack development services including architecture, animation, SEO, UI/UX, cloud, and quality assurance.
 - [Portfolio](${siteUrl}/my-work): Index of all portfolio projects.
 - [Contact](${siteUrl}/contact): Contact form, FAQ, and social links.
+- [Terms and Conditions](${siteUrl}/terms-and-conditions): Terms governing use of services and deliverables.
+- [Privacy Policy](${siteUrl}/privacy-policy): Data collection, usage, and protection practices.
 
 ## Portfolio Projects
 
@@ -54,6 +56,8 @@ ${publishedBlogs
 - [About Doc](${siteUrl}/docs/about/): Markdown reviewer for the about page.
 - [Services Doc](${siteUrl}/docs/service/): Markdown reviewer for the services page.
 - [Contact Doc](${siteUrl}/docs/contact/): Markdown reviewer for the contact page.
+- [Terms & Conditions Doc](${siteUrl}/docs/terms-and-conditions/): Markdown reviewer for the terms and conditions page.
+- [Privacy Policy Doc](${siteUrl}/docs/privacy-policy/): Markdown reviewer for the privacy policy page.
 ${portfolio
   .sort((a, b) => b.data.order - a.data.order)
   .map(

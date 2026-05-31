@@ -17,6 +17,7 @@ import { faqSchema } from "@/config/faq.config.ts"
 import { blogSchema, blogIndexSchema } from "@/config/blogs.config.ts"
 import { serviceIndexSchema } from "@/config/service-index.config.ts"
 import { pricingSchema } from "@/config/pricing.config.ts"
+import { pageSchema } from "@/config/page.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -133,6 +134,14 @@ const blog = defineCollection({
   schema: blogSchema,
 })
 
+const page = defineCollection({
+  loader: glob({
+    pattern: ["*.md", "*.mdx"],
+    base: "./src/content/page",
+  }),
+  schema: pageSchema,
+})
+
 // 3. Export the collections object
 export const collections = {
   nav,
@@ -151,4 +160,5 @@ export const collections = {
   pricing,
   blogIndex,
   blog,
+  page,
 }

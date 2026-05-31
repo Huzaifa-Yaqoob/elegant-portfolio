@@ -1,0 +1,169 @@
+---
+import Layout from "@/layouts/main.astro"
+import { getCollection, render } from "astro:content"
+
+const entries = await getCollection("page")
+
+const entry = entries.find((e) => e.id === "terms-and-conditions" || e.id === "terms-and-conditions.md")
+
+if (!entry) {
+  throw new Error(
+    `terms-and-conditions not found. Available IDs: [${entries.map((e) => JSON.stringify(e.id)).join(", ")}]`
+  )
+}
+
+const { data } = entry
+const { Content } = await render(entry)
+
+const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
+const canonical = `${siteUrl}/terms-and-conditions`
+const pageTitle = data.seo_title ?? `${data.title} | Huzaifa`
+const pageDescription = data.seo_description ?? data.description
+const pageKeywords = data.seo_keywords
+---
+
+<Layout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonical}
+  pageKeywords={pageKeywords}
+>
+  <article class="legal-page">
+    <header class="legal-header">
+      <h1>{data.title}</h1>
+      {data.lastUpdated && (
+        <p class="last-updated">Last updated: {data.lastUpdated.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+      )}
+      <hr />
+    </header>
+
+    <div class="legal-content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style is:global>
+  .legal-page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 8rem 1.5rem 6rem;
+  }
+
+  .legal-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--on-surface);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .last-updated {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--outline);
+    margin-bottom: 0;
+  }
+
+  .legal-header hr {
+    border: none;
+    border-top: 1px solid var(--surface-variant);
+    margin: 2rem 0;
+  }
+
+  .legal-content h2 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--on-surface);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .legal-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--on-surface);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-content p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--on-surface-variant);
+    margin-bottom: 1.25rem;
+  }
+
+  .legal-content strong {
+    color: var(--on-surface);
+    font-weight: 600;
+  }
+
+  .legal-content a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s;
+  }
+
+  .legal-content a:hover {
+    color: var(--on-surface);
+  }
+
+  .legal-content ul,
+  .legal-content ol {
+    color: var(--on-surface-variant);
+    font-size: 1rem;
+    line-height: 1.75;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .legal-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-content hr {
+    border: none;
+    border-top: 1px solid var(--surface-variant);
+    margin: 2.5rem 0;
+  }
+
+  .legal-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    color: var(--on-surface-variant);
+  }
+
+  .legal-content th,
+  .legal-content td {
+    border: 1px solid var(--surface-variant);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .legal-content th {
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+
+  .legal-content blockquote {
+    border-left: 3px solid var(--outline);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--on-surface);
+    font-style: italic;
+  }
+</style>

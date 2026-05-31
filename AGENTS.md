@@ -37,6 +37,7 @@ Single-page Astro site (`src/pages/index.astro`) that composes section component
 - **Path alias** — `@/*` maps to `./src/*`.
 - **Zero radius** — all corners are strictly `0px` per design system.
 - **React components** — `.tsx` files in `src/components/ui/`. Astro components use `.astro`.
+- **Markdown reviewer required** — whenever creating a new page in `src/pages/`, check if it needs a corresponding markdown reviewer doc at `src/pages/docs/<page-name>.ts`. If none exists, create one that reads from the relevant content collection and returns `Content-Type: text/markdown`. Add it to the Docs section in `src/pages/llms.txt.ts`.
 
 ## Gotchas
 

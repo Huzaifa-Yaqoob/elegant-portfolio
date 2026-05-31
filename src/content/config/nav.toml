@@ -17,3 +17,9 @@ copyright = "© {year} Huzaifa. All rights reserved."
 
 # Extra text if needed
 tagline = "Built to ship. Built to scale. Built to last."
+
+links = [
+  { label = "llms.txt", href = "/llms.txt" },
+  { label = "Terms & Conditions", href = "/terms-and-conditions" },
+  { label = "Privacy Policy", href = "/privacy-policy" },
+]

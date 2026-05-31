@@ -20,6 +20,14 @@ export const NavSchema = z.object({
   footer: z.object({
     copyright: z.string(),
     tagline: z.string().optional(),
+    links: z
+      .array(
+        z.object({
+          label: z.string(),
+          href: z.string(),
+        })
+      )
+      .optional(),
   }),
 })
 
