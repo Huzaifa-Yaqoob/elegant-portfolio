@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content"
 import LucideIcon from "@/components/icons/LucideIcon"
+import { resolveImage } from "@/lib/images"
 
 const portfolioSection = await getEntry("section", "portfolio")
 const maxPortfolio =
@@ -35,8 +36,8 @@ const cardClasses = [
           class={`group relative flex flex-col overflow-hidden border border-surface-variant transition-colors duration-300 ${cardClass}`}
         >
           <div
-            class="relative flex flex-1 flex-col overflow-hidden border-b border-surface-variant bg-surface-container-low"
-            style="background-image: url('/projects/background.png'); background-size: cover; background-position: center;"
+            class="relative flex flex-1 flex-col overflow-hidden border-b border-surface-variant bg-surface-container-low bg-cover bg-center"
+            style={`background-image: url(${resolveImage("/projects/background.png")!.src})`}
           >
             {project.data.mainImage === "/projects/background.png" ? (
               <div class="flex flex-1 items-center justify-center p-3">
@@ -47,7 +48,7 @@ const cardClasses = [
             ) : (
               <div class="flex flex-1 p-3">
                 <img
-                  src={project.data.mainImage}
+                  src={resolveImage(project.data.mainImage)?.src ?? resolveImage("/projects/background.png")!.src}
                   alt={project.data.title}
                   class="relative z-10 h-full w-full object-contain"
                   loading="lazy"

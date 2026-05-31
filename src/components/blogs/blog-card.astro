@@ -1,6 +1,8 @@
 ---
+import { Picture } from "astro:assets"
 import type { BlogConfig } from "@/config/blogs.config"
 import LucideIcon from "@/components/icons/LucideIcon"
+import { resolveImage } from "@/lib/images"
 
 interface Props {
   blog: BlogConfig
@@ -10,6 +12,8 @@ interface Props {
 const { blog, index = 0 } = Astro.props
 const isFeatured = blog.featured
 const tagPreview = blog.tags.slice(0, 3)
+const placeholderMeta = resolveImage("/blogs/placeholder.png")!
+const coverMeta = blog.coverImage ? resolveImage(blog.coverImage) : undefined
 ---
 
 <article
@@ -20,13 +24,37 @@ const tagPreview = blog.tags.slice(0, 3)
   <div
     class="relative aspect-[16/9] w-full overflow-hidden border-b border-surface-variant bg-surface-container-low"
   >
-    <img
-      src={blog.coverImage || "/blogs/placeholder.png"}
-      alt={blog.coverAlt ?? blog.title}
-      class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-      loading="lazy"
-      onerror="this.src='/blogs/placeholder.png'; this.onerror=null"
-    />
+    {
+      coverMeta ? (
+        <Picture
+          src={coverMeta}
+          alt={blog.coverAlt ?? blog.title}
+          class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+          loading="lazy"
+          formats={["avif", "webp"]}
+          widths={[600, 900, 1200]}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      ) : blog.coverImage ? (
+        <img
+          src={blog.coverImage}
+          alt={blog.coverAlt ?? blog.title}
+          class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+          loading="lazy"
+          onerror={`this.src='${placeholderMeta.src}'; this.onerror=null`}
+        />
+      ) : (
+        <Picture
+          src={placeholderMeta}
+          alt={blog.coverAlt ?? blog.title}
+          class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+          loading="lazy"
+          formats={["avif", "webp"]}
+          widths={[600, 900, 1200]}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      )
+    }
 
     {
       isFeatured && (

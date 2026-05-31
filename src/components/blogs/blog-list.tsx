@@ -25,12 +25,17 @@ export interface BlogListItem {
 interface BlogListProps {
   blogs: BlogListItem[]
   perPage: number
+  placeholderImageUrl?: string
 }
 
 type SortField = "date" | "title"
 type SortDir = "asc" | "desc"
 
-export default function BlogList({ blogs, perPage }: BlogListProps) {
+export default function BlogList({
+  blogs,
+  perPage,
+  placeholderImageUrl = "/blogs/placeholder.png",
+}: BlogListProps) {
   const [search, setSearch] = useState("")
   const [activeTags, setActiveTags] = useState<string[]>([])
   const [activeCategory, setActiveCategory] = useState<string>("")
@@ -297,14 +302,14 @@ export default function BlogList({ blogs, perPage }: BlogListProps) {
           >
             <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-surface-variant bg-surface-container-low">
               <img
-                src={blog.coverImage || "/blogs/placeholder.png"}
+                src={blog.coverImage ?? placeholderImageUrl}
                 alt={blog.coverAlt ?? blog.title}
                 className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 loading="lazy"
                 onError={(e) => {
                   const target = e.currentTarget
-                  if (target.src !== "/blogs/placeholder.png") {
-                    target.src = "/blogs/placeholder.png"
+                  if (target.src !== placeholderImageUrl) {
+                    target.src = placeholderImageUrl
                   }
                 }}
               />

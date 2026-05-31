@@ -1,5 +1,6 @@
 ---
 import LucideIcon from "@/components/icons/LucideIcon"
+import { resolveImage } from "@/lib/images"
 
 export interface Props {
   title: string
@@ -25,8 +26,9 @@ const {
   images,
 } = Astro.props
 
-const mockupImage = images?.[0] ?? "/projects/background.png"
-const isRestricted = mockupImage === "/projects/background.png"
+const firstImg = images?.[0]
+const isRestricted = !firstImg || firstImg === "/projects/background.png"
+const mockupImgMeta = resolveImage(firstImg) ?? resolveImage("/projects/background.png")!
 ---
 
 <header
@@ -35,13 +37,13 @@ const isRestricted = mockupImage === "/projects/background.png"
 >
   <div
     id="project-header-bg"
-    class="absolute inset-0 bg-(image:--bg-image) bg-cover bg-center"
-    style="--bg-image: url('/projects/background.png')"
+    class="absolute inset-0 bg-cover bg-center"
+    style={`background-image: url(${resolveImage("/projects/background.png")!.src})`}
   >
     {
       !isRestricted && (
         <img
-          src={mockupImage}
+          src={mockupImgMeta.src}
           alt={title}
           class="absolute inset-0 h-full w-full object-contain object-top pt-28 md:object-center md:pt-0"
         />

@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content"
 import LucideIcon from "@/components/icons/LucideIcon"
+import { getResolvedSrc } from "@/lib/images"
 
 const sectionEntry = await getEntry("section", "architect")
 if (!sectionEntry) throw new Error("Architect section entry not found")
@@ -176,7 +177,7 @@ phases.sort((a, b) => a.data.order - b.data.order)
                 >
                   <div
                     class="absolute inset-0 bg-cover bg-center grayscale"
-                    style={`background-image: url(${phase.data.image})`}
+                    style={`background-image: url(${getResolvedSrc(phase.data.image)})`}
                   />
                   <div class="absolute inset-0 bg-deep-obsidian opacity-40" />
                   <div

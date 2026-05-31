@@ -1,9 +1,11 @@
 ---
 import { getEntry } from "astro:content"
+import { Picture } from "astro:assets"
 import ClaudeIcon from "@/components/icons/ai/claude.astro"
 import GeminiIcon from "@/components/icons/ai/gemini.astro"
 import OpenAIIcon from "@/components/icons/ai/open-ai.astro"
 import PerplexityIcon from "@/components/icons/ai/preplexity.astro"
+import { resolveImage } from "@/lib/images"
 
 const aboutHeroEntry = await getEntry("section", "about-hero")
 if (!aboutHeroEntry) throw new Error("About Hero section content not found")
@@ -34,10 +36,14 @@ const iconMap: Record<string, any> = {
       >
         {
           main_image && (
-            <img
+            <Picture
+              src={resolveImage(main_image)!}
               alt="about-hero-image"
-              src={main_image}
               class="absolute inset-0 h-full w-full object-cover grayscale"
+              loading="eager"
+              formats={["avif", "webp"]}
+              widths={[600, 1200, 1920]}
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           )
         }

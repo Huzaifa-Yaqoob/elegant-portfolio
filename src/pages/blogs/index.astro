@@ -1,8 +1,10 @@
 ---
+import { Picture } from "astro:assets"
 import Layout from "@/layouts/main.astro"
 import ContactCTA from "@/components/contact-cta.astro"
 import { getCollection } from "astro:content"
 import BlogList from "@/components/blogs/blog-list"
+import { resolveImage } from "@/lib/images"
 
 const blogIndex = await getCollection("blogIndex")
 const indexData = blogIndex[0]?.data
@@ -26,6 +28,7 @@ const perPage =
     ? sectionEntry.data.max_blogs
     : 6
 
+const placeholderUrl = resolveImage("/blogs/placeholder.png")!.src
 const blogListItems = allBlogs.map((b) => ({
   title: b.data.title,
   description: b.data.description,
@@ -34,7 +37,7 @@ const blogListItems = allBlogs.map((b) => ({
   tags: b.data.tags,
   category: b.data.category,
   readingTime: b.data.readingTime,
-  coverImage: b.data.coverImage,
+  coverImage: resolveImage(b.data.coverImage)?.src ?? placeholderUrl,
   coverAlt: b.data.coverAlt,
   featured: b.data.featured,
 }))
@@ -64,11 +67,14 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 
     {
       indexData.mainImage && (
-        <img
-          src={indexData.mainImage}
+        <Picture
+          src={resolveImage(indexData.mainImage) ?? resolveImage("/hero/blog_hero.png")!}
           alt={indexData.title}
           class="absolute inset-0 h-full w-full object-cover"
           loading="eager"
+          formats={["avif", "webp"]}
+          widths={[800, 1200, 1600]}
+          sizes="100vw"
         />
       )
     }
@@ -87,7 +93,7 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 
   <!-- Blog Listing -->
   <div class="px-6 py-20 lg:px-16">
-    <BlogList client:only="react" blogs={blogListItems} perPage={perPage} />
+    <BlogList client:only="react" blogs={blogListItems} perPage={perPage} placeholderImageUrl={placeholderUrl} />
   </div>
 
   <ContactCTA />

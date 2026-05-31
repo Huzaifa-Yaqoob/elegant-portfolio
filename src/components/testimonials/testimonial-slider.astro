@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content"
 import TestimonialCard from "./testimonial-card.astro"
 import LucideIcon from "@/components/icons/LucideIcon"
+import { getResolvedSrc } from "@/lib/images"
 
 const testimonials = (await getCollection("testimonial")).sort(
   (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
@@ -27,7 +28,7 @@ const testimonials = (await getCollection("testimonial")).sort(
               quote={item.data.quote}
               name={item.data.author}
               role={item.data.role}
-              image={item.data.avatar_url}
+              image={getResolvedSrc(item.data.avatar_url)}
               tag={`LOG_${String(index + 1).padStart(3, "0")}`}
             />
           </div>

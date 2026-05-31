@@ -1,5 +1,7 @@
 ---
+import { Picture } from "astro:assets"
 import { getEntry } from "astro:content"
+import { resolveImage } from "@/lib/images"
 
 // Fetch content entries
 const mainHeroEntry = await getEntry("section", "main_hero")
@@ -97,13 +99,17 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
         id="hero-diagonal-image"
         class="relative h-full w-full overflow-hidden"
       >
-        <img
-          alt="hero-image"
-          src={main_image}
-          fetchpriority="high"
-          decoding="async"
-          class="absolute inset-0 h-full w-full object-cover grayscale"
-        />
+        {
+          <Picture
+            src={resolveImage(main_image) ?? resolveImage("/hero/main-hero.png")!}
+            alt="hero-image"
+            class="absolute inset-0 h-full w-full object-cover grayscale"
+            loading="eager"
+            formats={["avif", "webp"]}
+            widths={[600, 1200, 1920]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
+        }
       </div>
     </div>
   </div>

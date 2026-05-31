@@ -1,4 +1,7 @@
 ---
+import { Picture } from "astro:assets"
+import { resolveImage } from "@/lib/images"
+
 interface Props {
   title: string
   description: string
@@ -7,6 +10,7 @@ interface Props {
 }
 
 const { title, description, videoLink, mainImage } = Astro.props
+const resolvedHero = resolveImage(mainImage) ?? resolveImage("/hero/main-hero.png")!
 ---
 
 <header
@@ -33,12 +37,17 @@ const { title, description, videoLink, mainImage } = Astro.props
     )
   }
 
-  <img
-    src={mainImage}
-    alt={title}
-    class="absolute inset-0 h-full w-full object-cover"
-    loading="eager"
-  />
+  {
+    <Picture
+      src={resolvedHero}
+      alt={title}
+      class="absolute inset-0 h-full w-full object-cover"
+      loading="eager"
+      formats={["avif", "webp"]}
+      widths={[800, 1200, 1600]}
+      sizes="100vw"
+    />
+  }
 
   <div class="relative z-10 flex min-h-153.5 flex-col justify-end">
     <h1 class="h1-style max-w-5xl text-on-surface uppercase">

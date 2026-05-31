@@ -7,6 +7,7 @@ import SmoothScroller from "./smooth-scroller.astro"
 import CustomScrollbar from "@/components/animation/custom-scrollbar.astro"
 import CustomCursor from "@/components/cursor/cursor.astro"
 import { getCollection } from "astro:content"
+import { resolveImage, getResolvedSrc } from "@/lib/images"
 
 interface Props {
   pageTitle?: string
@@ -28,6 +29,7 @@ const {
 
 const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 const resolvedCanonical = canonicalUrl ?? siteUrl
+const resolvedPageImage = getResolvedSrc(pageImage, pageImage)
 const siteData = await getCollection("site")
 const site = siteData[0]?.data
 const socialLinks = site?.social
@@ -52,7 +54,7 @@ if (pathname !== "/") {
     <link
       rel="preload"
       as="image"
-      href="/hero/main-hero.png"
+      href={resolveImage("/hero/main-hero.png")!.src}
       fetchpriority="high"
     />
 
@@ -71,7 +73,7 @@ if (pathname !== "/") {
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:image" content={`${siteUrl}${pageImage}`} />
+    <meta property="og:image" content={`${siteUrl}${resolvedPageImage}`} />
     <meta property="og:url" content={resolvedCanonical} />
     <meta property="og:site_name" content="Huzaifa" />
     <meta property="og:locale" content="en_US" />
@@ -81,7 +83,7 @@ if (pathname !== "/") {
     <meta name="twitter:site" content="@huzaifadev" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={`${siteUrl}${pageImage}`} />
+    <meta name="twitter:image" content={`${siteUrl}${resolvedPageImage}`} />
 
     <!-- Geo Tags -->
     <meta name="geo.region" content="PK" />
