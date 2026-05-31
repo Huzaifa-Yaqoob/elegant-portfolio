@@ -68,7 +68,10 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
     {
       indexData.mainImage && (
         <Picture
-          src={resolveImage(indexData.mainImage) ?? resolveImage("/hero/blog_hero.png")!}
+          src={
+            resolveImage(indexData.mainImage) ??
+            resolveImage("/hero/blog_hero.png")!
+          }
           alt={indexData.title}
           class="absolute inset-0 h-full w-full object-cover"
           loading="eager"
@@ -93,7 +96,12 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 
   <!-- Blog Listing -->
   <div class="px-6 py-20 lg:px-16">
-    <BlogList client:only="react" blogs={blogListItems} perPage={perPage} placeholderImageUrl={placeholderUrl} />
+    <BlogList
+      client:only="react"
+      blogs={blogListItems}
+      perPage={perPage}
+      placeholderImageUrl={placeholderUrl}
+    />
   </div>
 
   <ContactCTA />

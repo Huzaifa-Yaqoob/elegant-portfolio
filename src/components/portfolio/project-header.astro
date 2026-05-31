@@ -28,7 +28,8 @@ const {
 
 const firstImg = images?.[0]
 const isRestricted = !firstImg || firstImg === "/projects/background.png"
-const mockupImgMeta = resolveImage(firstImg) ?? resolveImage("/projects/background.png")!
+const mockupImgMeta =
+  resolveImage(firstImg) ?? resolveImage("/projects/background.png")!
 ---
 
 <header

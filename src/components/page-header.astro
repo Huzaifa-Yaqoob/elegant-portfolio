@@ -10,7 +10,8 @@ interface Props {
 }
 
 const { title, description, videoLink, mainImage } = Astro.props
-const resolvedHero = resolveImage(mainImage) ?? resolveImage("/hero/main-hero.png")!
+const resolvedHero =
+  resolveImage(mainImage) ?? resolveImage("/hero/main-hero.png")!
 ---
 
 <header
@@ -38,15 +39,17 @@ const resolvedHero = resolveImage(mainImage) ?? resolveImage("/hero/main-hero.pn
   }
 
   {
-    <Picture
-      src={resolvedHero}
-      alt={title}
-      class="absolute inset-0 h-full w-full object-cover"
-      loading="eager"
-      formats={["avif", "webp"]}
-      widths={[800, 1200, 1600]}
-      sizes="100vw"
-    />
+    (
+      <Picture
+        src={resolvedHero}
+        alt={title}
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+        formats={["avif", "webp"]}
+        widths={[800, 1200, 1600]}
+        sizes="100vw"
+      />
+    )
   }
 
   <div class="relative z-10 flex min-h-153.5 flex-col justify-end">

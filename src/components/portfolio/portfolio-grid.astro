@@ -48,7 +48,10 @@ const cardClasses = [
             ) : (
               <div class="flex flex-1 p-3">
                 <img
-                  src={resolveImage(project.data.mainImage)?.src ?? resolveImage("/projects/background.png")!.src}
+                  src={
+                    resolveImage(project.data.mainImage)?.src ??
+                    resolveImage("/projects/background.png")!.src
+                  }
                   alt={project.data.title}
                   class="relative z-10 h-full w-full object-contain"
                   loading="lazy"

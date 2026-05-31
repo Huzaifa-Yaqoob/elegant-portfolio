@@ -100,15 +100,19 @@ const viewWorkLink = header.links.find((link) => link.label === "Work")
         class="relative h-full w-full overflow-hidden"
       >
         {
-          <Picture
-            src={resolveImage(main_image) ?? resolveImage("/hero/main-hero.png")!}
-            alt="hero-image"
-            class="absolute inset-0 h-full w-full object-cover grayscale"
-            loading="eager"
-            formats={["avif", "webp"]}
-            widths={[600, 1200, 1920]}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
+          (
+            <Picture
+              src={
+                resolveImage(main_image) ?? resolveImage("/hero/main-hero.png")!
+              }
+              alt="hero-image"
+              class="absolute inset-0 h-full w-full object-cover grayscale"
+              loading="eager"
+              formats={["avif", "webp"]}
+              widths={[600, 1200, 1920]}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          )
         }
       </div>
     </div>

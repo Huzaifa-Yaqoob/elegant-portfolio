@@ -60,7 +60,10 @@ const projects = entries.sort((a, b) => b.data.order - a.data.order)
                   </div>
                 ) : (
                   <img
-                    src={resolveImage(project.data.mainImage)?.src ?? resolveImage("/projects/background.png")!.src}
+                    src={
+                      resolveImage(project.data.mainImage)?.src ??
+                      resolveImage("/projects/background.png")!.src
+                    }
                     alt={project.data.title}
                     class="h-full w-full object-contain"
                     loading="lazy"
