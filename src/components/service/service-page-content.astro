@@ -1,0 +1,102 @@
+---
+import { getEntry, getCollection } from "astro:content"
+import ServiceCard from "@/components/service/service_card.astro"
+import SectionLayout from "@/layouts/section-layout.astro"
+
+const serviceSection = await getEntry("section", "service")
+
+if (!serviceSection) {
+  console.error(
+    "Service section entry 'service.md' not found in content collection 'section'."
+  )
+  return ""
+}
+
+const { title, description, divider_text, badge } = serviceSection.data
+
+const serviceEntries = await getCollection("services")
+const services = serviceEntries.sort((a, b) => a.data.order - b.data.order)
+---
+
+<SectionLayout
+  title={title}
+  description={description}
+  divider_text={divider_text}
+  badge={badge}
+>
+  <div
+    id="service-grid"
+    class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      services.map((service) => (
+        <ServiceCard
+          number={service.data.number}
+          icon={service.data.icon}
+          title={service.data.title}
+          description={service.data.description}
+          tags={service.data.tags}
+        />
+      ))
+    }
+  </div>
+</SectionLayout>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+  import { initSkewScroll } from "@/components/animation/skew-scroll"
+
+  const grid = document.getElementById("service-grid")
+  const cards = grid ? Array.from(grid.children) : []
+
+  if (cards.length) {
+    initSkewScroll("#service-grid > *")
+
+    gsap.matchMedia().add(
+      {
+        threeCol: "(min-width: 1024px)",
+        twoCol: "(min-width: 768px) and (max-width: 1023px)",
+        oneCol: "(max-width: 767px)",
+      },
+      (context) => {
+        const c = context.conditions as Record<string, boolean | undefined>
+        const threeCol = c.threeCol
+        const twoCol = c.twoCol
+
+        let numCols = 1
+        if (threeCol) numCols = 3
+        else if (twoCol) numCols = 2
+
+        cards.forEach((card, i) => {
+          const col = i % numCols
+          let finalY = 0
+          const startY = 60
+
+          if (numCols === 3) {
+            if (col === 1) finalY = -24
+            else if (col === 2) finalY = -48
+          } else if (numCols === 2 && col === 1) {
+            finalY = -24
+          }
+
+          gsap.fromTo(
+            card,
+            { y: finalY + startY, opacity: 0 },
+            {
+              y: finalY,
+              opacity: 1,
+              duration: 0.6,
+              ease: "power3.out",
+              delay: col * 0.08,
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                once: true,
+              },
+            }
+          )
+        })
+      }
+    )
+  }
+</script>

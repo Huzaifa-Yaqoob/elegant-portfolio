@@ -18,8 +18,9 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
   description={indexData.description}
   videoLink={indexData.videoLink}
   mainImage={indexData.mainImage}
-  pageTitle="Portfolio | React & TypeScript Web Projects | Huzaifa"
-  pageDescription="Portfolio of React, TypeScript, and full-stack projects. SaaS platforms, compliance systems, and design tools built for startups and enterprises worldwide."
+  pageTitle={indexData.seo_title}
+  pageDescription={indexData.seo_description}
+  pageKeywords={indexData.seo_keywords}
   canonicalUrl={`${siteUrl}/my-work`}
 >
   <PortfolioShowcase />

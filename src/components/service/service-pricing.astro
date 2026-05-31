@@ -1,0 +1,116 @@
+---
+import { getEntry } from "astro:content"
+import SectionLayout from "@/layouts/section-layout.astro"
+import LucideIcon from "@/components/icons/LucideIcon"
+
+const pricingEntry = await getEntry("pricing", "pricing")
+
+if (!pricingEntry) {
+  console.error(
+    "Pricing entry 'pricing.toml' not found in collection 'pricing'."
+  )
+  return ""
+}
+
+const { section, items } = pricingEntry.data
+---
+
+<SectionLayout
+  title={section.title}
+  description={section.description}
+  badge={section.badge}
+>
+  <div
+    id="pricing-grid"
+    class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+  >
+    {
+      items.map((tier) => (
+        <div
+          class={`pricing-card group relative flex flex-col border ${
+            tier.highlighted
+              ? "border-primary bg-primary/5"
+              : "border-surface-variant bg-transparent"
+          } transition-all duration-300 hover:bg-card-hover`}
+        >
+          {tier.highlighted && (
+            <div class="absolute top-0 right-0 bg-primary px-3 py-1">
+              <span class="font-mono-code text-mono-code text-on-primary uppercase">
+                POPULAR
+              </span>
+            </div>
+          )}
+          <div class="flex flex-col p-6">
+            {tier.icon && (
+              <LucideIcon
+                name={tier.icon}
+                size="32"
+                class="mb-4 text-primary"
+              />
+            )}
+            <h3 class="font-h3 text-h3 text-on-surface uppercase">
+              {tier.name}
+            </h3>
+            <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+              {tier.description}
+            </p>
+            <div class="mt-6 border-t border-surface-variant pt-6">
+              <span class="font-heading text-3xl font-bold text-on-surface">
+                {tier.price_range}
+              </span>
+            </div>
+          </div>
+          <div class="mt-auto border-t border-surface-variant p-6">
+            <ul class="space-y-3">
+              {tier.features.map((feature) => (
+                <li class="flex items-start gap-2">
+                  <LucideIcon
+                    name="check"
+                    size="16"
+                    class="mt-0.5 shrink-0 text-primary"
+                  />
+                  <span class="font-body-sm text-body-sm text-on-surface-variant">
+                    {feature}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <p
+    class="mt-8 text-center font-body-sm text-body-sm text-on-surface-variant italic"
+  >
+    Every project is scoped individually. Contact me for a precise quote.
+  </p>
+</SectionLayout>
+
+<script>
+  import { gsap } from "@/lib/gsap"
+
+  const cards = document.querySelectorAll("#pricing-grid .pricing-card")
+
+  if (cards.length) {
+    cards.forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          delay: i * 0.1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            once: true,
+          },
+        }
+      )
+    })
+  }
+</script>

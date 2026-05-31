@@ -4,6 +4,7 @@ logo = { label = "HUZAIFA.", href = "/" }
 links = [
   { label = "Home", href = "/" },
   { label = "About", href = "/about"},
+  { label = "Services", href = "/service"},
   { label = "Work", href = "/my-work" },
   { label = "Blogs", href = "/blogs" }
 ]

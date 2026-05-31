@@ -1,0 +1,65 @@
+[section]
+title = "Investment"
+description = "Transparent pricing based on scope and complexity. Every project is unique — these ranges give you a ballpark."
+badge = "PRICING"
+
+[[items]]
+name = "Landing Page"
+description = "A single-page or multi-section brand presence site. Perfect for startups, products, or personal brands."
+price_range = "$1,500 – $3,500"
+icon = "layout"
+highlighted = false
+features = [
+  "Responsive, pixel-perfect frontend",
+  "GSAP / Framer Motion animations",
+  "SEO-optimized markup & meta",
+  "Contact form integration",
+  "1 revision round",
+]
+
+[[items]]
+name = "Web Application"
+description = "Full-stack SaaS or internal tool with auth, database, and API integrations."
+price_range = "$5,000 – $15,000"
+icon = "code-2"
+highlighted = true
+features = [
+  "React / Next.js + Node.js backend",
+  "Authentication & authorization",
+  "Database design & integration",
+  "REST / GraphQL API",
+  "Admin dashboard",
+  "AI-augmented development pipeline",
+  "2 revision rounds",
+]
+
+[[items]]
+name = "Enterprise / Custom"
+description = "Complex systems, microservices, migration, or ongoing development partnership."
+price_range = "$15,000+"
+icon = "network"
+highlighted = false
+features = [
+  "Custom system architecture",
+  "Microservices & containerization",
+  "Legacy codebase audit & refactor",
+  "CI/CD pipeline setup",
+  "Performance optimization",
+  "Dedicated Slack channel",
+  "Priority support & maintenance",
+]
+
+[[items]]
+name = "Ongoing Maintenance"
+description = "Monthly retainer for post-launch support, updates, and feature development."
+price_range = "$500 – $2,000/mo"
+icon = "refresh-cw"
+highlighted = false
+features = [
+  "Bug fixes & hotfixes",
+  "Performance monitoring",
+  "Security patches & updates",
+  "Content updates",
+  "Up to 20 hours/month",
+  "48-hour response time",
+]

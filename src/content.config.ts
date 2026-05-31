@@ -15,6 +15,8 @@ import { contactFormSchema } from "@/config/contact-form.config.ts"
 import { contactIndexSchema } from "@/config/contact.config.ts"
 import { faqSchema } from "@/config/faq.config.ts"
 import { blogSchema, blogIndexSchema } from "@/config/blogs.config.ts"
+import { serviceIndexSchema } from "@/config/service-index.config.ts"
+import { pricingSchema } from "@/config/pricing.config.ts"
 
 const nav = defineCollection({
   loader: glob({ pattern: "nav.toml", base: "./src/content/config" }),
@@ -34,8 +36,20 @@ const section = defineCollection({
 
 // Define the services collection
 const services = defineCollection({
-  loader: glob({ pattern: ["*.md", "*.mdx"], base: "./src/content/services" }),
+  loader: glob({
+    pattern: ["*.md", "*.mdx", "!-index.md", "!-index.mdx"],
+    base: "./src/content/services",
+  }),
   schema: serviceSchema,
+})
+
+// Define the service index collection
+const serviceIndex = defineCollection({
+  loader: glob({
+    pattern: ["**/-index.md", "**/-index.mdx"],
+    base: "./src/content/services",
+  }),
+  schema: serviceIndexSchema,
 })
 
 // Define the portfolio index collection
@@ -98,6 +112,11 @@ const faq = defineCollection({
   schema: faqSchema,
 })
 
+const pricing = defineCollection({
+  loader: glob({ pattern: "pricing.toml", base: "./src/content/config" }),
+  schema: pricingSchema,
+})
+
 const blogIndex = defineCollection({
   loader: glob({
     pattern: ["**/-index.md", "**/-index.mdx"],
@@ -119,6 +138,7 @@ export const collections = {
   nav,
   site,
   section,
+  serviceIndex,
   services,
   portfolioIndex,
   portfolio,
@@ -128,6 +148,7 @@ export const collections = {
   contactForm,
   contactIndex,
   faq,
+  pricing,
   blogIndex,
   blog,
 }

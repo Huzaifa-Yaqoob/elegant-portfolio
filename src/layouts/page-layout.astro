@@ -11,6 +11,7 @@ interface Props {
   showCTA?: boolean
   pageTitle?: string
   pageDescription?: string
+  pageKeywords?: string
   canonicalUrl?: string
 }
 
@@ -22,6 +23,7 @@ const {
   showCTA = true,
   pageTitle,
   pageDescription,
+  pageKeywords,
   canonicalUrl,
 } = Astro.props
 ---
@@ -31,6 +33,7 @@ const {
   pageDescription={pageDescription}
   pageImage={mainImage}
   canonicalUrl={canonicalUrl}
+  pageKeywords={pageKeywords}
 >
   <PageHeader
     title={title}

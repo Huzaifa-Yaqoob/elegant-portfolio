@@ -37,6 +37,9 @@ export const blogIndexSchema = z.object({
   description: z.string(),
   mainImage: z.string().optional(),
   badge: z.string().optional(),
+  seo_title: z.string().optional(),
+  seo_description: z.string().optional(),
+  seo_keywords: z.string().optional(),
 })
 
 export type BlogIndexConfig = z.infer<typeof blogIndexSchema>

@@ -23,6 +23,9 @@ export const portfolioIndexSchema = z.object({
   description: z.string(),
   videoLink: z.string(),
   mainImage: z.string(),
+  seo_title: z.string().optional(),
+  seo_description: z.string().optional(),
+  seo_keywords: z.string().optional(),
 })
 
 export type PortfolioIndexConfig = z.infer<typeof portfolioIndexSchema>

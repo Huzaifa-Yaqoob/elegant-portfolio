@@ -1,0 +1,87 @@
+---
+import PageLayout from "@/layouts/page-layout.astro"
+import ServicePageContent from "@/components/service/service-page-content.astro"
+import ServicePricing from "@/components/service/service-pricing.astro"
+import FaqSection from "@/components/faq/faq-section.astro"
+import { getCollection } from "astro:content"
+
+const serviceIndex = await getCollection("serviceIndex")
+const indexData = serviceIndex[0]?.data
+
+if (!indexData) {
+  throw new Error("Service index content not found")
+}
+
+const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
+
+const services = await getCollection("services")
+const serviceNames = services
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => s.data.title)
+---
+
+<PageLayout
+  title={indexData.title}
+  description={indexData.description}
+  videoLink={indexData.videoLink ?? ""}
+  mainImage={indexData.mainImage ?? "/hero/services_hero.png"}
+  pageTitle={indexData.seo_title}
+  pageDescription={indexData.seo_description}
+  canonicalUrl={`${siteUrl}/service`}
+  pageKeywords={indexData.seo_keywords}
+>
+  <ServicePageContent />
+  <ServicePricing />
+  <FaqSection showDivider={false} />
+</PageLayout>
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        name: "Full-Stack Web Development Services",
+        description: indexData.description,
+        provider: {
+          "@type": "Person",
+          name: "Huzaifa",
+          jobTitle: "Full-Stack Web Developer & Technical Architect",
+          url: siteUrl,
+        },
+        areaServed: ["PK", "GB", "US", "AE", "SA"],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Web Development Services",
+          itemListElement: serviceNames.map((name, i) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name,
+            },
+            position: i + 1,
+          })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Services",
+            item: `${siteUrl}/service`,
+          },
+        ],
+      },
+    ],
+  })}
+/>

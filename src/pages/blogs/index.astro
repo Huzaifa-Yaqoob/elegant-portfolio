@@ -43,8 +43,9 @@ const siteUrl = Astro.site?.origin ?? "https://huzaifa.dev"
 ---
 
 <Layout
-  pageTitle="Blog | Engineering Insights & Tutorials | Huzaifa"
-  pageDescription={indexData.description}
+  pageTitle={indexData.seo_title}
+  pageDescription={indexData.seo_description}
+  pageKeywords={indexData.seo_keywords}
   pageImage={indexData.mainImage}
   canonicalUrl={`${siteUrl}/blogs`}
   ogType="blog"
