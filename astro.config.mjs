@@ -8,7 +8,7 @@ import sitemap from "@astrojs/sitemap"
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://huzaifa.dev",
+  site: "https://elegant-portfolio.muhammadhuzaifayaqoob3.workers.dev",
   image: {
     service: {
       entrypoint: "astro/assets/services/sharp",

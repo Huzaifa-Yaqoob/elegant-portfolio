@@ -21,7 +21,7 @@ const { email, phone, address, addressLink, responseTime } = Astro.props
       <div>
         <p class="label-caps-style mb-1 text-on-surface-variant">Email</p>
         <a
-          href={`mailto:${email}`}
+          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`}
           class="group/action flex items-center gap-3 border border-transparent p-2 transition-colors hover:border-on-surface"
         >
           <LucideIcon

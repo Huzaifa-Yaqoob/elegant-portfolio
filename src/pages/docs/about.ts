@@ -47,7 +47,7 @@ export const GET: APIRoute = async ({ site }) => {
 **Name:** ${siteConfig?.personal?.name ?? "Huzaifa"}
 **Title:** Full-Stack Web Developer & Technical Architect
 **Location:** ${siteConfig?.personal?.address ?? "Shahdara, Lahore, Pakistan"}
-**Email:** ${siteConfig?.personal?.email ?? "hi@huzaifa.dev"}
+**Email:** ${siteConfig?.personal?.email ?? "huzaifa.yaqoob.dev@gmail.com"}
 **Experience:** ${siteConfig?.stats?.years_experience ?? 5}+ years
 **Projects Completed:** ${siteConfig?.stats?.projects_completed ?? 42}+
 **Clients Served:** ${siteConfig?.stats?.total_clients ?? 28}+

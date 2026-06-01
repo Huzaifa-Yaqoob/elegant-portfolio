@@ -68,7 +68,7 @@ ${item.answer}
 ## Contact Information
 
 - **Name:** ${siteConfig?.personal?.name ?? "Huzaifa"}
-- **Email:** ${siteConfig?.personal?.email ?? "hi@huzaifa.dev"}
+- **Email:** ${siteConfig?.personal?.email ?? "huzaifa.yaqoob.dev@gmail.com"}
 - **Phone:** ${siteConfig?.personal?.phone ?? ""}
 - **Location:** ${siteConfig?.personal?.address ?? "Shahdara, Lahore, Pakistan"}
 - **Response Time:** Within 24 hours

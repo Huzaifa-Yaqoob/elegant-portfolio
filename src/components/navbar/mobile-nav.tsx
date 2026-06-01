@@ -87,7 +87,7 @@ export default function MobileNav({
                     Email
                   </p>
                   <a
-                    href={`mailto:${personal.email}`}
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${personal.email}`}
                     className="h3-style font-medium text-foreground transition-colors hover:text-primary"
                   >
                     {personal.email}

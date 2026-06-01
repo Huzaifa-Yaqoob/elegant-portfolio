@@ -80,7 +80,7 @@ export const GET: APIRoute = async ({ site }) => {
 
 Site: ${siteConfig?.site_name ?? "Huzaifa."}
 Location: ${siteConfig?.personal?.address ?? "Shahdara, Lahore, Punjab, Pakistan"}
-Email: ${siteConfig?.personal?.email ?? "hi@huzaifa.dev"}
+Email: ${siteConfig?.personal?.email ?? "huzaifa.yaqoob.dev@gmail.com"}
 Experience: ${siteConfig?.stats?.years_experience ?? 5}+ years
 Projects: ${siteConfig?.stats?.projects_completed ?? 42}+
 Clients: ${siteConfig?.stats?.total_clients ?? 28}+
