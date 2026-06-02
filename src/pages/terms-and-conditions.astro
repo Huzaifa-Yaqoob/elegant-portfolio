@@ -4,7 +4,9 @@ import { getCollection, render } from "astro:content"
 
 const entries = await getCollection("page")
 
-const entry = entries.find((e) => e.id === "terms-and-conditions" || e.id === "terms-and-conditions.md")
+const entry = entries.find(
+  (e) => e.id === "terms-and-conditions" || e.id === "terms-and-conditions.md"
+)
 
 if (!entry) {
   throw new Error(
@@ -31,9 +33,18 @@ const pageKeywords = data.seo_keywords
   <article class="legal-page">
     <header class="legal-header">
       <h1>{data.title}</h1>
-      {data.lastUpdated && (
-        <p class="last-updated">Last updated: {data.lastUpdated.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
-      )}
+      {
+        data.lastUpdated && (
+          <p class="last-updated">
+            Last updated:{" "}
+            {data.lastUpdated.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        )
+      }
       <hr />
     </header>
 
