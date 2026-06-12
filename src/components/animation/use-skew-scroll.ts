@@ -30,12 +30,13 @@ export function useSkewScroll<T extends HTMLElement>(
       const v = pos - lastPos
       lastPos = pos
 
-      if (Math.abs(v) > 0.5) {
-        const skew = gsap.utils.clamp(minSkew, maxSkew, v * multiplier)
-        gsap.set(el, { skewY: skew })
-      } else {
-        gsap.set(el, { skewY: 0 })
-      }
+      const skew = gsap.utils.clamp(minSkew, maxSkew, v * multiplier)
+      gsap.to(el, {
+        skewY: skew,
+        duration: 0.4,
+        ease: "power3.out",
+        overwrite: "auto",
+      })
     }
 
     gsap.ticker.add(tick)

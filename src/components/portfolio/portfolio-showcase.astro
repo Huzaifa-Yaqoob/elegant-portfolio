@@ -164,14 +164,19 @@ const projects = entries.sort((a, b) => b.data.order - a.data.order)
       const v = pos - lastPos
       lastPos = pos
 
-      if (Math.abs(v) > 0.5) {
-        const skew = gsap.utils.clamp(-8, 8, v * multiplier)
-        gsap.set(cards, { skewY: skew })
-        gsap.set(counters, { skewY: -skew })
-      } else {
-        gsap.set(cards, { skewY: 0 })
-        gsap.set(counters, { skewY: 0 })
-      }
+      const skew = gsap.utils.clamp(-8, 8, v * multiplier)
+      gsap.to(cards, {
+        skewY: skew,
+        duration: 0.4,
+        ease: "power3.out",
+        overwrite: "auto",
+      })
+      gsap.to(counters, {
+        skewY: -skew,
+        duration: 0.4,
+        ease: "power3.out",
+        overwrite: "auto",
+      })
     }
 
     gsap.ticker.add(tick)
