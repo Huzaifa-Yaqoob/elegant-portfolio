@@ -1,4 +1,4 @@
 ---
-title: "ENGINEERED BIOGRAPHY"
-description: "CORE REPOSITORY // DATA LOG 001"
+title: "The journey so far"
+description: "From Lahore to global projects. A timeline of building, shipping, and growing."
 ---

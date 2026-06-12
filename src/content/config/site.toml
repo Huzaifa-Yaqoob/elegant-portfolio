@@ -1,7 +1,7 @@
 # src/config/site.toml
 site_name = "Huzaifa."
 site_url = "https://elegant-portfolio.muhammadhuzaifayaqoob3.workers.dev"
-description = "Full-stack web developer specializing in React, TypeScript, and Node.js. 5+ years of building web applications, SaaS platforms, and digital products for clients worldwide. Based in Shahdara, Lahore."
+description = "Full-stack web developer working with React, TypeScript, and Node.js. 5+ years building web apps, SaaS platforms, and digital products for clients worldwide. Based in Shahdara, Lahore."
 
 [personal]
 name = "Huzaifa"

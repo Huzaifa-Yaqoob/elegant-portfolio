@@ -1,7 +1,7 @@
 ---
 title: "Tech Stack"
 tag: "// CORE_ARCHITECTURE"
-description: "Production-proven technologies. React, Next.js, TypeScript, Node.js, Docker, AWS, and more. Every tool here has shipped real products and handled real traffic."
+description: "React, Next.js, TypeScript, Node.js, Docker, AWS. Every tool here has shipped real products and handled real traffic."
 core_strengths:
   - "Microservices"
   - "REST API Architecture"

@@ -12,10 +12,8 @@ links = [
 cta = { label = "Get in Touch", href = "/contact" }
 
 [footer]
-# Use a placeholder like {year} to be replaced in your component logic
 copyright = "© {year} Huzaifa. All rights reserved."
 
-# Extra text if needed
 tagline = "Built to ship. Built to scale. Built to last."
 
 links = [

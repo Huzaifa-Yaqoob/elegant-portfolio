@@ -1,24 +1,24 @@
 [section]
-title = "Frequently Asked Questions"
+title = "Frequently asked questions"
 description = "Quick answers to the questions I get most often."
 badge = "FAQ"
 
 [[items]]
-question = "What technologies do you specialize in as a full-stack web developer?"
-answer = "I work primarily with React, TypeScript, Next.js, Node.js, and Tailwind CSS. On the infrastructure side: PostgreSQL, Docker, and AWS. If your stack is different, I can likely work with it. I pick up new tools fast and have shipped production code across many environments."
+question = "What technologies do you work with?"
+answer = "React, TypeScript, Next.js, Node.js, Tailwind CSS. Infrastructure: PostgreSQL, Docker, AWS. If your stack is different, I can likely work with it. I pick up new tools fast."
 
 [[items]]
-question = "How long does it take to build a web application with a React developer?"
-answer = "Depends on scope. A landing page or brochure site can be ready in 1 to 2 weeks. A full-scale web application with authentication, databases, and third-party integrations typically runs 4 to 12 weeks. I use AI-augmented engineering workflows to speed things up without cutting corners. I give you a clear timeline after the initial consultation, and I stick to it."
+question = "How long does it take to build a web app?"
+answer = "Depends on scope. A landing page can be ready in 1–2 weeks. A full web app with auth, databases, and third-party integrations runs 4–12 weeks. I use AI-assisted workflows to speed things up without cutting corners. I give you a clear timeline after the initial chat and stick to it."
 
 [[items]]
-question = "Do you offer maintenance and support after launch?"
-answer = "Yes. Post-launch I handle performance monitoring, bug fixes, feature additions, and general upkeep. We can set up a monthly retainer or work on a per-task basis. Whatever fits your budget."
+question = "Do you offer maintenance after launch?"
+answer = "Yes. I handle bug fixes, feature additions, performance monitoring, and general upkeep. Monthly retainer or per-task. Whatever fits your budget."
 
 [[items]]
-question = "How do I hire a full-stack web developer?"
-answer = "Fill out the contact form with a brief overview of your project, what you are building, your timeline, and any specific requirements. I will review it and we can schedule a quick call to talk about goals, scope, and next steps. No commitment needed on that first call."
+question = "How do I hire you?"
+answer = "Fill out the contact form with a brief overview of your project, timeline, and requirements. I will review it and we can schedule a quick call. No commitment needed."
 
 [[items]]
 question = "Can you work with my existing codebase?"
-answer = "Yes, and I do this often. I regularly audit existing projects for performance bottlenecks, refactor messy codebases, add new features, and clean up technical debt. Whether it is a modern JavaScript frontend, a Node.js API, or a legacy codebase that needs modernizing, I can jump in and contribute from day one."
+answer = "Yes, I do this often. I audit projects for performance bottlenecks, refactor messy codebases, add features, and clean up technical debt. Whether it is a modern JavaScript frontend, a Node.js API, or a legacy codebase, I can jump in from day one."

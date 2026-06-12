@@ -1,6 +1,6 @@
 ---
 title: "Engineering Precision"
-description: "Full-stack web development services covering frontend, backend, and cloud infrastructure. Every project built for scale, speed, and long-term maintainability."
+description: "Full-stack web development: frontend, backend, cloud. Every project built for scale, speed, and maintainability."
 divider_text: "SYS_CORE"
 badge: "CAPABILITIES"
 ---

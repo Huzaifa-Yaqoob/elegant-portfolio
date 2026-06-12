@@ -1,4 +1,4 @@
 ---
-title: "Verified Execution Protocols."
-badge: "Client Telemetry"
+title: "What clients say."
+badge: "TESTIMONIALS"
 ---

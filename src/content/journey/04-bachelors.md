@@ -1,8 +1,8 @@
 ---
-title: "BACHELOR_DEPLOYMENT"
+title: "Bachelor's degree"
 code: "08:00:00:00"
 date: "OCT_2024"
-description: "Bachelor's degree deployed. Four years of academic training, late-night coding sessions, and a commitment to the craft. System ready for production."
+description: "Bachelor's degree in the bag. Four years of classes, late-night coding, and stubborn commitment to the craft."
 order: 4
 tags: ["EDUCATION"]
 ---

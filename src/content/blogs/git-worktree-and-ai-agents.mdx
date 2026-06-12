@@ -26,7 +26,7 @@ import {
 
 ## The Problem: Context Switching Is Killing Your Flow
 
-Every developer knows the drill. You are deep in a feature branch, the architecture is crystal clear, and then ping. A critical bug fix needs to go out **now**.
+You are deep in a feature branch, the architecture is crystal clear, and then ping. A critical bug fix needs to go out **now**.
 
 You `git stash` your changes, `git checkout main`, create a hotfix branch, fix the bug, push, and then try to remember where you left off. By the time you `git checkout feature/amazing-thing` and `git stash pop`, you have lost 20 minutes of cognitive momentum.
 
@@ -36,11 +36,11 @@ You `git stash` your changes, `git checkout main`, create a hotfix branch, fix t
   caption="The cognitive cost of switching branches mounts with every context switch"
 />
 
-I ran into this every day until I tried **Git worktrees** combined with **AI coding assistants**.
+I ran into this daily until I tried **Git worktrees** combined with **AI coding assistants**.
 
 ## What Are Git Worktrees?
 
-Git worktrees allow you to check out multiple branches simultaneously in separate working directories, all sharing the same Git history.
+Git worktrees let you check out multiple branches simultaneously in separate working directories, all sharing the same Git history.
 
 <FileTree
   structure={[
@@ -110,7 +110,7 @@ git worktree remove ../my-project-feature
 
 ## Why This Matters for AI Agents
 
-AI coding assistants like Claude, Cursor, or GitHub Copilot work best when they have **clear context** and **isolated environments**.
+AI coding assistants work best when they have **clear context** and **isolated environments**.
 
 <BlogTable
   headers={["Approach", "Context Quality", "Safety", "Speed", "Resource Usage"]}
@@ -140,19 +140,9 @@ AI coding assistants like Claude, Cursor, or GitHub Copilot work best when they 
   caption="Comparison of parallel development approaches"
 />
 
-Here is the real insight: AI agents produce **unpredictable** changes. A single session might:
+AI agents produce **unpredictable** changes. A single session might install new dependencies, modify configuration files, generate thousands of lines of code, or refactor existing code in unexpected ways.
 
-1. Install new dependencies
-2. Modify configuration files
-3. Generate thousands of lines of code
-4. Refactor existing code in unexpected ways
-
-Running an AI agent in a worktree gives you:
-
-- **Zero risk** to your main working directory
-- **Easy review** (just diff the worktree against the branch base)
-- **Parallel experiments** (run 3 agents in 3 worktrees at the same time)
-- **Fast discard** (delete the worktree and branch if the experiment fails)
+Running an AI agent in a worktree gives you zero risk to your main directory, easy review, parallel experiments, and fast discard if it fails.
 
 ### My Workflow
 
@@ -196,14 +186,14 @@ function createAgentWorktree(config: WorktreeConfig) {
 
 Since I started using this workflow:
 
-- **3x more experiments.** I can try AI-generated solutions without commitment.
+- **3x more experiments.** I can try AI solutions without commitment.
 - **Zero accidental merges.** Worktrees make it obvious when you are in the wrong branch.
 - **Parallel AI sessions.** Claude refactors one feature, Cursor builds another.
 - **Cleaner reviews.** Each worktree produces a focused, reviewable diff.
 
 ## Give It a Try
 
-The next time you fire up an AI coding assistant, create a worktree first. It takes 10 seconds and saves hours of cleanup.
+Next time you fire up an AI coding assistant, create a worktree first. It takes 10 seconds and saves hours of cleanup.
 
 ```bash
 # One-liner to create and open a worktree for AI work

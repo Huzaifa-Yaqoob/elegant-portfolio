@@ -1,6 +1,6 @@
 ---
-title: "Know the developer behind every pixel."
-description: "Full-stack web developer and technical architect from Shahdara, Lahore. 5 years of experience building SaaS platforms and high-performance web applications for clients worldwide."
+title: "The developer behind every pixel."
+description: "Full-stack web developer and technical architect from Shahdara, Lahore. 5 years building SaaS platforms and web apps for clients around the world."
 main_image: "/hero/main-hero.png"
 ai_buttons:
   - name: "ChatGPT"

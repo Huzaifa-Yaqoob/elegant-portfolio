@@ -1,5 +1,5 @@
 ---
-title: "HOW WE ARCHITECT"
-description: "A structured approach to building software. We break down complex problems and ship resilient systems through a four-stage pipeline."
+title: "How we build"
+description: "A four-stage pipeline for breaking down complex problems and shipping resilient systems."
 badge: "METHODOLOGY"
 ---

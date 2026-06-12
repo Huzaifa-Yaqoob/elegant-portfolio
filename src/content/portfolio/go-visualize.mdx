@@ -1,6 +1,6 @@
 ---
 title: "Go Visualize"
-description: "An AI-powered design automation tool that turns plain text prompts into production-ready marketing graphics and editable SVGs. Uses Gemini 3 Flash and Claude in parallel for vector generation, brand extraction from URLs, and a multi-artboard canvas editor."
+description: "An AI-powered design automation tool that turns text prompts into production-ready marketing graphics and editable SVGs. Uses Gemini 3 Flash and Claude in parallel for vector generation, brand extraction from URLs, and a multi-artboard canvas editor."
 slug: "go-visualize"
 order: 1
 url: "https://app.govisualize.ai/"
@@ -38,40 +38,40 @@ import ProjectSection from "@/components/portfolio/project-section.astro"
 
 <ProjectSection title="The Mission" number="01">
 
-Marketing teams spend way too much time dragging pixels around design tools. Every social post, every ad, every flyer. Same grind, different day. And the moment you need something on brand, you are digging through hex codes and font files again.
+Marketing teams spend way too much time dragging pixels around design tools. Every social post, every ad, every flyer. Same grind, different day. And the moment you need something on-brand, you are digging through hex codes and font files again.
 
-**Go Visualize kills that workflow.** Type what you want. The AI generates production-ready, editable vector designs with your brand colors, typography, and layouts. Tweak if you want. Ship when ready. Done.
+**Go Visualize kills that workflow.** Type what you want. AI generates production-ready, editable vector designs with your brand colors, typography, and layouts. Tweak if you want. Ship when ready.
 
 </ProjectSection>
 
 <ProjectSection title="Multi-Artboard Canvas Engine" number="02">
 
-I built a **vector editor** on top of Fabric.js. Multiple artboards in one workspace. Real-time manipulation of text layers, high-res graphics, shapes, and grouped elements. The canvas state handles simultaneous rendering across artboards without dropping frames, even with complex layered designs.
+I built a **vector editor** on top of Fabric.js. Multiple artboards in one workspace. Real-time manipulation of text layers, graphics, shapes, and grouped elements. The canvas handles simultaneous rendering across artboards without dropping frames.
 
 </ProjectSection>
 
 <ProjectSection title="Multi-Agent AI Design Orchestration" number="03">
 
-This is where it gets interesting. I wired up a **dual-agent AI system** with Gemini 3 Flash Preview and Claude. You type a prompt. Both agents fire in parallel on different aspects of the generation. One handles layout, the other handles visual styling. The results merge into a single design.
+I wired up a **dual-agent AI system** with Gemini 3 Flash Preview and Claude. You type a prompt. Both agents fire in parallel. One handles layout, the other handles visual styling. The results merge into a single design.
 
-**Parallelization is the key.** Running both agents simultaneously inside the Next.js backend means generation takes seconds, not minutes.
+**Parallelization is the key.** Both agents running simultaneously inside the Next.js backend means generation takes seconds, not minutes.
 
 </ProjectSection>
 
 <ProjectSection title="Brand Guideline Extraction Engine" number="04">
 
-The most technically fun part of the project. Drop in a company URL. The platform scrapes the public website and **extracts the entire brand identity**. Exact colour swatches, typography hierarchy, logo positioning, the whole visual language. All of it loads directly into the canvas editor. No manual setup, no brand kit uploads. Just a URL.
+The most technically fun part. Drop in a company URL. The platform scrapes the public website and **extracts the entire brand identity**. Colour swatches, typography hierarchy, logo positioning. The whole visual language loads directly into the canvas editor. No manual setup, no brand kit uploads. Just a URL.
 
 </ProjectSection>
 
 <ProjectSection title="Auth, Billing & Credit Ledger" number="05">
 
-Authentication runs on **Better Auth** with session persistence. Billing has three tiers: usage-based, monthly, and annual. All wired through Stripe's Clover API. The twist is a **credit ledger system** that lets users buy ad-hoc token packs for heavy AI generation, separate from their subscription. Granular, self-serve, no support tickets needed.
+Authentication runs on **Better Auth** with session persistence. Three billing tiers: usage-based, monthly, annual. All wired through Stripe's Clover API. The twist is a **credit ledger system** that lets users buy ad-hoc token packs for heavy AI generation, separate from their subscription. Self-serve, no support tickets needed.
 
 </ProjectSection>
 
 <ProjectSection title="Engineering Impact" number="06">
 
-As **Technical Lead**, I defined the architecture. Prisma schema, component patterns, repo structure. Built the entire core system from February to early April 2026. Once the platform was stable and optimised, I handed off a production-ready codebase to the internal team. Shipped a complex multi-agent AI product in under two months.
+As **Technical Lead**, I defined the architecture. Prisma schema, component patterns, repo structure. Built the entire core system from February to early April 2026. Once it was stable and optimised, I handed off a production-ready codebase to the internal team. Shipped a complex multi-agent AI product in under two months.
 
 </ProjectSection>

@@ -1,6 +1,6 @@
 ---
 title: "AutoProv"
-description: "A B2B vehicle provenance and compliance platform for UK automotive dealers. Pulls data from 44 manufacturer databases, runs HPI and finance checks through Experian and DVLA, and includes automated PDF reporting, PDI workflows, distance sale compliance, and AI dispute resolution."
+description: "A B2B vehicle provenance and compliance platform for UK automotive dealers. Pulls data from 44 manufacturer databases, runs HPI and finance checks through Experian and DVLA, with automated PDF reporting, PDI workflows, distance sale compliance, and AI dispute resolution."
 slug: "autoprov"
 order: 4
 url: "https://app.govisualize.ai/"
@@ -39,42 +39,42 @@ import ProjectSection from "@/components/portfolio/project-section.astro"
 
 <ProjectSection title="The Mission" number="01">
 
-UK automotive dealers deal with a data mess. Service histories scattered across 44 manufacturer databases. HPI checks, finance records, and DVLA data in separate silos. Mileage readings lost between trades. Compliance paperwork done by hand.
+UK automotive dealers deal with a data mess. Service histories across 44 manufacturer databases. HPI checks, finance records, DVLA data in separate silos. Mileage readings lost between trades. Compliance paperwork done by hand.
 
-**AutoProv fixes that.** One platform connects everything. Pulls official service records, flags odometer inconsistencies, runs Experian and DVLA checks, generates compliant PDI reports, builds Distance Sale Packs, and handles AI-powered dispute responses under UK consumer law.
+**AutoProv fixes that.** One platform connects everything. Service records, odometer inconsistencies, Experian and DVLA checks, compliant PDI reports, Distance Sale Packs, and AI-powered dispute responses under UK consumer law.
 
 </ProjectSection>
 
 <ProjectSection title="Multi-Source API Engine" number="02">
 
-I built an **ingestion layer** that queries multiple automotive APIs at the same time, normalises conflicting schemas, and merges fragmented data into a single coherent record. Think of it as a translator for the UK automotive data ecosystem.
+I built an **ingestion layer** that queries multiple automotive APIs simultaneously, normalises conflicting schemas, and merges fragmented data into a single coherent record. Think of it as a translator for the UK automotive data ecosystem.
 
-**Speed was the real challenge.** Some of these endpoints are slow by design. I optimised the async fetching pipeline. Parallelised upstream requests. Added data-caching layers. Cut API response times significantly. What used to take tens of seconds now resolves in moments, even under heavy traffic.
+**Speed was the real challenge.** Some endpoints are slow by design. I optimised the async pipeline, parallelised upstream requests, and added caching layers. What used to take tens of seconds now resolves in moments, even under heavy traffic.
 
 </ProjectSection>
 
 <ProjectSection title="PDF Generation at Scale" number="03">
 
-This was the hardest technical problem in the project. AutoProv needs to compile **massive, deeply nested datasets** into publication-quality PDF reports without hitting serverless timeouts or leaking memory.
+The hardest technical problem in the project. AutoProv compiles **massive, deeply nested datasets** into publication-quality PDF reports without hitting serverless timeouts or leaking memory.
 
-I built a custom PDF generation subsystem that structures multi-tiered data arrays into clean, readable multi-page layouts. Handles dense relational trees that would choke standard rendering pipelines. The output is professional-grade reports that dealers can send straight to customers and regulators.
+I built a custom PDF generation subsystem that structures multi-tiered data into clean, readable multi-page layouts. Handles dense relational trees that would choke standard rendering pipelines. Professional-grade reports dealers can send straight to customers and regulators.
 
 </ProjectSection>
 
 <ProjectSection title="Billing & Monetisation" number="04">
 
-Deployed a **full Stripe billing architecture** with monthly and yearly tiers. The killer feature is an admin dashboard that lets project managers change pricing, update SKUs, and tweak subscription models without a single redeploy. Everything syncs live with Stripe via webhook handlers that track lifecycles, handle failures, manage trials, and keep the database in lockstep with Stripe's state.
+Deployed a **full Stripe billing architecture** with monthly and yearly tiers. The killer feature is an admin dashboard that lets project managers change pricing and update SKUs without a single redeploy. Everything syncs live with Stripe via webhooks that track lifecycles, handle failures, manage trials, and keep the database in lockstep with Stripe's state.
 
 </ProjectSection>
 
 <ProjectSection title="Viral Growth Engine" number="05">
 
-Added a **referral and rewards programme** with both client and server-side tracking. When a referred user converts, reward hooks fire automatically. Discounts or credits go to the referrer's account. No manual intervention, no support tickets. Self-serve growth.
+Added a **referral and rewards programme** with client and server-side tracking. When a referred user converts, reward hooks fire automatically. Discounts or credits go to the referrer. No manual intervention, no support tickets.
 
 </ProjectSection>
 
 <ProjectSection title="Engineering Impact" number="06">
 
-I inherited a prototype that needed structural work. **Rewrote the core.** Modularised the codebase, decoupled tangled components, cut the technical debt. The result is a clean, production-hardened platform that scaled from zero to commercial success for the company.
+I inherited a prototype that needed structural work. **Rewrote the core.** Modularised the codebase, decoupled tangled components, cut the technical debt. A clean, production-hardened platform that scaled from zero to commercial success.
 
 </ProjectSection>

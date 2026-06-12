@@ -1,25 +1,25 @@
 [section]
-title = "Investment"
-description = "Transparent pricing based on scope and complexity. Every project is unique — these ranges give you a ballpark."
+title = "Pricing"
+description = "Rough ranges based on scope. Every project is different, so these give you a ballpark."
 badge = "PRICING"
 
 [[items]]
 name = "Landing Page"
-description = "A single-page or multi-section brand presence site. Perfect for startups, products, or personal brands."
+description = "A single-page or multi-section site for startups, products, or personal brands."
 price_range = "$1,500 – $3,500"
 icon = "layout"
 highlighted = false
 features = [
-  "Responsive, pixel-perfect frontend",
+  "Responsive frontend",
   "GSAP / Framer Motion animations",
-  "SEO-optimized markup & meta",
+  "SEO markup & meta",
   "Contact form integration",
   "1 revision round",
 ]
 
 [[items]]
 name = "Web Application"
-description = "Full-stack SaaS or internal tool with auth, database, and API integrations."
+description = "Full-stack SaaS or internal tool with auth, database, and APIs."
 price_range = "$5,000 – $15,000"
 icon = "code-2"
 highlighted = true
@@ -29,13 +29,13 @@ features = [
   "Database design & integration",
   "REST / GraphQL API",
   "Admin dashboard",
-  "AI-augmented development pipeline",
+  "AI-augmented workflows",
   "2 revision rounds",
 ]
 
 [[items]]
 name = "Enterprise / Custom"
-description = "Complex systems, microservices, migration, or ongoing development partnership."
+description = "Complex systems, microservices, migrations, or ongoing partnership."
 price_range = "$15,000+"
 icon = "network"
 highlighted = false
@@ -50,8 +50,8 @@ features = [
 ]
 
 [[items]]
-name = "Ongoing Maintenance"
-description = "Monthly retainer for post-launch support, updates, and feature development."
+name = "Ongoing maintenance"
+description = "Monthly retainer for post-launch support, updates, and new features."
 price_range = "$500 – $2,000/mo"
 icon = "refresh-cw"
 highlighted = false
