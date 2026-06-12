@@ -57,38 +57,3 @@ const { title, description, tag, core_strengths, technologies } =
     </div>
   </div>
 </section>
-
-<script>
-  import { gsap, ScrollTrigger } from "@/lib/gsap"
-  import { ScrollSmoother } from "gsap/ScrollSmoother"
-
-  gsap.registerPlugin(ScrollSmoother)
-
-  function initPinning() {
-    if (window.innerWidth < 1024) return
-
-    const smoother = ScrollSmoother.get()
-    const scroller = smoother ? smoother.wrapper() : undefined
-
-    ScrollTrigger.create({
-      id: "tech-stack-pin",
-      trigger: "#tech-stack-section",
-      scroller,
-      start: "top top",
-      end: "bottom bottom",
-      pin: "#tech-stack-left",
-      anticipatePin: 1,
-    })
-  }
-
-  window.addEventListener("load", initPinning)
-
-  let resizeTimer: ReturnType<typeof setTimeout>
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(() => {
-      ScrollTrigger.getById("tech-stack-pin")?.kill()
-      initPinning()
-    }, 300)
-  })
-</script>

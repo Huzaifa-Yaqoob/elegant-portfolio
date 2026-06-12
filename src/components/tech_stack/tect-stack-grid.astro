@@ -63,55 +63,206 @@ const iconMap = {
 } as const
 ---
 
-<div
-  data-cursor="hidden"
-  class="grid grid-cols-2 border-t border-l border-border-structural sm:grid-cols-3 md:grid-cols-4"
->
+<div style="display: none" id="tech-pool">
   {
     technologies.map((item) => {
       const Icon = iconMap[item.icon as keyof typeof iconMap]
-      return (
-        <div class="group relative aspect-square overflow-hidden border-r border-b border-border-structural p-5 transition-colors hover:bg-card-hover md:p-6">
-          <div class="absolute inset-0 bg-linear-to-br from-surface-container-high/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div
-            data-stagger-item
-            class="relative z-10 flex h-full flex-col items-center justify-center text-center"
-          >
-            {Icon && (
-              <Icon class="mb-4 h-10 w-10 text-on-surface-variant transition-colors duration-300 group-hover:text-primary" />
-            )}
-            <span class="font-mono-code text-mono-code text-on-surface-variant uppercase transition-colors duration-300 group-hover:text-on-surface">
-              {item.name}
-            </span>
-          </div>
-        </div>
-      )
+      return Icon ? (
+        <Icon
+          data-icon={item.icon}
+          class="mb-4 h-10 w-10 text-on-surface-variant transition-colors duration-300 group-hover:text-primary"
+        />
+      ) : null
     })
   }
 </div>
 
+<div
+  id="tech-grid"
+  data-cursor="hidden"
+  data-technologies={JSON.stringify(technologies)}
+  class="grid grid-cols-2 border-t border-l border-border-structural sm:grid-cols-3 md:grid-cols-4"
+>
+</div>
+
 <script>
   import { gsap } from "@/lib/gsap"
-  import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-  const items = document.querySelectorAll("[data-stagger-item]")
-
-  if (items.length) {
-    gsap.set(items, { y: 48, opacity: 0 })
-
-    ScrollTrigger.batch(items, {
-      onEnter: (batch) => {
-        gsap.to(batch, {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: "power3.out",
-          stagger: { each: 0.06, from: "start" },
-          overwrite: true,
-        })
-      },
-      start: "top 90%",
-      once: true,
-    })
+  interface TechItem {
+    name: string
+    icon: string
   }
+
+  const GRID = document.getElementById("tech-grid")!
+  const POOL = document.getElementById("tech-pool")!
+  const TECHNOLOGIES: TechItem[] = JSON.parse(GRID.dataset.technologies!)
+
+  function getCols(): number {
+    const w = window.innerWidth
+    if (w < 640) return 2
+    if (w < 768) return 3
+    return 4
+  }
+
+  let visible: TechItem[] = []
+
+  let iconIdCounter = 0
+
+  function cloneIcon(src: Element): Element {
+    const clone = src.cloneNode(true) as Element
+    const uid = ++iconIdCounter
+
+    const idMap = new Map<string, string>()
+    const elementsWithId = clone.querySelectorAll("[id]")
+    for (let i = 0; i < elementsWithId.length; i++) {
+      const el = elementsWithId[i]
+      const oldId = el.getAttribute("id")!
+      const newId = oldId + "-g" + uid
+      idMap.set(oldId, newId)
+      el.setAttribute("id", newId)
+    }
+
+    if (idMap.size > 0) {
+      const allElements = clone.querySelectorAll("*")
+      for (let i = 0; i < allElements.length; i++) {
+        const el = allElements[i]
+        const attrs = el.attributes
+        for (let j = 0; j < attrs.length; j++) {
+          const attr = attrs[j]
+          const name = attr.name
+          let val = attr.value
+          if (val.includes("url(#")) {
+            for (const [oldId, newId] of idMap) {
+              val = val.split(`url(#${oldId})`).join(`url(#${newId})`)
+            }
+            el.setAttribute(name, val)
+          } else if (val.startsWith("#") && val.length > 1) {
+            for (const [oldId, newId] of idMap) {
+              if (val === `#${oldId}`) {
+                el.setAttribute(name, `#${newId}`)
+                break
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return clone
+  }
+
+  function createCell(tech: TechItem): HTMLDivElement {
+    const cell = document.createElement("div")
+    cell.className =
+      "group relative aspect-square overflow-hidden border-r border-b border-border-structural p-5 transition-colors hover:bg-card-hover md:p-6"
+
+    const overlay = document.createElement("div")
+    overlay.className =
+      "absolute inset-0 bg-linear-to-br from-surface-container-high/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    cell.appendChild(overlay)
+
+    const inner = document.createElement("div")
+    inner.dataset.gridItem = ""
+    inner.className =
+      "relative z-10 flex h-full flex-col items-center justify-center text-center"
+
+    const src = POOL.querySelector(`[data-icon="${tech.icon}"]`)
+    if (src) inner.appendChild(cloneIcon(src))
+
+    const span = document.createElement("span")
+    span.className =
+      "font-mono-code text-mono-code text-on-surface-variant uppercase transition-colors duration-300 group-hover:text-on-surface"
+    span.textContent = tech.name
+    inner.appendChild(span)
+
+    cell.appendChild(inner)
+    return cell
+  }
+
+  function buildGrid(first?: boolean): void {
+    const count = getCols() * 3
+    const shuffled = [...TECHNOLOGIES].sort(() => Math.random() - 0.5)
+    visible = shuffled.slice(0, count)
+
+    GRID.innerHTML = ""
+    visible.forEach((t) => GRID.appendChild(createCell(t)))
+
+    if (first) {
+      gsap.from("[data-grid-item]", {
+        scale: 0.8,
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        stagger: 0.04,
+        ease: "power2.out",
+        delay: 0.15,
+      })
+    }
+  }
+
+  function rotate(): void {
+    const available = TECHNOLOGIES.filter((t) => !visible.includes(t))
+    if (available.length === 0) return
+
+    const swapCount = Math.min(4, available.length)
+    if (swapCount === 0) return
+
+    const indices = new Set<number>()
+    while (indices.size < swapCount)
+      indices.add(Math.floor(Math.random() * visible.length))
+
+    const replacements = [...available]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, swapCount)
+
+    const indexArr = [...indices]
+    for (let i = 0; i < indexArr.length; i++) {
+      const idx = indexArr[i]
+      const inner = GRID.children[idx]!.querySelector("[data-grid-item]")!
+
+      gsap.to(inner, {
+        scale: 0.9,
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in",
+        onComplete: () => {
+          const tech = replacements[i]
+          visible[idx] = tech
+          const src = POOL.querySelector(`[data-icon="${tech.icon}"]`)
+          inner.innerHTML = ""
+          if (src) inner.appendChild(cloneIcon(src))
+          const span = document.createElement("span")
+          span.className =
+            "font-mono-code text-mono-code text-on-surface-variant uppercase transition-colors duration-300 group-hover:text-on-surface"
+          span.textContent = tech.name
+          inner.appendChild(span)
+
+          gsap.fromTo(
+            inner,
+            { scale: 0.9, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }
+          )
+        },
+      })
+    }
+  }
+
+  let rotationInterval: ReturnType<typeof setInterval> | undefined
+
+  function startRotation(): void {
+    if (rotationInterval !== undefined) clearInterval(rotationInterval)
+    rotationInterval = setInterval(rotate, 2800)
+  }
+
+  buildGrid(true)
+  startRotation()
+
+  let prevCols = getCols()
+  window.addEventListener("resize", () => {
+    const cols = getCols()
+    if (cols === prevCols) return
+    prevCols = cols
+    buildGrid()
+    startRotation()
+  })
 </script>
